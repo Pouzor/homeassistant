@@ -1,0 +1,343 @@
+- id: search_spotify
+  alias: Search on spotify
+  trigger:
+    platform: state
+    entity_id: input_text.search_spotify
+  action:
+    - service: media_player.play_media
+      data_template:
+        entity_id: media_player.pouzor_echo_spot
+        media_content_id: "{{ states('input_text.search_spotify') }}"
+        media_content_type: SPOTIFY
+- id: call_vmc_on
+  alias: "[Call] Vmc On"
+  trigger:
+    platform: state
+    entity_id: input_boolean.vmc
+    to: "on"
+  action:
+    - service: switch.turn_on
+      entity_id: switch.vmc_mss710_main_channel
+    - service: notify.slack_ha
+      data:
+        message: ":zap: Vmc On"
+- id: call_vmc_off
+  alias: "[Call] Vmc Off"
+  trigger:
+    platform: state
+    entity_id: input_boolean.vmc
+    to: "off"
+  action:
+    - service: switch.turn_off
+      entity_id: switch.vmc_mss710_main_channel
+    - service: notify.slack_ha
+      data:
+        message: ":zap: Vmc Off"
+- id: vmc_on
+  alias: "[Cron] Vmc On"
+  trigger:
+    - platform: time
+      at: 07:30:00
+    - platform: time
+      at: "12:00:00"
+    - platform: time
+      at: "18:00:00"
+  action:
+    - service: input_boolean.turn_on
+      data:
+        entity_id: input_boolean.vmc
+- id: vmc_off
+  alias: "[Cron] Vmc Off"
+  trigger:
+    - platform: time
+      at: "10:00:00"
+    - platform: time
+      at: "14:00:00"
+    - platform: time
+      at: "22:00:00"
+  action:
+    - service: input_boolean.turn_off
+      data:
+        entity_id: input_boolean.vmc
+- alias: VMC ON BUTTON
+  id: vmc_on_button
+  trigger:
+    platform: event
+    event_type: deconz_event
+    event_data:
+      id: vmc_on_off_tradfri
+      event: 1002
+  action:
+    - service: input_boolean.turn_on
+      data:
+        entity_id: input_boolean.vmc
+- alias: VMC OFF BUTTON
+  id: vmc_off_button
+  trigger:
+    platform: event
+    event_type: deconz_event
+    event_data:
+      id: vmc_on_off_tradfri
+      event: 2002
+  action:
+    - service: input_boolean.turn_off
+      data:
+        entity_id: input_boolean.vmc
+- alias: System - Update Template Sensors
+  initial_state: true
+  trigger:
+    - platform: time_pattern
+      minutes: /25
+  action:
+    - service: homeassistant.update_entity
+      entity_id:
+        - sensor.total_sensors
+        - sensor.total_automations
+        - sensor.total_scripts
+        - sensor.total_devicetrackers
+        - sensor.total_switches
+        - sensor.total_lights
+        - sensor.total_zwave_devices
+  id: edb9cdb511204046a2c2172e61aba0df
+- alias: Turn on light in couloir when motion trigger
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.presence_13
+      to: "on"
+    - platform: state
+      entity_id: binary_sensor.neo_coolcam_door_window_detector_sensor_2
+      to: "on"
+  action:
+    - service: light.turn_on
+      data:
+        entity_id: light.couloire
+        brightness: 255
+  id: b6abb38f076d4911badb3e8d195f6840
+- alias: Turn off light in couloir when motion trigger
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.presence_13
+      to: "off"
+      for:
+        seconds: 10
+  action:
+    - service: light.turn_off
+      entity_id: light.couloire
+  id: 2e49ba05aa164d27a0c7442f2282005e
+
+- alias: Send notification when alarm triggered
+  trigger:
+    - platform: state
+      entity_id: alarm_control_panel.home_alarm
+      to: triggered
+  action:
+    - service: notify.ios_iphone_8_de_pouzor
+      data:
+        message: ALARM! The alarm has been triggered
+  id: a15bee969c7140dfa68f4d6aa13f3404
+- alias: Activate alarm on RFID tag
+  trigger:
+    - platform: state
+      entity_id: sensor.schlage_link_mini_keypad_rfid_access_control
+      to: "5"
+  action:
+    - service: alarm_control_panel.alarm_arm_away
+      entity_id: alarm_control_panel.home_alarm
+    - service: notify.slack_ha
+      data:
+        message: ":control_knobs: Alarm On"
+  id: a245e897e73c4c0c93d33625c86944a8
+- alias: Desactivate alarm on RFID tag
+  trigger:
+    - platform: state
+      entity_id: sensor.schlage_link_mini_keypad_rfid_access_control
+      to: "6"
+  action:
+    - service: alarm_control_panel.alarm_disarm
+      entity_id: alarm_control_panel.home_alarm
+    - service: notify.slack_ha
+      data:
+        message: ":control_knobs: Alarm Off"
+  id: 0bbd8135dc444efebd4572c11d216992
+- alias: Motion trigger record camera salon
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.camera_salon_motion
+      to: "on"
+  action:
+    - service: camera.record
+      data:
+        entity_id: camera.salon
+        filename: /config/www/records/salon_{{ now().strftime("%Y-%m-%dH%H-%M-%S") }}.mp4
+        duration: 15
+        lookback: 5
+  id: 793cfc548ab8453fac57ca3b357f842f
+- alias: Motion trigger record camera ext
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.camera_ext_motion
+      to: "on"
+  action:
+    - service: shell_command.generate_camera_ext_picture
+    - service: notify.mobile_app_iphone_8_de_pouzor
+      data:
+        message: Alerte camera ext
+        data:
+          attachment:
+            url: !secret img_ext
+            content-type: jpg
+    - service: camera.record
+      data:
+        entity_id: camera.allee
+        filename: /config/www/records/allee_{{ now().strftime("%Y-%m-%dH%H-%M-%S") }}.mp4
+        duration: 15
+        lookback: 5
+  id: 24e6a36256cd44eebc0dc779c9c6241f
+- alias: Cron to generate snapshot picture for ext camera
+  trigger:
+    - platform: time_pattern
+      seconds: /5
+  action:
+    - service: shell_command.generate_camera_ext_picture
+  id: 64c23c6d3cd842778eb64642d4fec43d
+- alias: Cron to generate snapshot picture for salon camera
+  trigger:
+    - platform: time_pattern
+      minutes: /1
+  action:
+    - service: shell_command.generate_camera_salon_picture
+  id: c22d34f0a5d04cf9bef374ff9e29e121
+- alias: Cron to generate snapshot picture for garage camera
+  trigger:
+    - platform: time_pattern
+      minutes: /1
+  action:
+    - service: shell_command.generate_camera_garage_picture
+  id: 0f571a5705c043f0ad108d1223942e83
+- alias: Send notif to slack when motion ext
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.camera_ext_motion
+      to: "on"
+  action:
+    - service: shell_command.generate_camera_ext_picture
+    - service: notify.slack_ha
+      data:
+        data:
+          file:
+            url: !secret img_ext
+        message: Détection de mouvement camera ext
+  id: 1277d41a1e1f44d48ec2dfc64c32e603
+- alias: Send notif to slack when motion salon
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.camera_salon_motion
+      to: "on"
+  action:
+    - service: shell_command.generate_camera_salon_picture
+    - service: notify.slack_ha
+      data:
+        data:
+          file:
+            url: !secret img_salon
+        message: Détection de mouvement camera salon
+  id: 512bd87fb1184147b6202953e4683ebe
+- alias: Notify when printer has low ink
+  trigger:
+    - platform: state
+      entity_id:
+        sensor.hp_photosmart_5510_series_black_ink, sensor.hp_photosmart_5510_series_cyan_ink,
+        sensor.hp_photosmart_5510_series_magenta_ink, sensor.hp_photosmart_5510_series_yellow_ink
+  condition:
+    condition: or
+    conditions:
+      - condition: numeric_state
+        entity_id: sensor.hp_photosmart_5510_series_black_ink
+        below: 25
+      - condition: numeric_state
+        entity_id: sensor.hp_photosmart_5510_series_cyan_ink
+        below: 25
+      - condition: numeric_state
+        entity_id: sensor.hp_photosmart_5510_series_magenta_ink
+        below: 25
+      - condition: numeric_state
+        entity_id: sensor.hp_photosmart_5510_series_yellow_ink
+        below: 25
+  action:
+    - service: notify.slack_ha
+      data_template:
+        message:
+          ":printer: LOW : {{ trigger.entity_id }} : {{ trigger.to_state.state
+          }}%"
+        target: "#général"
+  id: 0313c2dad00d4264830eb913b0e77a2f
+- id: "1608570268355"
+  alias: "[Alarm] Trigger and Notify when Car Garage Open"
+  description: ""
+  use_blueprint:
+    path: pouzor/alarm_sensor.yaml
+    input:
+      trigger_sensor: binary_sensor.openclose_17
+- id: "1608589240184"
+  alias: "[Alarm] Trigger and Notify when motion in Garage"
+  description: ""
+  use_blueprint:
+    path: pouzor/alarm_sensor.yaml
+    input:
+      trigger_sensor: binary_sensor.motion_sensor
+- id: "1608589349671"
+  alias: "[Alarm] Trigger and Notify when front door open"
+  description: ""
+  use_blueprint:
+    path: pouzor/alarm_sensor.yaml
+    input:
+      trigger_sensor: binary_sensor.neo_coolcam_door_window_detector_sensor
+- id: "1608589377935"
+  alias: "[Alarm] Trigger and Notify when garage door open"
+  description: ""
+  use_blueprint:
+    path: pouzor/alarm_sensor.yaml
+    input:
+      trigger_sensor: binary_sensor.neo_coolcam_door_window_detector_sensor_2
+- id: "1608589641592"
+  alias: "[Alarm] Trigger and Notify when hallway motion"
+  description: ""
+  use_blueprint:
+    path: pouzor/alarm_sensor.yaml
+    input:
+      trigger_sensor: binary_sensor.presence_13
+- id: "1608592199554"
+  alias: "[Log] Garage Door"
+  description: ""
+  use_blueprint:
+    path: pouzor/log_sensor.yaml
+    input:
+      trigger_sensor: binary_sensor.neo_coolcam_door_window_detector_sensor_2
+- id: "1608592605111"
+  alias: "[Log] Motion Garage"
+  description: ""
+  use_blueprint:
+    path: pouzor/log_sensor.yaml
+    input:
+      trigger_sensor: binary_sensor.motion_sensor
+- id: "1608592686045"
+  alias: "[Log] Garage Car Door"
+  description: ""
+  use_blueprint:
+    path: pouzor/log_sensor.yaml
+    input:
+      trigger_sensor: binary_sensor.openclose_17
+- id: "1608592760031"
+  alias: "[Log] Front Door"
+  description: ""
+  use_blueprint:
+    path: pouzor/log_sensor.yaml
+    input:
+      trigger_sensor: binary_sensor.neo_coolcam_door_window_detector_sensor
+- id: "1608592803773"
+  alias: "[Log] Motion Front"
+  description: ""
+  use_blueprint:
+    path: pouzor/log_sensor.yaml
+    input:
+      trigger_sensor: binary_sensor.motion_salon
