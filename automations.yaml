@@ -271,6 +271,24 @@
           }}%"
         target: "#général"
   id: 0313c2dad00d4264830eb913b0e77a2f
+
+- alias: "tensorflow frontdoor"
+  trigger:
+    platform: state
+    entity_id: image_processing.doods_allee
+  condition:
+    - condition: template
+      value_template: "{{ 'person' in state_attr('image_processing.doods_allee', 'summary') }}"
+    - condition: template
+      value_template: "{{ as_timestamp(now()) - as_timestamp(states.automation.tensorflow_frontdoor.attributes.last_triggered) | int > 10 }}"
+  action:
+    - service: notify.slack_ha
+      data:
+        data:
+          file:
+            url: !secret doods_cam
+        message: Personne detectée sur la camera
+
 - id: "1608570268355"
   alias: "[Alarm] Trigger and Notify when Car Garage Open"
   description: ""
