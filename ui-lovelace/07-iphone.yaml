@@ -1,0 +1,21 @@
+path: iphone
+title: Iphone
+icon: "mdi:cellphone-iphone"
+badges: []
+cards:
+  - type: entities
+    entities:
+      - device_tracker.iphone_8_de_pouzor_2
+      - sensor.iphone_8_de_pouzor_activity
+      - sensor.iphone_8_de_pouzor_average_active_pace
+      - sensor.iphone_8_de_pouzor_bssid
+      - sensor.iphone_8_de_pouzor_connection_type
+      - sensor.iphone_8_de_pouzor_distance
+      - sensor.iphone_8_de_pouzor_floors_ascended
+      - sensor.iphone_8_de_pouzor_floors_descended
+      - sensor.iphone_8_de_pouzor_geocoded_location
+      - sensor.iphone_8_de_pouzor_last_update_trigger
+      - sensor.iphone_8_de_pouzor_sim_1
+      - sensor.iphone_8_de_pouzor_ssid
+      - sensor.iphone_8_de_pouzor_steps
+      - sensor.iphone_8_de_pouzor_storage_2

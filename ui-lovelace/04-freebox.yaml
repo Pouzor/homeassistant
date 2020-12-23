@@ -1,0 +1,57 @@
+title: Freebox  
+path: freebox
+badges: []
+icon: mdi:server-network    
+cards:
+  - type: entities
+    title: System Information
+    show_header_toggle: false
+    entities:
+      - sensor.freebox_temperature_1
+      - sensor.freebox_temperature_cpu_cp_master
+      - media_player.remy_s_freebox_delta
+      - automation.notify_when_printer_has_low_ink
+  - type: custom:mini-graph-card
+    name: Download
+    entities:
+      - sensor.freebox_download_speed
+    show:
+      icon: false
+    icon: mdi:download
+    show_state: true
+  - type: custom:mini-graph-card
+    name: Upload
+    icon: mdi:upload
+    show_state: true
+    entities:
+      - sensor.freebox_upload_speed
+    show:
+      icon: false
+
+  - type: custom:bar-card
+    title: HP 5510
+    columns: 4
+    direction: up
+    entities:
+      - color: black
+        entity: sensor.hp_photosmart_5510_series_black_ink
+        name: ' '
+      - color: '#00ffff'
+        entity: sensor.hp_photosmart_5510_series_cyan_ink
+        name: ' '
+      - color: '#ff00ff'
+        entity: sensor.hp_photosmart_5510_series_magenta_ink
+        name: ' '
+      - color: '#ffff00'
+        entity: sensor.hp_photosmart_5510_series_yellow_ink
+        name: ' '
+    height: 150px
+    min: 0
+    max: 100
+    padding: 10px
+    target: 20
+    title_position: bottom
+    align: center-split
+    icon_position: inside
+    unit_of_measurement: '%'
+    width: 100%

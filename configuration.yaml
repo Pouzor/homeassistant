@@ -1,0 +1,650 @@
+homeassistant:
+  name: Home
+  latitude: !secret lat
+  longitude: !secret lon
+  elevation: 0
+  unit_system: metric
+  time_zone: Europe/Paris
+  customize: !include customize.yaml
+  whitelist_external_dirs:
+    - /config/www/records
+  external_url: !secret external_url
+  internal_url: !secret internal_url
+  allowlist_external_urls:
+    - !secret img_ext
+    - !secret img_garage
+    - !secret img_salon
+  media_dirs:
+    media: /config/www/records
+
+group: !include groups.yaml
+automation: !include automations.yaml
+
+recorder:
+  db_url: !secret mariadb
+
+influxdb:
+  username: !secret influxdb_user
+  password: !secret influxdb_pass
+  max_retries: 3
+  host: localhost
+  port: !secret influxdb_port
+  database: home_assistant
+  default_measurement: state
+  include:
+    entities:
+      - sensor.netatmo_station_temperature
+      - sensor.temperature_14
+      - sensor.multi_sensor
+      - sensor.temperature_garage
+      - sensor.temperature_piscine
+
+http:
+  ssl_certificate: /ssl/fullchain.pem
+  ssl_key: /ssl/privkey.pem
+
+logger:
+  default: info
+  logs:
+    pydeconz: debug
+    homeassistant.components.deconz: debug
+    homeassistant.components.onvif: debug
+
+frontend:
+  themes: !include_dir_merge_named themes
+lovelace:
+  mode: yaml
+
+homekit:
+  filter:
+    include_domains:
+      - light
+      - switch
+
+alexa:
+  smart_home:
+
+freebox_player:
+  remote_code: !secret freebox_remote_code
+  host: !secret freebox_host
+
+#Global activation
+config:
+stream:
+system_health:
+device_tracker:
+default_config:
+ios:
+mobile_app:
+ffmpeg:
+updater:
+discovery:
+conversation:
+logbook:
+map:
+wake_on_lan:
+shell_command:
+  generate_camera_ext_picture: !secret generate_camera_ext_picture
+  generate_camera_garage_picture: !secret generate_camera_garage_picture
+  generate_camera_salon_picture: !secret generate_camera_salon_picture
+
+panel_custom:
+  - name: gallery
+    sidebar_title: Videos Records
+    sidebar_icon: mdi:cctv
+    config:
+      title: Videos Records
+      tabs:
+        - name: Videos
+          entity_id: sensor.gallery_images
+          maximum_files: 30
+  - name: zwave-graph-panel
+    url_path: zwave-graph
+    sidebar_title: Z-Wave Graph
+    sidebar_icon: mdi:z-wave
+    module_url: /local/zwavegraph3.js
+    config:
+      ranker: network-simplex
+      edge_visibility: relevant
+      grouping: z-wave
+
+ifttt:
+  key: !secret ifttt_key
+
+input_boolean:
+  vmc:
+    name: VMC status
+    initial: off
+    icon: mdi:fan
+
+meross_cloud:
+  username: !secret meross_username
+  password: !secret meross_password
+
+zwave:
+  usb_path: /dev/ttyACM0
+  device_config: !include zwave_device_config.yaml
+
+remote:
+  - platform: harmony
+    name: Harmony Hub
+    host: !secret harmony_host
+
+netatmo:
+  client_id: !secret netatmo_api_key
+  client_secret: !secret netatmo_secret_key
+
+input_text:
+  search_spotify:
+    name: search_spotify
+    initial: Search into spotify
+
+binary_sensor:
+  #  - platform: ffmpeg_motion remove for chrismas
+  #    input: !secret ip_camera_ext
+  #    name: "Camera ext motion"
+  #    reset: 5
+  #    changes: 8
+  #    initial_state: true
+  - platform: ffmpeg_motion
+    input: !secret ip_camera_salon
+    name: "Camera salon motion"
+    reset: 5
+    changes: 5
+    initial_state: true
+
+  - platform: mqtt
+    name: "My Computer - Connected"
+    state_topic: "iotlink/workgroup/pouzor-pc/lwt"
+    value_template: "{{ value }}"
+    payload_on: "ON"
+    payload_off: "OFF"
+    device_class: "connectivity"
+    qos: 1
+  - platform: mqtt
+    name: "My Computer - Charging"
+    state_topic: "iotlink/workgroup/pouzor-pc/windows-monitor/stats/power/status"
+    value_template: "{{ value }}"
+    payload_on: "Online"
+    payload_off: "Offline"
+    device_class: "plug"
+    availability_topic: "iotlink/workgroup/pouzor-pc/lwt"
+    payload_available: "ON"
+    payload_not_available: "OFF"
+    qos: 1
+
+hacs:
+  token: !secret hacs_token
+
+variable:
+
+sensor:
+  - platform: netatmo
+    station: Pouzor
+  - platform: files
+    folder: /config/www/records
+    name: gallery_images
+    sort: date
+  - platform: myEnedis
+    token: !secret enedis_token
+    code: !secret enedis_code
+    heures_creuses: "[['00:56','07:26'], ['12:56', '14:26']]"
+    hc_cout: 0.1344
+    hp_cout: 0.1798
+    scan_interval: 7200
+    delay: 7200 # OPTION
+  - platform: template
+    sensors:
+      temperature_garage:
+        value_template: "{{ state_attr('binary_sensor.motion_sensor', 'temperature') }}"
+      temperature_ext:
+        value_template: "{{ state_attr('binary_sensor.motion_salon', 'temperature') }}"
+      digicode:
+        value_template: "{% if is_state('sensor.schlage_link_mini_keypad_rfid_access_control', '6') %} Home {% else %} Away {% endif %}"
+  - platform: attributes
+    friendly_name: "Batteries"
+    attribute: battery_level
+    unit_of_measurement: "%"
+    entities:
+      - binary_sensor.capteur_couloire_motion
+      - zwave.zipato_unknown_type_0003_id_1083_2
+
+  - platform: mqtt
+    name: "Temperature ESP"
+    state_topic: "office/sensor1"
+    unit_of_measurement: "°C"
+    value_template: "{{ value_json.temperature }}"
+  - platform: mqtt
+    name: "Humidite ESP"
+    state_topic: "office/sensor1"
+    unit_of_measurement: "%"
+    value_template: "{{ value_json.humidity }}"
+  - platform: mqtt
+    name: "Temperature Simon"
+    state_topic: "chambre/simon"
+    unit_of_measurement: "°C"
+    value_template: "{{ value_json.temperature }}"
+  - platform: mqtt
+    name: "Humidite Simon"
+    state_topic: "chambre/simon"
+    unit_of_measurement: "%"
+    value_template: "{{ value_json.humidity }}"
+  - platform: mqtt
+    name: "Temperature Piscine"
+    state_topic: "jardin/piscine"
+    unit_of_measurement: "°C"
+    value_template: "{{ value_json.temperature }}"
+  - platform: mqtt
+    name: "My Computer - CPU Usage"
+    state_topic: "iotlink/workgroup/pouzor-pc/windows-monitor/stats/cpu"
+    unit_of_measurement: "%"
+    icon: mdi:speedometer
+    value_template: "{{ value }}"
+    availability_topic: "iotlink/workgroup/pouzor-pc/lwt"
+    payload_available: "ON"
+    payload_not_available: "OFF"
+    qos: 1
+
+  - platform: mqtt
+    name: "My Computer - RAM Usage"
+    state_topic: "iotlink/workgroup/pouzor-pc/windows-monitor/stats/memory/usage"
+    unit_of_measurement: "%"
+    icon: mdi:memory
+    value_template: "{{ value }}"
+    availability_topic: "iotlink/workgroup/pouzor-pc/lwt"
+    payload_available: "ON"
+    payload_not_available: "OFF"
+    qos: 1
+
+  - platform: mqtt
+    name: "My Computer - HDD Total Free Space (C)"
+    state_topic: "iotlink/workgroup/pouzor-pc/windows-monitor/stats/hard-drive/c/total-free-space"
+    unit_of_measurement: "MB"
+    icon: mdi:harddisk
+    value_template: "{{ value }}"
+    availability_topic: "iotlink/workgroup/pouzor-pc/lwt"
+    payload_available: "ON"
+    payload_not_available: "OFF"
+    qos: 1
+
+  - platform: mqtt
+    name: "My Computer - HDD Free Space (C)"
+    state_topic: "iotlink/workgroup/pouzor-pc/windows-monitor/stats/hard-drive/c/available-free-space"
+    unit_of_measurement: "MB"
+    icon: mdi:harddisk
+    value_template: "{{ value }}"
+    availability_topic: "iotlink/workgroup/pouzor-pc/lwt"
+    payload_available: "ON"
+    payload_not_available: "OFF"
+    qos: 1
+
+  - platform: mqtt
+    name: "My Computer - HDD Used Space (C)"
+    state_topic: "iotlink/workgroup/pouzor-pc/windows-monitor/stats/hard-drive/c/used-space"
+    unit_of_measurement: "MB"
+    icon: mdi:harddisk
+    value_template: "{{ value }}"
+    availability_topic: "iotlink/workgroup/pouzor-pc/lwt"
+    payload_available: "ON"
+    payload_not_available: "OFF"
+    qos: 1
+
+  - platform: folder
+    folder: /config/www/records
+
+  ###### HARDWARE STATISTICS
+  - platform: command_line
+    name: cpu_temp
+    command: "cat /sys/class/thermal/thermal_zone0/temp"
+    unit_of_measurement: "°C"
+    value_template: "{{ value | multiply(0.001) }}"
+  - platform: systemmonitor
+    resources:
+      - type: disk_free
+        arg: /home
+      - type: disk_use_percent
+        arg: /home
+      - type: memory_use_percent
+      - type: memory_free
+      - type: processor_use
+
+  ###### TOTAL NUMBER OF AUTOMATIONS
+  - platform: template
+    sensors:
+      total_automations:
+        friendly_name: "Number of Automations"
+        value_template: >
+          {%- set domains = ['automation'] -%}
+          {%- for domain in domains -%}
+            {%- for item in states[domain] -%}
+              {% if loop.first %}
+                {{loop.length}}
+              {% endif %}
+            {%- endfor -%}
+          {%- endfor -%}
+
+  ###### TOTAL NUMBER OF SENSORS
+  - platform: template
+    sensors:
+      total_sensors:
+        friendly_name: "Number of Sensors"
+        value_template: >
+          {%- set domains = ['sensor'] -%}
+          {%- for domain in domains -%}
+            {%- for item in states[domain] -%}
+              {% if loop.first %}
+                {{loop.length}}
+              {% endif %}
+            {%- endfor -%}
+          {%- endfor -%}
+
+  ###### TOTAL NUMBER OF SWITCHES
+  - platform: template
+    sensors:
+      total_switches:
+        friendly_name: "Number of Switches"
+        value_template: >
+          {%- set domains = ['switch'] -%}
+          {%- for domain in domains -%}
+            {%- for item in states[domain] -%}
+              {% if loop.first %}
+                {{loop.length}}
+              {% endif %}
+            {%- endfor -%}
+          {%- endfor -%}
+
+  ###### TOTAL NUMBER OF LIGHTS
+  - platform: template
+    sensors:
+      total_lights:
+        friendly_name: "Number of Lights"
+        value_template: >
+          {%- set domains = ['light'] -%}
+          {%- for domain in domains -%}
+            {%- for item in states[domain] -%}
+              {% if loop.first %}
+                {{loop.length}}
+              {% endif %}
+            {%- endfor -%}
+          {%- endfor -%}
+
+  ###### TOTAL NUMBER OF SCRIPTS
+  - platform: template
+    sensors:
+      total_scripts:
+        friendly_name: "Number of Scripts"
+        value_template: >
+          {%- set domains = ['script'] -%}
+          {%- for domain in domains -%}
+            {%- for item in states[domain] -%}
+              {% if loop.first %}
+                {{loop.length}}
+              {% endif %}
+            {%- endfor -%}
+          {%- endfor -%}
+
+  ###### TOTAL NUMBER OF DEVICES
+  - platform: template
+    sensors:
+      total_devicetrackers:
+        friendly_name: "Number of Devices"
+        value_template: >
+          {%- set domains = ['device_tracker'] -%}
+          {%- for domain in domains -%}
+            {%- for item in states[domain] -%}
+              {% if loop.first %}
+                {{loop.length}}
+              {% endif %}
+            {%- endfor -%}
+          {%- endfor -%}
+
+  ###### TOTAL NUMBER OF ZWAVE DEVICES
+  - platform: template
+    sensors:
+      total_zwave_devices:
+        friendly_name: "Number of Zwave Devices"
+        value_template: >
+          {%- set domains = ['zwave'] -%}
+          {%- for domain in domains -%}
+            {%- for item in states[domain] -%}
+              {% if loop.first %}
+                {{loop.length}}
+              {% endif %}
+            {%- endfor -%}
+          {%- endfor -%}
+
+  ###### TOTAL NUMBER OF ZIGBE DEVICES
+  - platform: template
+    sensors:
+      total_zigbee_devices:
+        friendly_name: "Number of Zigbee Devices"
+        value_template: "12" #todo find real value
+
+  ###### DISPLAY CURRENT HOME ASSISTANT VERSION
+  - platform: version
+    name: Installed Version
+
+  ###### UPTIME
+  - platform: uptime
+    name: Time Online
+
+media_source:
+  media_dirs:
+    camera: /www/records
+
+camera:
+  - platform: generic
+    stream_source: !secret ip_camera_ext
+    name: Allee
+    still_image_url: !secret img_ext
+
+  - platform: generic
+    stream_source: !secret ip_camera_garage
+    name: Garage
+    still_image_url: !secret img_garage
+
+  - platform: generic
+    stream_source: !secret ip_camera_salon
+    name: Salon
+    still_image_url: !secret img_salon
+
+  - platform: generic
+    name: doods_cam
+    still_image_url: !secret doods_cam
+
+image_processing:
+  - platform: doods
+    url: !secret doods_url
+    detector: default
+    scan_interval: 2
+    source:
+      - entity_id: camera.allee
+    file_out: /config/www/records/doods_allee.jpg
+    confidence: 50
+
+media_player:
+  - platform: spotify
+    client_id: !secret spotify_id
+    client_secret: !secret spotify_secret
+
+spotify:
+  client_id: !secret spotify_id
+  client_secret: !secret spotify_secret
+
+# Enables support for tracking state changes over time
+history:
+  exclude:
+    entities:
+      - sensor.yr_symbol
+      - remote.harmony_hub
+      - binary_sensor.remote_ui
+      - sensor.total_automations
+      - sensor.total_devicetrackers
+      - sensor.total_lights
+      - sensor.total_scripts
+      - sensor.total_sensors
+      - sensor.total_switches
+      - sensor.total_zwave_devices
+      - sun.sun
+      - sensor.last_hallway_detection
+      - sensor.netatmo_module_battery
+      - sensor.netatmo_module_battery_percent
+      - sensor.netatmo_station_wifi
+      - zwave.z_wave_me_zme_uzb1_usb_stick
+      - zwave.unknown_node_2
+      - camera.onvif_flux_etage
+      - camera.onvif_flux_garage
+      - camera.onvif_flux_salon
+      - camera.etage
+      - camera.garage
+      - camera.salon
+      - variable.last_hallway_detection
+      - variable.last_garage_detection
+      - sensor.netatmo_module_radio
+      - sensor.netatmo_module_battery_percent
+      - sensor.netatmo_module_battery
+      - sensor.netatmo_station_wifi
+      - sensor.solar_angle
+      - sensor.sunrise
+      - sensor.time_online
+      - sensor.neo_coolcam_door_window_detector_access_control
+      - sensor.neo_coolcam_door_window_detector_access_control_2
+      - sensor.neo_coolcam_door_window_detector_access_control_3
+      - sensor.shenzhen_neo_electronics_co_ltd_door_window_detector_access_control
+      - sensor.shenzhen_neo_electronics_co_ltd_door_window_detector_access_control_2
+      - sensor.neo_coolcam_door_window_detector_alarm_level
+      - sensor.neo_coolcam_door_window_detector_alarm_level_2
+      - sensor.neo_coolcam_door_window_detector_alarm_level_3
+      - sensor.shenzhen_neo_electronics_co_ltd_door_window_detector_alarm_level
+      - sensor.shenzhen_neo_electronics_co_ltd_door_window_detector_alarm_level_2
+      - sensor.neo_coolcam_door_window_detector_alarm_type
+      - sensor.neo_coolcam_door_window_detector_alarm_type_2
+      - sensor.neo_coolcam_door_window_detector_alarm_type_3
+      - sensor.shenzhen_neo_electronics_co_ltd_door_window_detector_alarm_type
+      - sensor.shenzhen_neo_electronics_co_ltd_door_window_detector_alarm_type_2
+      - sensor.my_computer_cpu_usage
+      - sensor.my_computer_hdd_format_c
+      - sensor.my_computer_hdd_free_space_c
+      - sensor.my_computer_hdd_label_c
+      - sensor.my_computer_hdd_total_free_space_c
+      - sensor.my_computer_hdd_total_size_c
+      - sensor.my_computer_hdd_usage_c
+      - sensor.my_computer_hdd_used_space_c
+      - sensor.my_computer_ram_usage
+    domains:
+      - device_tracker
+      - automation
+      - script
+
+tts:
+  - platform: google_translate
+    service_name: google_say
+
+alarm_control_panel:
+  - platform: manual
+    name: Home Alarm
+    delay_time: 2
+    trigger_time: 4
+    disarmed:
+      trigger_time: 0
+    armed_home:
+      arming_time: 0
+      delay_time: 0
+
+aws:
+  credentials:
+    - name: aws_account
+      aws_access_key_id: !secret aws_access_key_id
+      aws_secret_access_key: !secret aws_secret_access_key
+
+  notify:
+    - service: sns
+      region_name: "eu-west-3"
+      credential_name: aws_account
+      name: notify_sns
+
+notify:
+  - name: slack_ha
+    platform: slack
+    api_key: !secret slack_api_key
+    default_channel: "#général"
+
+freebox:
+  host: !secret freebox_server_host
+  port: !secret freebox_server_port
+
+switch:
+  - platform: template
+    switches:
+      my_computer:
+        friendly_name: "My Computer"
+        value_template: "{{ is_state('binary_sensor.my_computer_connected', 'on') }}"
+        turn_on:
+          service: script.my_computer_wake
+        turn_off:
+          service: script.my_computer_suspend
+        icon_template: mdi:laptop
+
+script:
+  my_computer_wake:
+    alias: "My Computer - Wake On Lan"
+    sequence:
+      - service: wake_on_lan.send_magic_packet
+        data:
+          mac: !secret mac_address
+
+  my_computer_shutdown:
+    alias: "My Computer - Shutdown"
+    sequence:
+      - service: mqtt.publish
+        data:
+          topic: "iotlink/workgroup/pouzor-pc/commands/shutdown"
+          payload: ""
+
+  my_computer_suspend:
+    alias: "My Computer - Suspend"
+    sequence:
+      - service: mqtt.publish
+        data:
+          topic: "iotlink/workgroup/pouzor-pc/commands/suspend"
+          payload: ""
+
+  my_computer_hibernate:
+    alias: "My Computer - Hibernate"
+    sequence:
+      - service: mqtt.publish
+        data:
+          topic: "iotlink/workgroup/pouzor-pc/commands/hibernate"
+          payload: ""
+
+  my_computer_reboot:
+    alias: "My Computer - Reboot"
+    sequence:
+      - service: mqtt.publish
+        data:
+          topic: "iotlink/workgroup/pouzor-pc/commands/reboot"
+          payload: ""
+
+  my_computer_steam:
+    alias: "My Computer - Steam"
+    sequence:
+      - service: mqtt.publish
+        data:
+          topic: "iotlink/workgroup/pouzor-pc/commands/run"
+          payload: '{ "command": "F:\\Steam\\Steam.exe", "args":"", "path": "F:\\Steam", "user": "", "visible": true, "fallback": true}'
+
+  my_computer_run_chrome:
+    alias: "My Computer - Run Chrome"
+    sequence:
+      - service: mqtt.publish
+        data:
+          topic: "iotlink/workgroup/pouzor-pc/commands/run"
+          payload: '{ "command": "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe", "args": "https://iotlink.gitlab.io", "path": "C:\\Program Files (x86)\\Google\\Chrome\\Application", "user": "", "visible": true, "fallback": true }'
+
+  my_computer_run_lol:
+    alias: "My Computer - Run LOL"
+    sequence:
+      - service: mqtt.publish
+        data:
+          topic: "iotlink/workgroup/pouzor-pc/commands/run"
+          payload: '{ "command": "F:\\Riot\\LeagueClient.exe", "args": "", "path": "F:\\Riot", "user": "", "visible": true, "fallback": true }'

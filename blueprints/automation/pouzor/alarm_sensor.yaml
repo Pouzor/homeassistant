@@ -1,0 +1,36 @@
+blueprint:
+  name: Alarm template
+  description: Trigger alarm and notify when sensor is triggered
+  domain: automation
+  input:
+    trigger_sensor:
+      selector:
+        entity:
+          domain: binary_sensor
+    message:
+      name: Message
+      default: ":male-police-officer: - Alarme déclenchée : {{ entity_name }} - @remy.jardinet"
+    message_iphone:
+      name: Message Mobile
+      default: "Alarme déclenchée : {{ entity_name }}"
+
+trigger:
+  - platform: state
+    entity_id: !input trigger_sensor
+    to: "on"
+condition:
+  - condition: state
+    entity_id: alarm_control_panel.home_alarm
+    state: armed_away
+variables:
+  entity_name: "{{ states[trigger.entity_id].name }}"
+action:
+  - service: alarm_control_panel.alarm_trigger
+    entity_id: alarm_control_panel.home_alarm
+  - service: notify.slack_ha
+    data_template:
+      message: !input "message"
+      target: "#général"
+  - service: notify.mobile_app_iphone_8_de_pouzor
+    data_template:
+      message: !input message_iphone

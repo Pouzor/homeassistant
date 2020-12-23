@@ -1,0 +1,39 @@
+title: PC
+path: pc
+badges: []
+icon: mdi:desktop-classic
+cards:
+      - type: entities
+        title: Commandes
+        show_header_toggle: false
+        entities:
+          - entity: script.my_computer_hibernate
+            name: Mettre en veille prolongée
+          - entity: script.my_computer_reboot
+            name: Reboot
+          - entity: script.my_computer_shutdown
+            name: Shutdown
+          - entity: script.my_computer_suspend
+            name: Mettre en veille
+          - entity: script.my_computer_wake
+            name: WOL
+            icon: mdi:desktop-classic
+          - entity: script.my_computer_steam  
+            name: Steam
+            icon: mdi:steam
+          - entity: script.my_computer_run_chrome
+            name: Chrome
+            icon: mdi:google-chrome
+          - entity: script.my_computer_run_lol
+            name: LOL
+            icon: mdi:gamepad-variant
+      - type: entities
+        title: Commandes
+        show_header_toggle: false
+        entities:
+          - entity: binary_sensor.my_computer_connected
+            name: Connecté
+          - entity: sensor.my_computer_cpu_usage
+            name: CPU
+          - entity: sensor.my_computer_ram_usage
+            name: RAM

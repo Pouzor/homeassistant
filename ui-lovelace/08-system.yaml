@@ -1,0 +1,83 @@
+path: system
+title: System
+icon: 'mdi:settings'
+badges: []
+cards:
+      - type: vertical-stack
+        cards:
+          - type: glance
+            columns: 7
+            show_name: true
+            entities:
+              - entity: sensor.total_sensors
+                name: Sensors
+                icon: mdi:counter
+
+              - entity: sensor.total_automations
+                name: Auto
+                icon: mdi:robot
+                hold_action:
+                  action: call-service
+                  service: automation.reload # reloads automations when long-pressed
+
+              - entity: sensor.total_scripts
+                name: Scripts
+                icon: mdi:script-text-outline
+                hold_action:
+                  action: call-service
+                  service: script.reload # reloads scripts when long-pressed
+
+              - entity: sensor.total_devicetrackers
+                name: Devices
+                icon: mdi:cellphone-link
+
+              - entity: sensor.total_switches
+                name: Switches
+                icon: mdi:power-socket-us
+
+
+              - entity: sensor.total_lights
+                name: Lights
+                icon: mdi:lightbulb-on
+                tap_action:
+                  action: navigate # goes to my Lights page when tapped
+                  navigation_path: /lovelace/lights/
+
+              - entity: sensor.total_zwave_devices
+                name: ZWave
+                icon: mdi:z-wave
+
+              - entity: sensor.total_zigbee_devices
+                name: Zigbee
+                icon: mdi:zigbee
+
+              - entity: sensor.time_online
+                name: Uptime
+                hold_action:
+                  action: call-service
+                  service: homeassistant.restart # restarts HA when long-pressed
+
+              - entity: sensor.installed_version
+                tap_action:
+                  action: navigate
+                  navigation_path: /hassio/dashboard # goes to Hassio update section when tapped
+
+      - type: entities
+        title: System Information
+        show_header_toggle: false
+        entities:
+          - sensor.processor_use
+          - sensor.disk_use_percent_home
+          - sensor.disk_free_home
+          - sensor.memory_use_percent
+          - sensor.memory_free
+          - entity: sensor.cpu_temp
+            name: CPU Temperature
+          - sensor.installed_version
+          - sensor.hacs
+          - entity: zone.home
+            icon: 'mdi:restart'
+            name: Home Assistant
+            tap_action:
+              action: call-service
+              service: homeassistant.restart

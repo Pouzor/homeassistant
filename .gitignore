@@ -1,0 +1,36 @@
+# Generic ignores
+*.log
+*.db
+*.pyc
+._*
+__pycache__
+*.conf
+.spotify-token-cache
+
+# OS files
+.DS_Store
+
+# Virtual environement
+venv
+
+
+# Ignore folders.
+.storage
+.cloud
+.google.token
+
+*.sqlite
+*.txt
+zigate.json
+*.xml
+*.mp3
+*.html
+
+# Ensure these YAML files are ignored, otherwise your secret data/credentials will leak.
+ip_bans.yaml
+secrets.yaml
+known_devices.yaml
+www/*.jpg
+www/records/
+www/*.mp4
+tts/

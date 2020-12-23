@@ -1,0 +1,369 @@
+title: Dashboard
+path: dashboard
+badges: []
+icon: mdi:desktop-mac-dashboard
+cards:
+  - type: vertical-stack
+    cards:
+      - type: custom:meteo-france-weather-card
+        name: Moret
+        entity: weather.moret_sur_loing
+        rainForecastEntity: sensor.moret_sur_loing_next_rain
+        rainChanceEntity: sensor.moret_sur_loing_rain_chance
+        thunderChanceEntity: sensor.moret_sur_loing_thunder_chance
+        alertEntity: sensor.moret_sur_loing_weather_alert
+      - type: "custom:button-card"
+        color_type: label-card
+        color: rgb(44, 109, 214)
+        name: Actions
+      - type: glance
+        title: Telecommande
+        show_state: false
+        show_name: false
+        entities:
+          - icon: mdi:fan
+            entity: input_boolean.vmc
+            name: vmc
+            tap_action:
+              action: call-service
+              service: input_boolean.toggle
+              service_data:
+                entity_id: input_boolean.vmc
+          - entity: remote.harmony_hub
+            name: "on"
+            icon: mdi:power
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                device: 47604917
+                command: PowerOn
+                entity_id: remote.harmony_hub
+          - entity: remote.harmony_hub
+            name: "off"
+            icon: mdi:power-plug-off
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                device: 47604917
+                command: PowerOff
+                entity_id: remote.harmony_hub
+          - entity: remote.harmony_hub
+            icon: mdi:volume-minus
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                device: 47604917
+                command: VolumeDown
+                entity_id: remote.harmony_hub
+          - entity: remote.harmony_hub
+            icon: mdi:volume-high
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                device: 47604917
+                command: VolumeUp
+                entity_id: remote.harmony_hub
+          - entity: remote.harmony_hub
+            icon: mdi:auto-upload
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                device: 47604917
+                command: InputNext
+                entity_id: remote.harmony_hub
+          - entity: remote.harmony_hub
+            icon: mdi:auto-download
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                device: 47604917
+                command: InputDown
+                entity_id: remote.harmony_hub
+
+  - type: vertical-stack
+    cards:
+      - type: "custom:button-card"
+        color_type: label-card
+        color: rgb(44, 109, 214)
+        name: Cameras
+      - type: horizontal-stack
+        cards:
+          - type: picture-glance
+            title: Garage
+            entities: []
+            camera_image: camera.garage
+          - type: picture-glance
+            title: Etage
+            entities: []
+            camera_image: camera.etage_mainstream
+          - type: picture-glance
+            title: Salon
+            entities: []
+            camera_image: camera.salon
+          - type: picture-glance
+            title: Allee
+            entities: []
+            camera_image: camera.allee
+
+      - type: entities
+        title: Security
+        show_header_toggle: false
+        entities:
+          - entity: binary_sensor.motion_salon
+            icon: hass:security
+            name: Motion Entrée
+            secondary_info: last-changed
+          - entity: binary_sensor.motion_sensor
+            icon: hass:security
+            name: Motion Garage
+            secondary_info: last-changed
+          - entity: binary_sensor.neo_coolcam_door_window_detector_sensor
+            icon: mdi:door
+            name: Porte entrée
+            secondary_info: last-changed
+          - entity: binary_sensor.neo_coolcam_door_window_detector_sensor_2
+            icon: mdi:door
+            secondary_info: last-changed
+            name: Porte garage
+          - entity: binary_sensor.openclose_17
+            name: Garage
+            icon: mdi:garage
+            secondary_info: last-changed
+          - entity: binary_sensor.presence_13
+            name: Couloir
+            icon: mdi:home-circle
+            secondary_info: last-changed
+          - entity: binary_sensor.camera_ext_motion
+            icon: hass:cctv
+            secondary_info: last-changed
+          - entity: binary_sensor.camera_salon_motion
+            icon: hass:cctv
+            secondary_info: last-changed
+          - entity: binary_sensor.neo_coolcam_door_window_detector_sensor_3
+            secondary_info: last-changed
+          - entity: binary_sensor.shenzhen_neo_electronics_co_ltd_door_window_detector_sensor
+            secondary_info: last-changed
+          - entity: binary_sensor.shenzhen_neo_electronics_co_ltd_door_window_detector_sensor_2
+            secondary_info: last-changed
+  - type: "custom:content-card-linky"
+    entity: sensor.myenedis_22138784256450
+    showInTableUnit: false
+
+  - type: vertical-stack
+    cards:
+      - type: "custom:button-card"
+        color_type: label-card
+        color: rgb(44, 109, 214)
+        name: Temperatures
+      - type: horizontal-stack
+        cards:
+          - type: custom:mini-graph-card
+            name: Salon [Netatmo]
+            entities:
+              - sensor.netatmo_station_temperature
+            show:
+              icon: false
+            height: 75
+            color_thresholds:
+              - value: 0
+                color: "#CCE5FF"
+              - value: 10
+                color: "#66B2FF"
+              - value: 15
+                color: "#0080FF"
+              - value: 18
+                color: "#87c087"
+              - value: 21
+                color: "#389638"
+              - value: 24
+                color: "#FF9932"
+              - value: 25
+                color: "#FF8000"
+              - value: 26
+                color: "#ff0000"
+          - type: custom:mini-graph-card
+            name: Couloir
+            entities:
+              - sensor.temperature_14
+            show:
+              icon: false
+            height: 75
+            color_thresholds:
+              - value: 0
+                color: "#CCE5FF"
+              - value: 10
+                color: "#66B2FF"
+              - value: 15
+                color: "#0080FF"
+              - value: 18
+                color: "#87c087"
+              - value: 21
+                color: "#389638"
+              - value: 24
+                color: "#FF9932"
+              - value: 25
+                color: "#FF8000"
+              - value: 26
+                color: "#ff0000"
+      - type: horizontal-stack
+        cards:
+          - type: custom:mini-graph-card
+            name: Chambre [X multi]
+            entities:
+              - sensor.multi_sensor
+            line_color: blue
+            show:
+              icon: false
+            height: 75
+            color_thresholds:
+              - value: 0
+                color: "#CCE5FF"
+              - value: 10
+                color: "#66B2FF"
+              - value: 15
+                color: "#0080FF"
+              - value: 18
+                color: "#87c087"
+              - value: 21
+                color: "#389638"
+              - value: 24
+                color: "#FF9932"
+              - value: 25
+                color: "#FF8000"
+              - value: 26
+                color: "#ff0000"
+          - type: custom:mini-graph-card
+            name: Garage [X motion]
+            entities:
+              - sensor.temperature_garage
+            unit: "°C"
+            show:
+              icon: false
+            height: 75
+            color_thresholds:
+              - value: 0
+                color: "#CCE5FF"
+              - value: 10
+                color: "#66B2FF"
+              - value: 15
+                color: "#0080FF"
+              - value: 18
+                color: "#87c087"
+              - value: 21
+                color: "#389638"
+              - value: 24
+                color: "#FF9932"
+              - value: 25
+                color: "#FF8000"
+              - value: 26
+                color: "#ff0000"
+      - type: horizontal-stack
+        cards:
+          - type: custom:mini-graph-card
+            name: Piscine
+            entities:
+              - sensor.temperature_piscine
+            line_color: blue
+            show:
+              icon: false
+            height: 75
+            color_thresholds:
+              - value: 0
+                color: "#CCE5FF"
+              - value: 10
+                color: "#66B2FF"
+              - value: 15
+                color: "#0080FF"
+              - value: 18
+                color: "#87c087"
+              - value: 21
+                color: "#389638"
+              - value: 24
+                color: "#FF9932"
+              - value: 25
+                color: "#FF8000"
+              - value: 26
+                color: "#ff0000"
+          - type: custom:mini-graph-card
+            name: Ext [X motion]
+            entities:
+              - sensor.temperature_ext
+            unit: "°C"
+            show:
+              icon: false
+            height: 75
+            color_thresholds:
+              - value: 0
+                color: "#CCE5FF"
+              - value: 10
+                color: "#66B2FF"
+              - value: 15
+                color: "#0080FF"
+              - value: 18
+                color: "#87c087"
+              - value: 21
+                color: "#389638"
+              - value: 24
+                color: "#FF9932"
+              - value: 25
+                color: "#FF8000"
+              - value: 26
+                color: "#ff0000"
+      - type: "custom:button-card"
+        color_type: label-card
+        color: rgb(44, 109, 214)
+        name: Switch
+      - type: entities
+        show_header_toggle: false
+        entities:
+          - entity: switch.vmc_mss710_main_channel
+          - entity: switch.smart_switch_mss710_main_channel
+          - entity: switch.shenzhen_neo_electronics_co_ltd_power_plug_12a_switch
+          - entity: switch.shenzhen_neo_electronics_co_ltd_power_plug_12a_switch_2
+          - entity: switch.zipato_unknown_type_0003_id_1083_switch
+          - entity: automation.motion_trigger_record_camera_ext
+          - entity: automation.motion_trigger_record_camera_salon
+          - entity: automation.send_notif_to_slack_when_motion_ext
+          - entity: automation.send_notif_to_slack_when_motion_salon
+          - entity: automation.send_notification_when_alarm_triggered
+
+  - type: vertical-stack
+    cards:
+      - type: "custom:button-card"
+        color_type: label-card
+        color: rgb(44, 109, 214)
+        name: Zigbee
+      - type: entities
+        show_header_toggle: false
+        entities:
+          - entity: light.hue_bureau
+            name: Plafonnier Bureau
+          - entity: light.lightstripe
+            name: LightStripe
+          - entity: light.extended_color_light_7
+            name: Chambre
+          - entity: light.dimmable_light_3
+            name: Ikea Armoire
+          - entity: light.extended_color_light_5
+            name: Salon D
+          - entity: light.extended_color_light_6
+            name: Salon G
+          - entity: light.couloire
+            name: Couloir
+      - type: "custom:button-card"
+        color_type: label-card
+        color: rgb(44, 109, 214)
+        name: Alarme
+      - type: entities
+        entities:
+          - entity: sensor.digicode
+            name: Digicode
+            icon: mdi:keyboard
+      - type: alarm-panel
+        entity: alarm_control_panel.home_alarm

@@ -1,0 +1,25 @@
+blueprint:
+  name: Log template
+  description: Log event on slack
+  domain: automation
+  input:
+    trigger_sensor:
+      selector:
+        entity:
+          domain: binary_sensor
+    message:
+      name: Message
+      default: ':door: {{ entity_name }} {{entity_state}} ({{now().strftime("%H:%M:%S") }})'
+
+trigger:
+  - platform: state
+    entity_id: !input trigger_sensor
+    to: "on"
+variables:
+  entity_name: "{{ states[trigger.entity_id].name }}"
+  entity_state: "{{ states[trigger.entity_id].state }}"
+action:
+  - service: notify.slack_ha
+    data_template:
+      message: !input "message"
+      target: "#général"

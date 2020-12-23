@@ -1,0 +1,24 @@
+title: Player
+path: player
+badges: []
+icon: mdi:animation-play
+cards:
+  - type: entities
+    title: Player
+    entities:
+      - entity: media_player.chromecast1265
+        name: ChromeCast
+      - entity: media_player.remy_s_freebox_delta
+        name: Freebox
+      - entity: media_player.pouzor_echo_spot
+        name: Echo spot
+      - entity: media_player.maison_2
+        name: Groupe Maison
+      - entity: media_player.googlehome_de_pouzor
+        name: Google Home
+      - entity: media_player.mini_chambre
+        name: Google Home Mini
+      - entity: input_text.search_spotify
+
+  - type: media-control
+    entity: media_player.spotify_remy_jardinet
