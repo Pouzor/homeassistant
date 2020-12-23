@@ -12,6 +12,9 @@ cards:
         rainChanceEntity: sensor.moret_sur_loing_rain_chance
         thunderChanceEntity: sensor.moret_sur_loing_thunder_chance
         alertEntity: sensor.moret_sur_loing_weather_alert
+      - type: "custom:content-card-linky"
+        entity: sensor.myenedis_22138784256450
+        showInTableUnit: false
       - type: "custom:button-card"
         color_type: label-card
         color: rgb(44, 109, 214)
@@ -151,9 +154,17 @@ cards:
             secondary_info: last-changed
           - entity: binary_sensor.shenzhen_neo_electronics_co_ltd_door_window_detector_sensor_2
             secondary_info: last-changed
-  - type: "custom:content-card-linky"
-    entity: sensor.myenedis_22138784256450
-    showInTableUnit: false
+      - type: "custom:button-card"
+        color_type: label-card
+        color: rgb(44, 109, 214)
+        name: Alarme
+      - type: entities
+        entities:
+          - entity: sensor.digicode
+            name: Digicode
+            icon: mdi:keyboard
+      - type: alarm-panel
+        entity: alarm_control_panel.home_alarm
 
   - type: vertical-stack
     cards:
@@ -356,14 +367,3 @@ cards:
             name: Salon G
           - entity: light.couloire
             name: Couloir
-      - type: "custom:button-card"
-        color_type: label-card
-        color: rgb(44, 109, 214)
-        name: Alarme
-      - type: entities
-        entities:
-          - entity: sensor.digicode
-            name: Digicode
-            icon: mdi:keyboard
-      - type: alarm-panel
-        entity: alarm_control_panel.home_alarm
