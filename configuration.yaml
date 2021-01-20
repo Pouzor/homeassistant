@@ -55,7 +55,7 @@ frontend:
   themes: !include_dir_merge_named themes
 lovelace:
   mode: yaml
-
+  resources: !include resources.yaml
 homekit:
   filter:
     include_domains:
@@ -193,7 +193,6 @@ sensor:
     hc_cout: 0.1344
     hp_cout: 0.1798
     scan_interval: 7200
-    delay: 7200 # OPTION
   - platform: template
     sensors:
       temperature_garage:
@@ -461,7 +460,7 @@ image_processing:
     source:
       - entity_id: camera.allee
     file_out: /config/www/records/doods_allee.jpg
-    confidence: 50
+    confidence: 60
 
 media_player:
   - platform: spotify

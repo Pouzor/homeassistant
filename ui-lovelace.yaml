@@ -1,21 +1,2 @@
 title: Pouzor Home
-resources:
-  - url: /hacsfiles/button-card/button-card.js
-    type: module
-  - url: /hacsfiles/mini-graph-card/mini-graph-card-bundle.js
-    type: module
-  - url: /local/card-tools.js?track=true
-    type: js
-  - url: /hacsfiles/spotify-card/spotify-card.js
-    type: module
-  - url: /hacsfiles/lovelace-auto-entities/auto-entities.js
-    type: module
-  - url: /hacsfiles/bar-card/bar-card.js
-    type: module
-  - url: /hacsfiles/meteo-france-weather-card/meteo-france-weather-card.js
-    type: module
-  - url: /hacsfiles/lovelace-multiple-entity-row/multiple-entity-row.js
-    type: module
-  - url: /hacsfiles/content-card-linky/content-card-linky.js
-    type: module
 views: !include_dir_list ui-lovelace/

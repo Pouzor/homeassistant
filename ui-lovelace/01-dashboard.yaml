@@ -343,6 +343,11 @@ cards:
           - entity: automation.send_notif_to_slack_when_motion_ext
           - entity: automation.send_notif_to_slack_when_motion_salon
           - entity: automation.send_notification_when_alarm_triggered
+          - entity: switch.hurleuse_switch
+          - entity: sensor.alarm_time
+          - entity: switch.lumiere_ext_switch
+          - entity: light.light_ext_sensor
+          - entity: device_tracker.esp_af1459
 
   - type: vertical-stack
     cards:
