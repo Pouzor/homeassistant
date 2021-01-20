@@ -154,26 +154,6 @@ binary_sensor:
     changes: 5
     initial_state: true
 
-  - platform: mqtt
-    name: "My Computer - Connected"
-    state_topic: "iotlink/workgroup/pouzor-pc/lwt"
-    value_template: "{{ value }}"
-    payload_on: "ON"
-    payload_off: "OFF"
-    device_class: "connectivity"
-    qos: 1
-  - platform: mqtt
-    name: "My Computer - Charging"
-    state_topic: "iotlink/workgroup/pouzor-pc/windows-monitor/stats/power/status"
-    value_template: "{{ value }}"
-    payload_on: "Online"
-    payload_off: "Offline"
-    device_class: "plug"
-    availability_topic: "iotlink/workgroup/pouzor-pc/lwt"
-    payload_available: "ON"
-    payload_not_available: "OFF"
-    qos: 1
-
 hacs:
   token: !secret hacs_token
 
@@ -234,60 +214,6 @@ sensor:
     state_topic: "jardin/piscine"
     unit_of_measurement: "°C"
     value_template: "{{ value_json.temperature }}"
-  - platform: mqtt
-    name: "My Computer - CPU Usage"
-    state_topic: "iotlink/workgroup/pouzor-pc/windows-monitor/stats/cpu"
-    unit_of_measurement: "%"
-    icon: mdi:speedometer
-    value_template: "{{ value }}"
-    availability_topic: "iotlink/workgroup/pouzor-pc/lwt"
-    payload_available: "ON"
-    payload_not_available: "OFF"
-    qos: 1
-
-  - platform: mqtt
-    name: "My Computer - RAM Usage"
-    state_topic: "iotlink/workgroup/pouzor-pc/windows-monitor/stats/memory/usage"
-    unit_of_measurement: "%"
-    icon: mdi:memory
-    value_template: "{{ value }}"
-    availability_topic: "iotlink/workgroup/pouzor-pc/lwt"
-    payload_available: "ON"
-    payload_not_available: "OFF"
-    qos: 1
-
-  - platform: mqtt
-    name: "My Computer - HDD Total Free Space (C)"
-    state_topic: "iotlink/workgroup/pouzor-pc/windows-monitor/stats/hard-drive/c/total-free-space"
-    unit_of_measurement: "MB"
-    icon: mdi:harddisk
-    value_template: "{{ value }}"
-    availability_topic: "iotlink/workgroup/pouzor-pc/lwt"
-    payload_available: "ON"
-    payload_not_available: "OFF"
-    qos: 1
-
-  - platform: mqtt
-    name: "My Computer - HDD Free Space (C)"
-    state_topic: "iotlink/workgroup/pouzor-pc/windows-monitor/stats/hard-drive/c/available-free-space"
-    unit_of_measurement: "MB"
-    icon: mdi:harddisk
-    value_template: "{{ value }}"
-    availability_topic: "iotlink/workgroup/pouzor-pc/lwt"
-    payload_available: "ON"
-    payload_not_available: "OFF"
-    qos: 1
-
-  - platform: mqtt
-    name: "My Computer - HDD Used Space (C)"
-    state_topic: "iotlink/workgroup/pouzor-pc/windows-monitor/stats/hard-drive/c/used-space"
-    unit_of_measurement: "MB"
-    icon: mdi:harddisk
-    value_template: "{{ value }}"
-    availability_topic: "iotlink/workgroup/pouzor-pc/lwt"
-    payload_available: "ON"
-    payload_not_available: "OFF"
-    qos: 1
 
   - platform: folder
     folder: /config/www/records
@@ -592,59 +518,3 @@ script:
       - service: wake_on_lan.send_magic_packet
         data:
           mac: !secret mac_address
-
-  my_computer_shutdown:
-    alias: "My Computer - Shutdown"
-    sequence:
-      - service: mqtt.publish
-        data:
-          topic: "iotlink/workgroup/pouzor-pc/commands/shutdown"
-          payload: ""
-
-  my_computer_suspend:
-    alias: "My Computer - Suspend"
-    sequence:
-      - service: mqtt.publish
-        data:
-          topic: "iotlink/workgroup/pouzor-pc/commands/suspend"
-          payload: ""
-
-  my_computer_hibernate:
-    alias: "My Computer - Hibernate"
-    sequence:
-      - service: mqtt.publish
-        data:
-          topic: "iotlink/workgroup/pouzor-pc/commands/hibernate"
-          payload: ""
-
-  my_computer_reboot:
-    alias: "My Computer - Reboot"
-    sequence:
-      - service: mqtt.publish
-        data:
-          topic: "iotlink/workgroup/pouzor-pc/commands/reboot"
-          payload: ""
-
-  my_computer_steam:
-    alias: "My Computer - Steam"
-    sequence:
-      - service: mqtt.publish
-        data:
-          topic: "iotlink/workgroup/pouzor-pc/commands/run"
-          payload: '{ "command": "F:\\Steam\\Steam.exe", "args":"", "path": "F:\\Steam", "user": "", "visible": true, "fallback": true}'
-
-  my_computer_run_chrome:
-    alias: "My Computer - Run Chrome"
-    sequence:
-      - service: mqtt.publish
-        data:
-          topic: "iotlink/workgroup/pouzor-pc/commands/run"
-          payload: '{ "command": "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe", "args": "https://iotlink.gitlab.io", "path": "C:\\Program Files (x86)\\Google\\Chrome\\Application", "user": "", "visible": true, "fallback": true }'
-
-  my_computer_run_lol:
-    alias: "My Computer - Run LOL"
-    sequence:
-      - service: mqtt.publish
-        data:
-          topic: "iotlink/workgroup/pouzor-pc/commands/run"
-          payload: '{ "command": "F:\\Riot\\LeagueClient.exe", "args": "", "path": "F:\\Riot", "user": "", "visible": true, "fallback": true }'
