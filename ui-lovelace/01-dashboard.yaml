@@ -150,9 +150,9 @@ cards:
             secondary_info: last-changed
           - entity: binary_sensor.neo_coolcam_door_window_detector_sensor_3
             secondary_info: last-changed
-          - entity: binary_sensor.shenzhen_neo_electronics_co_ltd_door_window_detector_sensor
-            secondary_info: last-changed
           - entity: binary_sensor.shenzhen_neo_electronics_co_ltd_door_window_detector_sensor_2
+            secondary_info: last-changed
+          - entity: binary_sensor.window_door_sensor_2
             secondary_info: last-changed
       - type: "custom:button-card"
         color_type: label-card
@@ -348,6 +348,7 @@ cards:
           - entity: switch.lumiere_ext_switch
           - entity: light.light_ext_sensor
           - entity: device_tracker.esp_af1459
+          - entity: switch.on_off_plug_in_unit_11
 
   - type: vertical-stack
     cards:
@@ -372,3 +373,7 @@ cards:
             name: Salon G
           - entity: light.couloire
             name: Couloir
+          - entity: light.lightstripe_lidl
+            name: LightStrip LIDL Celia
+          - entity: light.lumiere_celia
+            name: Plafonier Célia

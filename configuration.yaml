@@ -118,9 +118,9 @@ input_boolean:
     initial: off
     icon: mdi:fan
 
-meross_cloud:
-  username: !secret meross_username
-  password: !secret meross_password
+#meross_cloud:
+#  username: !secret meross_username
+#  password: !secret meross_password
 
 zwave:
   usb_path: /dev/ttyACM0
@@ -141,12 +141,12 @@ input_text:
     initial: Search into spotify
 
 binary_sensor:
-  #  - platform: ffmpeg_motion remove for chrismas
-  #    input: !secret ip_camera_ext
-  #    name: "Camera ext motion"
-  #    reset: 5
-  #    changes: 8
-  #    initial_state: true
+  - platform: ffmpeg_motion
+    input: !secret ip_camera_ext
+    name: "Camera ext motion"
+    reset: 5
+    changes: 8
+    initial_state: true
   - platform: ffmpeg_motion
     input: !secret ip_camera_salon
     name: "Camera salon motion"

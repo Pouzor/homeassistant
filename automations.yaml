@@ -83,6 +83,62 @@
     - service: input_boolean.turn_off
       data:
         entity_id: input_boolean.vmc
+
+- alias: Light on Celia
+  id: light_on_celia
+  trigger:
+    platform: event
+    event_type: deconz_event
+    event_data:
+      id: dimmer_switch
+      event: 1002
+  action:
+    - service: light.turn_on
+      data:
+        entity_id: light.lumiere_celia
+        brightness: 100
+        kelvin: 2700
+- alias: Light off Celia
+  id: light_off_celia
+  trigger:
+    platform: event
+    event_type: deconz_event
+    event_data:
+      id: dimmer_switch
+      event: 4002
+  action:
+    - service: light.turn_off
+      data:
+        entity_id: light.lumiere_celia
+
+- alias: Light on Celia stripe
+  id: light_on_celia_stripe
+  trigger:
+    platform: event
+    event_type: deconz_event
+    event_data:
+      id: dimmer_switch
+      event: 2002
+  action:
+    - service: light.turn_on
+      data:
+        entity_id: light.lightstripe_lidl
+        hs_color:
+          - "{{ (30 + (state_attr('light.lightstripe_lidl', 'hs_color')[0] or 0)) % 360 }}"
+          - 100
+- alias: Light off Celia Stripe
+  id: light_off_celia_stripe
+  trigger:
+    platform: event
+    event_type: deconz_event
+    event_data:
+      id: dimmer_switch
+      event: 3002
+  action:
+    - service: light.turn_off
+      data:
+        entity_id: light.lightstripe_lidl
+
 - alias: System - Update Template Sensors
   initial_state: true
   trigger:
