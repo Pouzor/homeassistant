@@ -126,3 +126,8 @@ cards:
   - type: entities
     entities:
       - entity: sensor.records
+  - type: entities
+    entities:
+      - switch.camera_video_camera_control_camera_control_on
+  - type: picture-entity
+    entity: camera.camera_video_camera_control

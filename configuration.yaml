@@ -38,7 +38,6 @@ influxdb:
       - sensor.temperature_14
       - sensor.multi_sensor
       - sensor.temperature_garage
-      - sensor.temperature_piscine
 
 http:
   ssl_certificate: /ssl/fullchain.pem
@@ -50,6 +49,7 @@ logger:
     pydeconz: debug
     homeassistant.components.deconz: debug
     homeassistant.components.onvif: debug
+    custom_components.xiaomi_miot: debug
 
 frontend:
   themes: !include_dir_merge_named themes
@@ -61,6 +61,12 @@ homekit:
     include_domains:
       - light
       - switch
+      - sensor
+
+xiaomi_miot:
+  username: !secret email
+  password: !secret xiaomi_secret
+  server_country: de
 
 alexa:
   smart_home:
@@ -84,6 +90,7 @@ conversation:
 logbook:
 map:
 wake_on_lan:
+
 shell_command:
   generate_camera_ext_picture: !secret generate_camera_ext_picture
   generate_camera_garage_picture: !secret generate_camera_garage_picture
@@ -109,31 +116,23 @@ panel_custom:
       edge_visibility: relevant
       grouping: z-wave
 
-ifttt:
-  key: !secret ifttt_key
-
 input_boolean:
   vmc:
     name: VMC status
     initial: off
     icon: mdi:fan
 
-#meross_cloud:
-#  username: !secret meross_username
-#  password: !secret meross_password
-
 zwave:
   usb_path: /dev/ttyACM0
   device_config: !include zwave_device_config.yaml
+
+browser_mod:
+  prefix: "browser_mod_"
 
 remote:
   - platform: harmony
     name: Harmony Hub
     host: !secret harmony_host
-
-netatmo:
-  client_id: !secret netatmo_api_key
-  client_secret: !secret netatmo_secret_key
 
 input_text:
   search_spotify:
@@ -160,8 +159,6 @@ hacs:
 variable:
 
 sensor:
-  - platform: netatmo
-    station: Pouzor
   - platform: files
     folder: /config/www/records
     name: gallery_images
@@ -209,11 +206,11 @@ sensor:
     state_topic: "chambre/simon"
     unit_of_measurement: "%"
     value_template: "{{ value_json.humidity }}"
-  - platform: mqtt
-    name: "Temperature Piscine"
-    state_topic: "jardin/piscine"
-    unit_of_measurement: "°C"
-    value_template: "{{ value_json.temperature }}"
+  #  - platform: mqtt
+  #    name: "Temperature Piscine"
+  #    state_topic: "jardin/piscine"
+  #    unit_of_measurement: "°C"
+  #    value_template: "{{ value_json.temperature }}"
 
   - platform: folder
     folder: /config/www/records
@@ -368,11 +365,13 @@ camera:
     stream_source: !secret ip_camera_garage
     name: Garage
     still_image_url: !secret img_garage
+    rtsp_transport: udp
 
   - platform: generic
     stream_source: !secret ip_camera_salon
     name: Salon
     still_image_url: !secret img_salon
+    rtsp_transport: udp
 
   - platform: generic
     name: doods_cam

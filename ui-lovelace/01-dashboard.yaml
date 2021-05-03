@@ -13,7 +13,7 @@ cards:
         thunderChanceEntity: sensor.moret_sur_loing_thunder_chance
         alertEntity: sensor.moret_sur_loing_weather_alert
       - type: "custom:content-card-linky"
-        entity: sensor.myenedis_22138784256450
+        entity: sensor.myenedis_22138784256450_2
         showInTableUnit: false
       - type: "custom:button-card"
         color_type: label-card
@@ -154,6 +154,8 @@ cards:
             secondary_info: last-changed
           - entity: binary_sensor.window_door_sensor_2
             secondary_info: last-changed
+          - entity: binary_sensor.window_door_sensor_3
+            secondary_info: last-changed
       - type: "custom:button-card"
         color_type: label-card
         color: rgb(44, 109, 214)
@@ -177,7 +179,7 @@ cards:
           - type: custom:mini-graph-card
             name: Salon [Netatmo]
             entities:
-              - sensor.netatmo_station_temperature
+              - sensor.netatmo_pouzor_station_temperature
             show:
               icon: false
             height: 75
@@ -225,9 +227,9 @@ cards:
       - type: horizontal-stack
         cards:
           - type: custom:mini-graph-card
-            name: Chambre [X multi]
+            name: Ext [X motion]
             entities:
-              - sensor.multi_sensor
+              - sensor.temperature_ext
             line_color: blue
             show:
               icon: false
@@ -277,9 +279,9 @@ cards:
       - type: horizontal-stack
         cards:
           - type: custom:mini-graph-card
-            name: Piscine
+            name: Salon
             entities:
-              - sensor.temperature_piscine
+              - sensor.temperature_24
             line_color: blue
             show:
               icon: false
@@ -302,9 +304,34 @@ cards:
               - value: 26
                 color: "#ff0000"
           - type: custom:mini-graph-card
-            name: Ext [X motion]
+            name: Chambre [X multi]
             entities:
-              - sensor.temperature_ext
+              - sensor.multi_sensor
+            unit: "°C"
+            show:
+              icon: false
+            height: 75
+            color_thresholds:
+              - value: 0
+                color: "#CCE5FF"
+              - value: 10
+                color: "#66B2FF"
+              - value: 15
+                color: "#0080FF"
+              - value: 18
+                color: "#87c087"
+              - value: 21
+                color: "#389638"
+              - value: 24
+                color: "#FF9932"
+              - value: 25
+                color: "#FF8000"
+              - value: 26
+                color: "#ff0000"
+          - type: custom:mini-graph-card
+            name: Etage
+            entities:
+              - sensor.temperature_27
             unit: "°C"
             show:
               icon: false
@@ -377,3 +404,7 @@ cards:
             name: LightStrip LIDL Celia
           - entity: light.lumiere_celia
             name: Plafonier Célia
+          - entity: light.extended_color_light_12
+            name: Plafonier Simon
+          - entity: light.extended_color_light_12_2
+            name: LightStrip PC

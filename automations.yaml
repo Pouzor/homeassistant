@@ -111,6 +111,61 @@
       data:
         entity_id: light.lumiere_celia
 
+- alias: Light on Simon
+  id: light_on_simon
+  trigger:
+    platform: event
+    event_type: deconz_event
+    event_data:
+      id: tradfri_on_off_switch
+      event: 1002
+  condition:
+    condition: state
+    entity_id:
+      - light.extended_color_light_12
+    state: "off"
+  action:
+    - service: light.turn_on
+      data:
+        entity_id: light.extended_color_light_12
+        brightness: 100
+        kelvin: 2700
+
+- alias: Light on color Simon
+  id: light_on_color_simon
+  trigger:
+    platform: event
+    event_type: deconz_event
+    event_data:
+      id: tradfri_on_off_switch
+      event: 1002
+  condition:
+    condition: state
+    entity_id:
+      - light.extended_color_light_12
+    state: "on"
+  action:
+    - service: light.turn_on
+      data:
+        entity_id: light.extended_color_light_12
+        hs_color:
+          - "{{ (30 + (state_attr('light.extended_color_light_12', 'hs_color')[0] or 0)) % 360 }}"
+          - 100
+        brightness: 255
+
+- alias: Light off Simon
+  id: light_off_simon
+  trigger:
+    platform: event
+    event_type: deconz_event
+    event_data:
+      id: tradfri_on_off_switch
+      event: 2002
+  action:
+    - service: light.turn_off
+      data:
+        entity_id: light.extended_color_light_12
+
 - alias: Light on Celia stripe
   id: light_on_celia_stripe
   trigger:
