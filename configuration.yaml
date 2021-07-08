@@ -14,6 +14,7 @@ homeassistant:
     - !secret img_ext
     - !secret img_garage
     - !secret img_salon
+    - !secret img_etage
     - !secret doods_cam
   media_dirs:
     media: /config/www/records
@@ -95,6 +96,7 @@ shell_command:
   generate_camera_ext_picture: !secret generate_camera_ext_picture
   generate_camera_garage_picture: !secret generate_camera_garage_picture
   generate_camera_salon_picture: !secret generate_camera_salon_picture
+  generate_camera_etage_picture: !secret generate_camera_etage_picture
 
 panel_custom:
   - name: gallery
@@ -121,6 +123,7 @@ input_boolean:
     name: VMC status
     initial: off
     icon: mdi:fan
+  freebox:
 
 zwave:
   usb_path: /dev/ttyACM0
@@ -156,20 +159,7 @@ binary_sensor:
 hacs:
   token: !secret hacs_token
 
-variable:
-
 sensor:
-  - platform: files
-    folder: /config/www/records
-    name: gallery_images
-    sort: date
-  - platform: myEnedis
-    token: !secret enedis_token
-    code: !secret enedis_code
-    heures_creuses: "[['00:56','07:26'], ['12:56', '14:26']]"
-    hc_cout: 0.1344
-    hp_cout: 0.1798
-    scan_interval: 7200
   - platform: template
     sensors:
       temperature_garage:
@@ -206,11 +196,6 @@ sensor:
     state_topic: "chambre/simon"
     unit_of_measurement: "%"
     value_template: "{{ value_json.humidity }}"
-  #  - platform: mqtt
-  #    name: "Temperature Piscine"
-  #    state_topic: "jardin/piscine"
-  #    unit_of_measurement: "°C"
-  #    value_template: "{{ value_json.temperature }}"
 
   - platform: folder
     folder: /config/www/records
@@ -374,6 +359,12 @@ camera:
     rtsp_transport: udp
 
   - platform: generic
+    stream_source: !secret ip_camera_etage
+    name: Etage
+    still_image_url: !secret img_etage
+    rtsp_transport: udp
+
+  - platform: generic
     name: doods_cam
     still_image_url: !secret doods_cam
 
@@ -386,11 +377,6 @@ image_processing:
       - entity_id: camera.allee
     file_out: /config/www/records/doods_allee.jpg
     confidence: 60
-
-media_player:
-  - platform: spotify
-    client_id: !secret spotify_id
-    client_secret: !secret spotify_secret
 
 spotify:
   client_id: !secret spotify_id

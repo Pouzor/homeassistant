@@ -23,3 +23,7 @@ action:
     data_template:
       message: !input "message"
       target: "#général"
+  - service: notify.mobile_app_iphone_8_de_pouzor
+    data_template:
+      message: !input "message"
+      title: HA - Ouverture
