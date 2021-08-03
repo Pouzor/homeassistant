@@ -144,11 +144,6 @@ cards:
         color_type: label-card
         color: rgb(44, 109, 214)
         name: Alarme
-      - type: entities
-        entities:
-          - entity: sensor.digicode
-            name: Digicode
-            icon: mdi:keyboard
       - type: alarm-panel
         entity: alarm_control_panel.home_alarm
 

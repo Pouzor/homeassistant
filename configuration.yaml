@@ -6,7 +6,7 @@ homeassistant:
   unit_system: metric
   time_zone: Europe/Paris
   customize: !include customize.yaml
-  whitelist_external_dirs:
+  allowlist_external_dirs:
     - /config/www/records
   external_url: !secret external_url
   internal_url: !secret internal_url
@@ -454,11 +454,14 @@ tts:
 alarm_control_panel:
   - platform: manual
     name: Home Alarm
-    delay_time: 2
+    delay_time: 10
     trigger_time: 4
     disarmed:
       trigger_time: 0
     armed_home:
+      arming_time: 0
+      delay_time: 0
+    armed_away:
       arming_time: 0
       delay_time: 0
 

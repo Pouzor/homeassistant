@@ -34,3 +34,10 @@ action:
   - service: notify.mobile_app_iphone_8_de_pouzor
     data_template:
       message: !input message_iphone
+      data:
+        push:
+          interruption-level: critical
+          sound:
+            name: "default"
+            critical: 1
+            volume: 1.0

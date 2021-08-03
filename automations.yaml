@@ -276,10 +276,42 @@
       entity_id: alarm_control_panel.home_alarm
       to: triggered
   action:
-    - service: notify.ios_iphone_8_de_pouzor
+    - service: notify.mobile_app_iphone_8_de_pouzor
       data:
         message: ALARM! The alarm has been triggered
+        data:
+          push:
+            interruption-level: critical
+            sound:
+              name: "default"
+              critical: 1
+              volume: 1.0
+    - service: switch.turn_on
+      entity_id: switch.hurleuse_switch
+    - service: switch.turn_on
+      entity_id: switch.zipato_unknown_type_0003_id_1083_switch
   id: a15bee969c7140dfa68f4d6aa13f3404
+
+- alias: Send notification when alarm is unarmed and disable alarm
+  trigger:
+    - platform: state
+      entity_id: alarm_control_panel.home_alarm
+      to: disarmed
+  action:
+    - service: notify.mobile_app_iphone_8_de_pouzor
+      data:
+        message: The alarm has been disabled
+        data:
+          push:
+            interruption-level: critical
+            sound:
+              name: "default"
+              critical: 1
+              volume: 1.0
+    - service: switch.turn_off
+      entity_id: switch.hurleuse_switch
+    - service: switch.turn_off
+      entity_id: switch.zipato_unknown_type_0003_id_1083_switch
 
 - alias: Motion trigger record camera salon
   trigger:
@@ -420,41 +452,65 @@
             url: !secret doods_cam
         message: Personne detectée sur la camera
 
-- id: "1608570268355"
-  alias: "[Alarm] Trigger and Notify when Car Garage Open"
-  description: ""
-  use_blueprint:
-    path: pouzor/alarm_sensor.yaml
-    input:
-      trigger_sensor: binary_sensor.openclose_17
-- id: "1608589240184"
-  alias: "[Alarm] Trigger and Notify when motion in Garage"
-  description: ""
-  use_blueprint:
-    path: pouzor/alarm_sensor.yaml
-    input:
-      trigger_sensor: binary_sensor.motion_sensor
-- id: "1608589349671"
-  alias: "[Alarm] Trigger and Notify when front door open"
-  description: ""
-  use_blueprint:
-    path: pouzor/alarm_sensor.yaml
-    input:
-      trigger_sensor: binary_sensor.neo_coolcam_door_window_detector_sensor
-- id: "1608589377935"
-  alias: "[Alarm] Trigger and Notify when garage door open"
+################################# ALARM ####################################
+
+- alias: "[Alarm] Garage Door"
   description: ""
   use_blueprint:
     path: pouzor/alarm_sensor.yaml
     input:
       trigger_sensor: binary_sensor.neo_coolcam_door_window_detector_sensor_2
-- id: "1608589641592"
-  alias: "[Alarm] Trigger and Notify when hallway motion"
+
+- alias: "[Alarm] Garage Car Door"
+  description: ""
+  use_blueprint:
+    path: pouzor/alarm_sensor.yaml
+    input:
+      trigger_sensor: binary_sensor.openclose_17
+
+- alias: "[Alarm] Front Door"
+  description: ""
+  use_blueprint:
+    path: pouzor/alarm_sensor.yaml
+    input:
+      trigger_sensor: binary_sensor.neo_coolcam_door_window_detector_sensor
+
+- alias: "[Alarm] Windows Bureau"
+  description: ""
+  use_blueprint:
+    path: pouzor/alarm_sensor.yaml
+    input:
+      trigger_sensor: binary_sensor.neo_coolcam_door_window_detector_sensor_3
+
+- alias: "[Alarm] Windows Kitchen"
+  description: ""
+  use_blueprint:
+    path: pouzor/alarm_sensor.yaml
+    input:
+      trigger_sensor: binary_sensor.shenzhen_neo_electronics_co_ltd_door_window_detector_sensor_2
+
+- alias: "[Alarm] BackYard Door"
+  description: ""
+  use_blueprint:
+    path: pouzor/alarm_sensor.yaml
+    input:
+      trigger_sensor: binary_sensor.window_door_sensor_3
+
+- alias: "[Alarm] FrontYard Door"
+  description: ""
+  use_blueprint:
+    path: pouzor/alarm_sensor.yaml
+    input:
+      trigger_sensor: binary_sensor.window_door_sensor_2
+
+- alias: "[Alarm] hallway"
   description: ""
   use_blueprint:
     path: pouzor/alarm_sensor.yaml
     input:
       trigger_sensor: binary_sensor.presence_13
+
+############################ LOG ###############################
 - id: "1608592199554"
   alias: "[Log] Garage Door"
   description: ""
@@ -462,6 +518,8 @@
     path: pouzor/log_sensor.yaml
     input:
       trigger_sensor: binary_sensor.neo_coolcam_door_window_detector_sensor_2
+      picto: "🚪"
+      title: "HA - Porte couloire ouverte"
 - id: "1608592605111"
   alias: "[Log] Motion Garage"
   description: ""
@@ -469,6 +527,8 @@
     path: pouzor/log_sensor.yaml
     input:
       trigger_sensor: binary_sensor.motion_sensor
+      picto: "📷"
+      title: "HA - Motion dans le garage"
 - id: "1608592686045"
   alias: "[Log] Garage Car Door"
   description: ""
@@ -476,6 +536,8 @@
     path: pouzor/log_sensor.yaml
     input:
       trigger_sensor: binary_sensor.openclose_17
+      picto: "🏍"
+      title: HA - Garage ouvert
 - id: "1608592760031"
   alias: "[Log] Front Door"
   description: ""
@@ -483,6 +545,8 @@
     path: pouzor/log_sensor.yaml
     input:
       trigger_sensor: binary_sensor.neo_coolcam_door_window_detector_sensor
+      picto: "🚪"
+      title: "HA - Porte entrée ouverte"
 - id: "1608592803773"
   alias: "[Log] Motion Front"
   description: ""
@@ -490,21 +554,96 @@
     path: pouzor/log_sensor.yaml
     input:
       trigger_sensor: binary_sensor.motion_salon
+      picto: "📷"
+      title: "HA - Motion devant la porte"
 - alias: "[Log] Windows Bureau"
   description: ""
   use_blueprint:
     path: pouzor/log_sensor.yaml
     input:
       trigger_sensor: binary_sensor.neo_coolcam_door_window_detector_sensor_3
+      title: HA - Fenetre ouverte
 - alias: "[Log] BackYard Door"
   description: ""
   use_blueprint:
     path: pouzor/log_sensor.yaml
     input:
       trigger_sensor: binary_sensor.window_door_sensor_3
+      picto: "🪟"
 - alias: "[Log] FrontYard Door"
   description: ""
   use_blueprint:
     path: pouzor/log_sensor.yaml
     input:
       trigger_sensor: binary_sensor.window_door_sensor_2
+      picto: "🪟"
+
+- alias: "[Log] kitchen windows"
+  description: ""
+  use_blueprint:
+    path: pouzor/log_sensor.yaml
+    input:
+      trigger_sensor: binary_sensor.shenzhen_neo_electronics_co_ltd_door_window_detector_sensor_2
+
+- alias: "[Log] C02 Sensor"
+  description: ""
+  use_blueprint:
+    path: pouzor/log_sensor.yaml
+    input:
+      trigger_sensor: binary_sensor.fire_30
+      picto: "🔥"
+      title: HA - C02 Alarme
+
+- id: simu_pres_1
+  alias: "Simu Presence 1"
+  trigger:
+    - platform: time
+      at: "21:35:00"
+  action:
+    - service: light.turn_on
+      entity_id: light.lumiere_celia
+
+- id: simu_pres_2
+  alias: "Simu Presence 2"
+  trigger:
+    - platform: time
+      at: "20:15:00"
+  action:
+    - service: light.turn_on
+      entity_id: light.extended_color_light_6
+
+- id: simu_pres_3"
+  alias: "Simu Presence 3"
+  trigger:
+    - platform: time
+      at: "23:00:00"
+  action:
+    - service: light.turn_on
+      entity_id: light.hue_bureau
+
+- id: simu_pres_1_off
+  alias: "Simu Presence 1 off"
+  trigger:
+    - platform: time
+      at: "23:35:00"
+  action:
+    - service: light.turn_off
+      entity_id: light.lumiere_celia
+
+- id: simu_pres_2_off
+  alias: "Simu Presence 2 off"
+  trigger:
+    - platform: time
+      at: "21:15:00"
+  action:
+    - service: light.turn_off
+      entity_id: light.extended_color_light_6
+
+- id: simu_pres_3_off"
+  alias: "Simu Presence 3 off"
+  trigger:
+    - platform: time
+      at: "01:00:00"
+  action:
+    - service: light.turn_off
+      entity_id: light.hue_bureau
