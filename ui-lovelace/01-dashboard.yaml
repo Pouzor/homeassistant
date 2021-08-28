@@ -126,12 +126,6 @@ cards:
             name: Couloir
             icon: mdi:home-circle
             secondary_info: last-changed
-          - entity: binary_sensor.camera_ext_motion
-            icon: hass:cctv
-            secondary_info: last-changed
-          - entity: binary_sensor.camera_salon_motion
-            icon: hass:cctv
-            secondary_info: last-changed
           - entity: binary_sensor.neo_coolcam_door_window_detector_sensor_3
             secondary_info: last-changed
           - entity: binary_sensor.shenzhen_neo_electronics_co_ltd_door_window_detector_sensor_2
@@ -344,8 +338,6 @@ cards:
           - entity: switch.shenzhen_neo_electronics_co_ltd_power_plug_12a_switch
           - entity: switch.shenzhen_neo_electronics_co_ltd_power_plug_12a_switch_2
           - entity: switch.zipato_unknown_type_0003_id_1083_switch
-          - entity: automation.motion_trigger_record_camera_ext
-          - entity: automation.motion_trigger_record_camera_salon
           - entity: automation.send_notif_to_slack_when_motion_ext
           - entity: automation.send_notif_to_slack_when_motion_salon
           - entity: automation.send_notification_when_alarm_triggered

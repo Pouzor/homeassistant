@@ -99,15 +99,6 @@ shell_command:
   generate_camera_etage_picture: !secret generate_camera_etage_picture
 
 panel_custom:
-  - name: gallery
-    sidebar_title: Videos Records
-    sidebar_icon: mdi:cctv
-    config:
-      title: Videos Records
-      tabs:
-        - name: Videos
-          entity_id: sensor.gallery_images
-          maximum_files: 30
   - name: zwave-graph-panel
     url_path: zwave-graph
     sidebar_title: Z-Wave Graph
@@ -142,19 +133,19 @@ input_text:
     name: search_spotify
     initial: Search into spotify
 
-binary_sensor:
-  - platform: ffmpeg_motion
-    input: !secret ip_camera_ext
-    name: "Camera ext motion"
-    reset: 5
-    changes: 8
-    initial_state: true
-  - platform: ffmpeg_motion
-    input: !secret ip_camera_salon
-    name: "Camera salon motion"
-    reset: 5
-    changes: 5
-    initial_state: true
+#binary_sensor:
+#  - platform: ffmpeg_motion
+#    input: !secret ip_camera_ext
+#    name: "Camera ext motion"
+#    reset: 5
+#    changes: 8
+#    initial_state: true
+#  - platform: ffmpeg_motion
+#    input: !secret ip_camera_salon
+#    name: "Camera salon motion"
+#    reset: 5
+#    changes: 5
+#    initial_state: true
 
 hacs:
   token: !secret hacs_token
@@ -342,41 +333,23 @@ media_source:
 
 camera:
   - platform: generic
-    stream_source: !secret ip_camera_ext
     name: Allee
     still_image_url: !secret img_ext
 
   - platform: generic
-    stream_source: !secret ip_camera_garage
     name: Garage
     still_image_url: !secret img_garage
     rtsp_transport: udp
 
   - platform: generic
-    stream_source: !secret ip_camera_salon
     name: Salon
     still_image_url: !secret img_salon
     rtsp_transport: udp
 
   - platform: generic
-    stream_source: !secret ip_camera_etage
     name: Etage
     still_image_url: !secret img_etage
     rtsp_transport: udp
-
-  - platform: generic
-    name: doods_cam
-    still_image_url: !secret doods_cam
-
-image_processing:
-  - platform: doods
-    url: !secret doods_url
-    detector: default
-    scan_interval: 2
-    source:
-      - entity_id: camera.allee
-    file_out: /config/www/records/doods_allee.jpg
-    confidence: 60
 
 spotify:
   client_id: !secret spotify_id

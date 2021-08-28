@@ -31,7 +31,7 @@ action:
     data_template:
       message: !input "message"
       target: "#général"
-  - service: notify.mobile_app_iphone_8_de_pouzor
+  - service: notify.mobile_app_iphone_12_de_pouzor
     data_template:
       message: !input message_iphone
       data:

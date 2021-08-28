@@ -32,39 +32,39 @@ cards:
                 filename: '/config/www/records/allee_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
           - type: "custom:button-card"
             color_type: blank-card
-  - type: vertical-stack
-    cards:
-      - type: picture-glance
-        title: Garage
-        entities: []
-        camera_image: camera.garage
-      - type: picture-glance
-        title: Doods
-        entities: []
-        camera_image: camera.doods_cam
-      - type: horizontal-stack
-        cards:
-          - type: "custom:button-card"
-            color_type: blank-card
-          - type: "custom:button-card"
-            icon: mdi:record-rec
-            tap_action:
-              action: call-service
-              service: camera.record
-              service_data:
-                entity_id: camera.garage
-                filename: '/config/www/records/garage_{{ now().strftime("%Y-%m-%dH%H-%M-%S") }}.mp4'
-                duration: 10
-          - type: "custom:button-card"
-            icon: mdi:camera
-            tap_action:
-              action: call-service
-              service: camera.snapshot
-              service_data:
-                entity_id: camera.garage
-                filename: '/config/www/records/garage_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
-          - type: "custom:button-card"
-            color_type: blank-card
+  #  - type: vertical-stack
+  #    cards:
+  #      - type: picture-glance
+  #        title: Garage
+  #        entities: []
+  #        camera_image: camera.garage
+  #      - type: picture-glance
+  #        title: Doods
+  #        entities: []
+  #        camera_image: camera.doods_cam
+  #      - type: horizontal-stack
+  #        cards:
+  #          - type: "custom:button-card"
+  #            color_type: blank-card
+  #          - type: "custom:button-card"
+  #            icon: mdi:record-rec
+  #            tap_action:
+  #              action: call-service
+  #              service: camera.record
+  #              service_data:
+  #                entity_id: camera.garage
+  #                filename: '/config/www/records/garage_{{ now().strftime("%Y-%m-%dH%H-%M-%S") }}.mp4'
+  #                duration: 10
+  #          - type: "custom:button-card"
+  #            icon: mdi:camera
+  #            tap_action:
+  #              action: call-service
+  #              service: camera.snapshot
+  #              service_data:
+  #                entity_id: camera.garage
+  #                filename: '/config/www/records/garage_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
+  #          - type: "custom:button-card"
+  #            color_type: blank-card
   - type: vertical-stack
     cards:
       - type: picture-glance
@@ -126,8 +126,13 @@ cards:
   - type: entities
     entities:
       - entity: sensor.records
-  - type: entities
-    entities:
-      - switch.camera_video_camera_control_camera_control_on
-  - type: picture-entity
-    entity: camera.camera_video_camera_control
+  - type: "custom:frigate-card"
+    camera_entity: camera.front_door
+    frigate_url: "http://frigate"
+    motion_entity: binary_sensor.front_door_person_motion
+    menu_mode: below
+  - type: "custom:frigate-card"
+    camera_entity: camera.front_door
+    frigate_url: "http://frigate"
+    motion_entity: binary_sensor.front_door_person_motion
+    view_default: snapshots

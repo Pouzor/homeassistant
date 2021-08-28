@@ -276,7 +276,7 @@
       entity_id: alarm_control_panel.home_alarm
       to: triggered
   action:
-    - service: notify.mobile_app_iphone_8_de_pouzor
+    - service: notify.mobile_app_iphone_12_de_pouzor
       data:
         message: ALARM! The alarm has been triggered
         data:
@@ -298,7 +298,7 @@
       entity_id: alarm_control_panel.home_alarm
       to: disarmed
   action:
-    - service: notify.mobile_app_iphone_8_de_pouzor
+    - service: notify.mobile_app_iphone_12_de_pouzor
       data:
         message: The alarm has been disabled
         data:
@@ -313,40 +313,42 @@
     - service: switch.turn_off
       entity_id: switch.zipato_unknown_type_0003_id_1083_switch
 
-- alias: Motion trigger record camera salon
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.camera_salon_motion
-      to: "on"
-  action:
-    - service: camera.record
-      data:
-        entity_id: camera.salon
-        filename: /config/www/records/salon_{{ now().strftime("%Y-%m-%dH%H-%M-%S") }}.mp4
-        duration: 15
-        lookback: 5
-  id: 793cfc548ab8453fac57ca3b357f842f
-- alias: Motion trigger record camera ext
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.camera_ext_motion
-      to: "on"
-  action:
-    - service: shell_command.generate_camera_ext_picture
-    - service: notify.mobile_app_iphone_8_de_pouzor
-      data:
-        message: Alerte camera ext
-        data:
-          attachment:
-            url: !secret img_ext
-            content-type: jpg
-    - service: camera.record
-      data:
-        entity_id: camera.allee
-        filename: /config/www/records/allee_{{ now().strftime("%Y-%m-%dH%H-%M-%S") }}.mp4
-        duration: 15
-        lookback: 5
-  id: 24e6a36256cd44eebc0dc779c9c6241f
+############### CAMERA ########################
+
+#- alias: Motion trigger record camera salon
+#  trigger:
+#    - platform: state
+#      entity_id: binary_sensor.camera_salon_motion
+#      to: "on"
+#  action:
+#    - service: camera.record
+#      data:
+#        entity_id: camera.salon
+#        filename: /config/www/records/salon_{{ now().strftime("%Y-%m-%dH%H-%M-%S") }}.mp4
+#        duration: 15
+#        lookback: 5
+#  id: 793cfc548ab8453fac57ca3b357f842f
+#- alias: Motion trigger record camera ext
+#  trigger:
+#    - platform: state
+#      entity_id: binary_sensor.camera_ext_motion
+#      to: "on"
+#  action:
+#    - service: shell_command.generate_camera_ext_picture
+#    - service: notify.mobile_app_iphone_12_de_pouzor
+#      data:
+#        message: Alerte camera ext
+#        data:
+#          attachment:
+#            url: !secret img_ext
+#            content-type: jpg
+#    - service: camera.record
+#      data:
+#        entity_id: camera.allee
+#        filename: /config/www/records/allee_{{ now().strftime("%Y-%m-%dH%H-%M-%S") }}.mp4
+#        duration: 15
+#        lookback: 5
+#  id: 24e6a36256cd44eebc0dc779c9c6241f
 - alias: Cron to generate snapshot picture for ext camera
   trigger:
     - platform: time_pattern
@@ -377,80 +379,80 @@
   action:
     - service: shell_command.generate_camera_etage_picture
 
-- alias: Send notif to slack when motion ext
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.camera_ext_motion
-      to: "on"
-  action:
-    - service: shell_command.generate_camera_ext_picture
-    - service: notify.slack_ha
-      data:
-        data:
-          file:
-            url: !secret img_ext
-        message: Détection de mouvement camera ext
-  id: 1277d41a1e1f44d48ec2dfc64c32e603
-- alias: Send notif to slack when motion salon
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.camera_salon_motion
-      to: "on"
-  action:
-    - service: shell_command.generate_camera_salon_picture
-    - service: notify.slack_ha
-      data:
-        data:
-          file:
-            url: !secret img_salon
-        message: Détection de mouvement camera salon
-  id: 512bd87fb1184147b6202953e4683ebe
-- alias: Notify when printer has low ink
-  trigger:
-    - platform: state
-      entity_id:
-        sensor.hp_photosmart_5510_series_black_ink, sensor.hp_photosmart_5510_series_cyan_ink,
-        sensor.hp_photosmart_5510_series_magenta_ink, sensor.hp_photosmart_5510_series_yellow_ink
-  condition:
-    condition: or
-    conditions:
-      - condition: numeric_state
-        entity_id: sensor.hp_photosmart_5510_series_black_ink
-        below: 25
-      - condition: numeric_state
-        entity_id: sensor.hp_photosmart_5510_series_cyan_ink
-        below: 25
-      - condition: numeric_state
-        entity_id: sensor.hp_photosmart_5510_series_magenta_ink
-        below: 25
-      - condition: numeric_state
-        entity_id: sensor.hp_photosmart_5510_series_yellow_ink
-        below: 25
-  action:
-    - service: notify.slack_ha
-      data_template:
-        message:
-          ":printer: LOW : {{ trigger.entity_id }} : {{ trigger.to_state.state
-          }}%"
-        target: "#général"
-  id: 0313c2dad00d4264830eb913b0e77a2f
-
-- alias: "tensorflow frontdoor"
-  trigger:
-    platform: state
-    entity_id: image_processing.doods_allee
-  condition:
-    - condition: template
-      value_template: "{{ 'person' in state_attr('image_processing.doods_allee', 'summary') }}"
-    - condition: template
-      value_template: "{{ as_timestamp(now()) - as_timestamp(states.automation.tensorflow_frontdoor.attributes.last_triggered) | int > 10 }}"
-  action:
-    - service: notify.slack_ha
-      data:
-        data:
-          file:
-            url: !secret doods_cam
-        message: Personne detectée sur la camera
+#- alias: Send notif to slack when motion ext
+#  trigger:
+#    - platform: state
+#      entity_id: binary_sensor.camera_ext_motion
+#      to: "on"
+#  action:
+#    - service: shell_command.generate_camera_ext_picture
+#    - service: notify.slack_ha
+#      data:
+#        data:
+#          file:
+#            url: !secret img_ext
+#        message: Détection de mouvement camera ext
+#  id: 1277d41a1e1f44d48ec2dfc64c32e603
+#- alias: Send notif to slack when motion salon
+#  trigger:
+#    - platform: state
+#      entity_id: binary_sensor.camera_salon_motion
+#      to: "on"
+#  action:
+#    - service: shell_command.generate_camera_salon_picture
+#    - service: notify.slack_ha
+#      data:
+#        data:
+#          file:
+#            url: !secret img_salon
+#        message: Détection de mouvement camera salon
+#  id: 512bd87fb1184147b6202953e4683ebe
+#- alias: Notify when printer has low ink
+#  trigger:
+#    - platform: state
+#      entity_id:
+#        sensor.hp_photosmart_5510_series_black_ink, sensor.hp_photosmart_5510_series_cyan_ink,
+#        sensor.hp_photosmart_5510_series_magenta_ink, sensor.hp_photosmart_5510_series_yellow_ink
+#  condition:
+#    condition: or
+#    conditions:
+#      - condition: numeric_state
+#        entity_id: sensor.hp_photosmart_5510_series_black_ink
+#        below: 25
+#      - condition: numeric_state
+#        entity_id: sensor.hp_photosmart_5510_series_cyan_ink
+#        below: 25
+#      - condition: numeric_state
+#        entity_id: sensor.hp_photosmart_5510_series_magenta_ink
+#        below: 25
+#      - condition: numeric_state
+#        entity_id: sensor.hp_photosmart_5510_series_yellow_ink
+#        below: 25
+#  action:
+#    - service: notify.slack_ha
+#      data_template:
+#        message:
+#          ":printer: LOW : {{ trigger.entity_id }} : {{ trigger.to_state.state
+#          }}%"
+#        target: "#général"
+#  id: 0313c2dad00d4264830eb913b0e77a2f
+#
+#- alias: "tensorflow frontdoor"
+#  trigger:
+#    platform: state
+#    entity_id: image_processing.doods_allee
+#  condition:
+#    - condition: template
+#      value_template: "{{ 'person' in state_attr('image_processing.doods_allee', 'summary') }}"
+#    - condition: template
+#      value_template: "{{ as_timestamp(now()) - as_timestamp(states.automation.tensorflow_frontdoor.attributes.last_triggered) | int > 10 }}"
+#  action:
+#    - service: notify.slack_ha
+#      data:
+#        data:
+#          file:
+#            url: !secret doods_cam
+#        message: Personne detectée sur la camera
 
 ################################# ALARM ####################################
 
