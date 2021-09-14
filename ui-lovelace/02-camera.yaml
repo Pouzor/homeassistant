@@ -8,7 +8,7 @@ cards:
       - type: picture-glance
         title: Outside
         entities: []
-        camera_image: camera.allee
+        camera_image: camera.front_door
       - type: horizontal-stack
         cards:
           - type: "custom:button-card"
@@ -97,7 +97,7 @@ cards:
   - type: vertical-stack
     cards:
       - type: picture-glance
-        title: Etage
+        title: Lapin
         entities: []
         camera_image: camera.etage
       - type: horizontal-stack
@@ -126,13 +126,27 @@ cards:
   - type: entities
     entities:
       - entity: sensor.records
-  - type: "custom:frigate-card"
-    camera_entity: camera.front_door
-    frigate_url: "http://frigate"
-    motion_entity: binary_sensor.front_door_person_motion
-    menu_mode: below
-  - type: "custom:frigate-card"
-    camera_entity: camera.front_door
-    frigate_url: "http://frigate"
-    motion_entity: binary_sensor.front_door_person_motion
-    view_default: snapshots
+  #  - type: "custom:frigate-card"
+  #    camera_entity: camera.front_door
+  #    frigate_url: "http://frigate"
+  #    motion_entity: binary_sensor.front_door_person_motion
+  #    menu_mode: below
+  - type: picture-glance
+    title: Garage
+    entities: []
+    camera_image: camera.garage_frigate
+  - type: picture-glance
+    title: Last detection
+    entities: []
+    camera_image: camera.front_door_person
+  - type: picture-glance
+    title: Last detection Garage
+    entities: []
+    camera_image: camera.garage_frigate_person
+  - type: entities
+    title: Frigate Information
+    show_header_toggle: false
+    entities:
+      - sensor.garage_frigate_camera_fps
+      - sensor.garage_frigate_detection_fps
+      - sensor.garage_frigate_process_fps

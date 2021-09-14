@@ -315,40 +315,22 @@
 
 ############### CAMERA ########################
 
-#- alias: Motion trigger record camera salon
-#  trigger:
-#    - platform: state
-#      entity_id: binary_sensor.camera_salon_motion
-#      to: "on"
-#  action:
-#    - service: camera.record
-#      data:
-#        entity_id: camera.salon
-#        filename: /config/www/records/salon_{{ now().strftime("%Y-%m-%dH%H-%M-%S") }}.mp4
-#        duration: 15
-#        lookback: 5
-#  id: 793cfc548ab8453fac57ca3b357f842f
-#- alias: Motion trigger record camera ext
-#  trigger:
-#    - platform: state
-#      entity_id: binary_sensor.camera_ext_motion
-#      to: "on"
-#  action:
-#    - service: shell_command.generate_camera_ext_picture
-#    - service: notify.mobile_app_iphone_12_de_pouzor
-#      data:
-#        message: Alerte camera ext
-#        data:
-#          attachment:
-#            url: !secret img_ext
-#            content-type: jpg
-#    - service: camera.record
-#      data:
-#        entity_id: camera.allee
-#        filename: /config/www/records/allee_{{ now().strftime("%Y-%m-%dH%H-%M-%S") }}.mp4
-#        duration: 15
-#        lookback: 5
-#  id: 24e6a36256cd44eebc0dc779c9c6241f
+- alias: Notify iphone when person on cam
+  mode: single
+  max_exceeded: silent
+  trigger:
+    platform: mqtt
+    topic: frigate/events
+  action:
+    - service: notify.mobile_app_iphone_12_de_pouzor
+      data_template:
+        message: Alert camera Tensor Flow
+        data:
+          attachment:
+            url: !secret frigate_url
+            content-type: jpg
+    - delay: 30
+
 - alias: Cron to generate snapshot picture for ext camera
   trigger:
     - platform: time_pattern
@@ -437,22 +419,6 @@
 #        target: "#général"
 #  id: 0313c2dad00d4264830eb913b0e77a2f
 #
-#- alias: "tensorflow frontdoor"
-#  trigger:
-#    platform: state
-#    entity_id: image_processing.doods_allee
-#  condition:
-#    - condition: template
-#      value_template: "{{ 'person' in state_attr('image_processing.doods_allee', 'summary') }}"
-#    - condition: template
-#      value_template: "{{ as_timestamp(now()) - as_timestamp(states.automation.tensorflow_frontdoor.attributes.last_triggered) | int > 10 }}"
-#  action:
-#    - service: notify.slack_ha
-#      data:
-#        data:
-#          file:
-#            url: !secret doods_cam
-#        message: Personne detectée sur la camera
 
 ################################# ALARM ####################################
 

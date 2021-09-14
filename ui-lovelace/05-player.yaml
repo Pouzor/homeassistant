@@ -22,3 +22,53 @@ cards:
 
   - type: media-control
     entity: media_player.spotify_remy_jardinet
+  - type: button
+    name: HDMI Next - Firestick
+    show_state: false
+    tap_action:
+      action: call-service
+      service: remote.send_command
+      service_data:
+        entity_id: remote.harmony_hub
+        device: "LG 37LE5300-ZA"
+        command: "InputHdmi1/Dvi"
+  - type: button
+    name: HDMI 2
+    show_state: false
+    tap_action:
+      action: call-service
+      service: remote.send_command
+      service_data:
+        entity_id: remote.harmony_hub
+        device: "LG 37LE5300-ZA"
+        command: "InputHdmi2"
+  - type: button
+    name: Freebox
+    show_state: false
+    tap_action:
+      action: call-service
+      service: remote.send_command
+      service_data:
+        entity_id: remote.harmony_hub
+        device: "LG 37LE5300-ZA"
+        command: "InputHdmi3"
+  - type: button
+    name: Switch
+    show_state: false
+    tap_action:
+      action: call-service
+      service: remote.send_command
+      service_data:
+        entity_id: remote.harmony_hub
+        device: "LG 37LE5300-ZA"
+        command: "InputHdmi4"
+  - type: button
+    name: Next
+    show_state: false
+    tap_action:
+      action: call-service
+      service: remote.send_command
+      service_data:
+        entity_id: remote.harmony_hub
+        device: "LG 37LE5300-ZA"
+        command: "InputNext"

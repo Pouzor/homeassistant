@@ -123,29 +123,10 @@ zwave:
 browser_mod:
   prefix: "browser_mod_"
 
-remote:
-  - platform: harmony
-    name: Harmony Hub
-    host: !secret harmony_host
-
 input_text:
   search_spotify:
     name: search_spotify
     initial: Search into spotify
-
-#binary_sensor:
-#  - platform: ffmpeg_motion
-#    input: !secret ip_camera_ext
-#    name: "Camera ext motion"
-#    reset: 5
-#    changes: 8
-#    initial_state: true
-#  - platform: ffmpeg_motion
-#    input: !secret ip_camera_salon
-#    name: "Camera salon motion"
-#    reset: 5
-#    changes: 5
-#    initial_state: true
 
 hacs:
   token: !secret hacs_token
@@ -455,10 +436,6 @@ notify:
     platform: slack
     api_key: !secret slack_api_key
     default_channel: "#général"
-
-freebox:
-  host: !secret freebox_server_host
-  port: !secret freebox_server_port
 
 switch:
   - platform: template
