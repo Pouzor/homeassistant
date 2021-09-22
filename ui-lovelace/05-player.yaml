@@ -18,6 +18,8 @@ cards:
         name: Google Home
       - entity: media_player.mini_chambre
         name: Google Home Mini
+      - entity: media_player.firetvstick_remy
+      - entity: media_player.2eme_firetvstick_remy
       - entity: input_text.search_spotify
 
   - type: media-control

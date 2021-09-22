@@ -5,148 +5,59 @@ icon: mdi:cctv
 cards:
   - type: vertical-stack
     cards:
-      - type: picture-glance
-        title: Outside
-        entities: []
-        camera_image: camera.front_door
-      - type: horizontal-stack
-        cards:
-          - type: "custom:button-card"
-            color_type: blank-card
-          - type: "custom:button-card"
-            icon: mdi:record-rec
-            tap_action:
-              action: call-service
-              service: camera.record
-              service_data:
-                entity_id: camera.allee
-                filename: '/config/www/records/allee_{{ now().strftime("%Y-%m-%dH%H-%M-%S") }}.mp4'
-                duration: 10
-          - type: "custom:button-card"
-            icon: mdi:camera
-            tap_action:
-              action: call-service
-              service: camera.snapshot
-              service_data:
-                entity_id: camera.allee
-                filename: '/config/www/records/allee_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
-          - type: "custom:button-card"
-            color_type: blank-card
-  #  - type: vertical-stack
-  #    cards:
-  #      - type: picture-glance
-  #        title: Garage
-  #        entities: []
-  #        camera_image: camera.garage
-  #      - type: picture-glance
-  #        title: Doods
-  #        entities: []
-  #        camera_image: camera.doods_cam
-  #      - type: horizontal-stack
-  #        cards:
-  #          - type: "custom:button-card"
-  #            color_type: blank-card
-  #          - type: "custom:button-card"
-  #            icon: mdi:record-rec
-  #            tap_action:
-  #              action: call-service
-  #              service: camera.record
-  #              service_data:
-  #                entity_id: camera.garage
-  #                filename: '/config/www/records/garage_{{ now().strftime("%Y-%m-%dH%H-%M-%S") }}.mp4'
-  #                duration: 10
-  #          - type: "custom:button-card"
-  #            icon: mdi:camera
-  #            tap_action:
-  #              action: call-service
-  #              service: camera.snapshot
-  #              service_data:
-  #                entity_id: camera.garage
-  #                filename: '/config/www/records/garage_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
-  #          - type: "custom:button-card"
-  #            color_type: blank-card
-  - type: vertical-stack
-    cards:
-      - type: picture-glance
-        title: Salon
-        entities: []
-        camera_image: camera.salon
-      - type: horizontal-stack
-        cards:
-          - type: "custom:button-card"
-            color_type: blank-card
-          - type: "custom:button-card"
-            icon: mdi:record-rec
-            tap_action:
-              action: call-service
-              service: camera.record
-              service_data:
-                entity_id: camera.salon
-                filename: '/config/www/records/salon_{{ now().strftime("%Y-%m-%dH%H-%M-%S") }}.mp4'
-                duration: 10
-          - type: "custom:button-card"
-            icon: mdi:camera
-            tap_action:
-              action: call-service
-              service: camera.snapshot
-              service_data:
-                entity_id: camera.salon
-                filename: '/config/www/records/salon_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
-          - type: "custom:button-card"
-            color_type: blank-card
-  - type: vertical-stack
-    cards:
-      - type: picture-glance
-        title: Lapin
-        entities: []
-        camera_image: camera.etage
-      - type: horizontal-stack
-        cards:
-          - type: "custom:button-card"
-            color_type: blank-card
-          - type: "custom:button-card"
-            icon: mdi:record-rec
-            tap_action:
-              action: call-service
-              service: camera.record
-              service_data:
-                entity_id: camera.etage
-                filename: '/config/www/records/etage_{{ now().strftime("%Y-%m-%dH%H-%M-%S") }}.mp4'
-                duration: 10
-          - type: "custom:button-card"
-            icon: mdi:camera
-            tap_action:
-              action: call-service
-              service: camera.snapshot
-              service_data:
-                entity_id: camera.etage
-                filename: '/config/www/records/etage_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
-          - type: "custom:button-card"
-            color_type: blank-card
-  - type: entities
-    entities:
-      - entity: sensor.records
-  #  - type: "custom:frigate-card"
-  #    camera_entity: camera.front_door
-  #    frigate_url: "http://frigate"
-  #    motion_entity: binary_sensor.front_door_person_motion
-  #    menu_mode: below
+      - type: entities
+        title: Medias
+        show_header_toggle: false
+        entities:
+          - entity: sensor.records
+          - entity: sensor.frigate
+      - type: entities
+        title: Frigate Information
+        show_header_toggle: false
+        entities:
+          - sensor.garage_frigate_camera_fps
+          - sensor.garage_frigate_detection_fps
+          - sensor.garage_frigate_process_fps
+          - sensor.front_door_camera_fps
+          - sensor.front_door_detection_fps
+          - sensor.front_door_process_fps
+      - type: entities
+        title: Cameras
+        show_header_toggle: false
+        entities:
+          - entity: device_tracker.camera_garage_2
+          - entity: device_tracker.camera_salon_2
+          - entity: device_tracker.unknown_device_13
+          - entity: device_tracker.unknown_device_14
+          - entity: device_tracker.unknown_device
+
+  - type: picture-glance
+    title: Outside
+    entities: []
+    camera_image: camera.front_door
+  - type: picture-glance
+    title: Salon
+    entities: []
+    camera_image: camera.salon
   - type: picture-glance
     title: Garage
     entities: []
     camera_image: camera.garage_frigate
   - type: picture-glance
-    title: Last detection
+    title: Xiaomi
     entities: []
-    camera_image: camera.front_door_person
+    camera_image: camera.xiaomi
   - type: picture-glance
-    title: Last detection Garage
+    title: Xiaomi 2
     entities: []
-    camera_image: camera.garage_frigate_person
-  - type: entities
-    title: Frigate Information
-    show_header_toggle: false
-    entities:
-      - sensor.garage_frigate_camera_fps
-      - sensor.garage_frigate_detection_fps
-      - sensor.garage_frigate_process_fps
+    camera_image: camera.xiaomi_2
+  - type: horizontal-stack
+    cards:
+      - type: picture-glance
+        title: Last detection front
+        entities: []
+        camera_image: camera.front_door_person
+      - type: picture-glance
+        title: Last detection Garage
+        entities: []
+        camera_image: camera.garage_frigate_pers

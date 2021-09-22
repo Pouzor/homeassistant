@@ -8,6 +8,7 @@ homeassistant:
   customize: !include customize.yaml
   allowlist_external_dirs:
     - /config/www/records
+    - /media/frigate
   external_url: !secret external_url
   internal_url: !secret internal_url
   allowlist_external_urls:
@@ -50,7 +51,6 @@ logger:
     pydeconz: debug
     homeassistant.components.deconz: debug
     homeassistant.components.onvif: debug
-    custom_components.xiaomi_miot: debug
 
 frontend:
   themes: !include_dir_merge_named themes
@@ -63,11 +63,6 @@ homekit:
       - light
       - switch
       - sensor
-
-xiaomi_miot:
-  username: !secret email
-  password: !secret xiaomi_secret
-  server_country: de
 
 alexa:
   smart_home:
@@ -171,6 +166,9 @@ sensor:
 
   - platform: folder
     folder: /config/www/records
+
+  - platform: folder
+    folder: /media/frigate
 
   ###### HARDWARE STATISTICS
   - platform: command_line
@@ -331,6 +329,16 @@ camera:
     name: Etage
     still_image_url: !secret img_etage
     rtsp_transport: udp
+
+  - platform: generic
+    name: xiaomi
+    still_image_url: !secret cam_xiaomi_1_pic
+    stream_source: !secret cam_xiaomi_1_vid
+
+  - platform: generic
+    name: xiaomi 2
+    still_image_url: !secret cam_xiaomi_2_pic
+    stream_source: !secret cam_xiaomi_2_vid
 
 spotify:
   client_id: !secret spotify_id
