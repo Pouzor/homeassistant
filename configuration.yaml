@@ -25,21 +25,8 @@ automation: !include automations.yaml
 
 recorder:
   db_url: !secret mariadb
-
-influxdb:
-  username: !secret influxdb_user
-  password: !secret influxdb_pass
-  max_retries: 3
-  host: localhost
-  port: !secret influxdb_port
-  database: home_assistant
-  default_measurement: state
-  include:
-    entities:
-      - sensor.netatmo_station_temperature
-      - sensor.temperature_14
-      - sensor.multi_sensor
-      - sensor.temperature_garage
+  auto_purge: true
+  purge_keep_days: 10
 
 http:
   ssl_certificate: /ssl/fullchain.pem
@@ -47,10 +34,6 @@ http:
 
 logger:
   default: info
-  logs:
-    pydeconz: debug
-    homeassistant.components.deconz: debug
-    homeassistant.components.onvif: debug
 
 frontend:
   themes: !include_dir_merge_named themes
@@ -75,7 +58,6 @@ freebox_player:
 config:
 stream:
 system_health:
-device_tracker:
 default_config:
 ios:
 mobile_app:
@@ -86,12 +68,6 @@ conversation:
 logbook:
 map:
 wake_on_lan:
-
-shell_command:
-  generate_camera_ext_picture: !secret generate_camera_ext_picture
-  generate_camera_garage_picture: !secret generate_camera_garage_picture
-  generate_camera_salon_picture: !secret generate_camera_salon_picture
-  generate_camera_etage_picture: !secret generate_camera_etage_picture
 
 panel_custom:
   - name: zwave-graph-panel
@@ -115,9 +91,6 @@ zwave:
   usb_path: /dev/ttyACM0
   device_config: !include zwave_device_config.yaml
 
-browser_mod:
-  prefix: "browser_mod_"
-
 input_text:
   search_spotify:
     name: search_spotify
@@ -127,6 +100,7 @@ hacs:
   token: !secret hacs_token
 
 sensor:
+  - platform: websocket_api
   - platform: template
     sensors:
       temperature_garage:
@@ -169,6 +143,12 @@ sensor:
 
   - platform: folder
     folder: /media/frigate
+
+  - platform: command_line
+    name: frigate size
+    command: "du -s /media/frigate"
+    unit_of_measurement: "MiB"
+    value_template: '{{ value.split("\t" )[0] | multiply(1/1024) | round(2) }}'
 
   ###### HARDWARE STATISTICS
   - platform: command_line
@@ -296,7 +276,7 @@ sensor:
     sensors:
       total_zigbee_devices:
         friendly_name: "Number of Zigbee Devices"
-        value_template: "12" #todo find real value
+        value_template: "32" #todo find real value
 
   ###### DISPLAY CURRENT HOME ASSISTANT VERSION
   - platform: version
@@ -309,36 +289,6 @@ sensor:
 media_source:
   media_dirs:
     camera: /www/records
-
-camera:
-  - platform: generic
-    name: Allee
-    still_image_url: !secret img_ext
-
-  - platform: generic
-    name: Garage
-    still_image_url: !secret img_garage
-    rtsp_transport: udp
-
-  - platform: generic
-    name: Salon
-    still_image_url: !secret img_salon
-    rtsp_transport: udp
-
-  - platform: generic
-    name: Etage
-    still_image_url: !secret img_etage
-    rtsp_transport: udp
-
-  - platform: generic
-    name: xiaomi
-    still_image_url: !secret cam_xiaomi_1_pic
-    stream_source: !secret cam_xiaomi_1_vid
-
-  - platform: generic
-    name: xiaomi 2
-    still_image_url: !secret cam_xiaomi_2_pic
-    stream_source: !secret cam_xiaomi_2_vid
 
 spotify:
   client_id: !secret spotify_id

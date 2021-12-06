@@ -65,6 +65,7 @@ cards:
     title: System Information
     show_header_toggle: false
     entities:
+      - sensor.connected_clients
       - sensor.processor_use
       - sensor.disk_use_percent_home
       - sensor.disk_free_home
@@ -74,6 +75,8 @@ cards:
         name: CPU Temperature
       - sensor.installed_version
       - sensor.hacs
+      - entity: sensor.cert_expiry_timestamp
+        name: cert expiration
       - entity: zone.home
         icon: "mdi:restart"
         name: Home Assistant

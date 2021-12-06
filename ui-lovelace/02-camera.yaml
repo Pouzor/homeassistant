@@ -11,6 +11,21 @@ cards:
         entities:
           - entity: sensor.records
           - entity: sensor.frigate
+          - entity: sensor.frigate_size
+          - entity: switch.front_door_detect
+          - entity: switch.front_door_recordings
+          - entity: switch.front_door_snapshots
+          - entity: switch.garage_frigate_detect
+          - entity: switch.garage_frigate_recordings
+          - entity: switch.garage_frigate_snapshots
+          - entity: switch.jardin_frigate_detect
+          - entity: switch.jardin_frigate_recordings
+          - entity: switch.jardin_frigate_snapshots
+            card_mod:
+              style: |
+                :host {
+                color: red;
+                }
       - type: entities
         title: Frigate Information
         show_header_toggle: false
@@ -30,34 +45,38 @@ cards:
           - entity: device_tracker.unknown_device_13
           - entity: device_tracker.unknown_device_14
           - entity: device_tracker.unknown_device
+          - entity: device_tracker.c310_7526b3
 
   - type: picture-glance
     title: Outside
     entities: []
     camera_image: camera.front_door
+
+  - type: custom:frigate-card
+    camera_entity: camera.front_door
+    event_viewer:
+      controls:
+        next_previous:
+          style: thumbnails
+    view:
+      default: snapshot
   - type: picture-glance
     title: Salon
     entities: []
-    camera_image: camera.salon
+    camera_image: camera.salon_frigate
   - type: picture-glance
     title: Garage
     entities: []
     camera_image: camera.garage_frigate
   - type: picture-glance
-    title: Xiaomi
+    title: Jardin
     entities: []
-    camera_image: camera.xiaomi
+    camera_image: camera.jardin_frigate
   - type: picture-glance
-    title: Xiaomi 2
+    title: Lapin
     entities: []
-    camera_image: camera.xiaomi_2
-  - type: horizontal-stack
-    cards:
-      - type: picture-glance
-        title: Last detection front
-        entities: []
-        camera_image: camera.front_door_person
-      - type: picture-glance
-        title: Last detection Garage
-        entities: []
-        camera_image: camera.garage_frigate_pers
+    camera_image: camera.lapin_frigate
+  - type: picture-glance
+    title: Etage
+    entities: []
+    camera_image: camera.etage_frigate

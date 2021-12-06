@@ -90,7 +90,7 @@ class ContentCardLinky extends LitElement {
                   ${this.config.showIcon
                     ? html`
                       <div class="icon-block">
-                      <span class="linky-icon bigger" style="background: none, url(https://github.com/saniho/content-card-linky/blob/main/images/linky.jpg?raw=true) no-repeat; background-size: contain;"></span>
+                      <span class="linky-icon bigger" style="background: none, url(https://apps.lincs.enedis.fr/mes-prms/assets/images/compteurs/linky.svg) no-repeat; background-size: contain;"></span>
                       </div>`
                     : html `` 
                   }
@@ -197,7 +197,7 @@ class ContentCardLinky extends LitElement {
                   ${this.config.showIcon
                     ? html`
                       <div class="icon-block">
-                      <span class="linky-icon bigger" style="background: none, url(https://github.com/saniho/content-card-linky/blob/main/images/linky.jpg?raw=true) no-repeat; background-size: contain;"></span>
+                      <span class="linky-icon bigger" style="background: none, url(https://apps.lincs.enedis.fr/mes-prms/assets/images/compteurs/linky.svg) no-repeat; background-size: contain;"></span>
                       </div>`
                     : html `` 
                   }
@@ -294,7 +294,35 @@ class ContentCardLinky extends LitElement {
         </div>
       `
   }
+  renderDailyWeekTitre( maConfig, monTitre ){
+    if (maConfig === true) {
+       return html
+       `${monTitre}<br>
+       `
+      }
+    else{
+       return html
+       `
+       `
+    }
+  }
   renderTitreLigne(config) {
+    if (this.config.showTitreLigne === true) {
+       return html
+       `
+        <div class="day">
+          ${this.renderDailyWeekTitre(true, "")}
+          ${this.renderDailyWeekTitre(true, "Conso")}
+          ${this.renderDailyWeekTitre(this.config.showDayPrice, "Prix")}
+          ${this.renderDailyWeekTitre(this.config.showDayPriceHCHP, "Prix HC")}
+          ${this.renderDailyWeekTitre(this.config.showDayPriceHCHP, "Prix HP")}
+          ${this.renderDailyWeekTitre(this.config.showDayHCHP, "HC")}
+          ${this.renderDailyWeekTitre(this.config.showDayHCHP, "HP")}
+        </div>
+        `
+    }
+  }
+  r_enderTitreLigne(config) {
     if (this.config.showTitreLigne === true) {
         return html
         `
@@ -307,22 +335,22 @@ class ContentCardLinky extends LitElement {
         }
         ${this.config.showDayPriceHCHP
         ? html `
-        <br><span class="cons-val">Prix HP</span>`
+        <br><span class="cons-val">Prix HC</span>`
         : html ``
         }
         ${this.config.showDayPriceHCHP 
         ? html `
-        <br><span class="cons-val">Prix HC</span>`
-        : html ``
-        }
-        ${this.config.showDayHCHP 
-        ? html `
-        <br><span class="cons-val">HP</span>`
+        <br><span class="cons-val">Prix HP</span>`
         : html ``
         }
         ${this.config.showDayHCHP 
         ? html `
         <br><span class="cons-val">HC</span>`
+        : html ``
+        }
+        ${this.config.showDayHCHP 
+        ? html `
+        <br><span class="cons-val">HP</span>`
         : html ``
         }
             </div>

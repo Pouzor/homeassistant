@@ -151,18 +151,18 @@
     platform: event
     event_type: deconz_event
     event_data:
-      id: tradfri_on_off_switch
+      id: tradfri_on_off_switch_simon
       event: 1002
   condition:
     condition: state
     entity_id:
-      - light.extended_color_light_12
+      - light.extended_color_light_14
     state: "off"
   action:
     - service: light.turn_on
       data:
-        entity_id: light.extended_color_light_12
-        brightness: 100
+        entity_id: light.extended_color_light_14
+        brightness: 80
         kelvin: 2700
 
 - alias: Light on color Simon
@@ -171,21 +171,21 @@
     platform: event
     event_type: deconz_event
     event_data:
-      id: tradfri_on_off_switch
+      id: tradfri_on_off_switch_simon
       event: 1002
   condition:
     condition: state
     entity_id:
-      - light.extended_color_light_12
+      - light.extended_color_light_14
     state: "on"
   action:
     - service: light.turn_on
       data:
-        entity_id: light.extended_color_light_12
+        entity_id: light.extended_color_light_14
         hs_color:
-          - "{{ (30 + (state_attr('light.extended_color_light_12', 'hs_color')[0] or 0)) % 360 }}"
+          - "{{ (30 + (state_attr('light.extended_color_light_14', 'hs_color')[0] or 0)) % 360 }}"
           - 100
-        brightness: 255
+        brightness: 80
 
 - alias: Light off Simon
   id: light_off_simon
@@ -193,12 +193,12 @@
     platform: event
     event_type: deconz_event
     event_data:
-      id: tradfri_on_off_switch
+      id: tradfri_on_off_switch_simon
       event: 2002
   action:
     - service: light.turn_off
       data:
-        entity_id: light.extended_color_light_12
+        entity_id: light.extended_color_light_14
 
 - alias: Light on Celia stripe
   id: light_on_celia_stripe
@@ -222,10 +222,25 @@
       at: "22:00:00"
     - platform: time
       at: "23:00:00"
+    - platform: time
+      at: "00:00:00"
   action:
     - service: light.turn_off
       data:
         entity_id: light.lightstripe_lidl
+
+- alias: Light off Simon stripe after 1 hour
+  trigger:
+    - platform: time
+      at: "22:00:00"
+    - platform: time
+      at: "23:00:00"
+    - platform: time
+      at: "00:00:00"
+  action:
+    - service: light.turn_off
+      data:
+        entity_id: light.extended_color_light_14
 
 - alias: Light off Celia Stripe
   id: light_off_celia_stripe
@@ -343,36 +358,6 @@
             url: !secret frigate_url
             content-type: jpg
     - delay: 30
-
-- alias: Cron to generate snapshot picture for ext camera
-  trigger:
-    - platform: time_pattern
-      seconds: /5
-  action:
-    - service: shell_command.generate_camera_ext_picture
-  id: 64c23c6d3cd842778eb64642d4fec43d
-- alias: Cron to generate snapshot picture for salon camera
-  trigger:
-    - platform: time_pattern
-      minutes: /1
-  action:
-    - service: shell_command.generate_camera_salon_picture
-  id: c22d34f0a5d04cf9bef374ff9e29e121
-
-- alias: Cron to generate snapshot picture for garage camera
-  trigger:
-    - platform: time_pattern
-      minutes: /1
-  action:
-    - service: shell_command.generate_camera_garage_picture
-  id: 0f571a5705c043f0ad108d1223942e83
-
-- alias: Cron to generate snapshot picture for etage camera
-  trigger:
-    - platform: time_pattern
-      minutes: /1
-  action:
-    - service: shell_command.generate_camera_etage_picture
 
 ################################# ALARM ####################################
 
@@ -569,3 +554,27 @@
   action:
     - service: light.turn_off
       entity_id: light.hue_bureau
+
+- id: noel_on
+  alias: "Noel ON"
+  trigger:
+    - platform: time
+      at: 07:30:00
+    - platform: time
+      at: "18:00:00"
+  action:
+    - service: switch.turn_on
+      data:
+        entity_id: switch.on_off_plug_in_unit_11
+
+- id: noel_off
+  alias: "Noel OFF"
+  trigger:
+    - platform: time
+      at: 08:30:00
+    - platform: time
+      at: "22:00:00"
+  action:
+    - service: switch.turn_off
+      data:
+        entity_id: switch.on_off_plug_in_unit_11

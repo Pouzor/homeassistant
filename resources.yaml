@@ -2,8 +2,6 @@
   type: module
 - url: /hacsfiles/mini-graph-card/mini-graph-card-bundle.js
   type: module
-- url: /local/card-tools.js?track=true
-  type: js
 - url: /hacsfiles/spotify-card/spotify-card.js
   type: module
 - url: /hacsfiles/lovelace-auto-entities/auto-entities.js
@@ -18,3 +16,13 @@
   type: module
 - url: /hacsfiles/frigate-hass-card/frigate-hass-card.js
   type: module
+- url: /hacsfiles/lovelace-card-mod/card-mod.js
+  type: module
+- url: /hacsfiles/lovelace-card-tools/card-tools.js
+  type: module
+- url: /hacsfiles/banner-card/banner-card.js
+  type: module
+- url: /hacsfiles/stack-in-card/stack-in-card.js
+  type: module
+- url: https://fonts.googleapis.com/css2?family=Oxygen&family=Ubuntu:wght@300&display=swap
+  type: css

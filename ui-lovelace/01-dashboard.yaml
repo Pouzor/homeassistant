@@ -3,103 +3,121 @@ path: dashboard
 badges: []
 icon: mdi:desktop-mac-dashboard
 cards:
-  - type: vertical-stack
-    cards:
-      - type: custom:meteo-france-weather-card
-        name: Moret
-        entity: weather.moret_sur_loing
-        rainForecastEntity: sensor.moret_sur_loing_next_rain
-        rainChanceEntity: sensor.moret_sur_loing_rain_chance
-        thunderChanceEntity: sensor.moret_sur_loing_thunder_chance
-        alertEntity: sensor.moret_sur_loing_weather_alert
-      - type: "custom:content-card-linky"
-        entity: sensor.myenedis_22138784256450_2
-        showInTableUnit: false
-      - type: "custom:button-card"
-        color_type: label-card
-        color: rgb(44, 109, 214)
-        name: Actions
-      - type: glance
-        title: Telecommande
-        show_state: false
-        show_name: false
-        entities:
-          - icon: mdi:fan
-            entity: input_boolean.vmc
-            name: vmc
-            tap_action:
-              action: call-service
-              service: input_boolean.toggle
-              service_data:
-                entity_id: input_boolean.vmc
-
-          - entity: input_boolean.freebox
-            name: "on"
-            icon: mdi:power
-            tap_action:
-              action: call-service
-              service: freebox_player.remote
-              service_data:
-                code: power
-
-          - entity: input_boolean.freebox
-            icon: mdi:volume-minus
-            tap_action:
-              action: call-service
-              service: freebox_player.remote
-              service_data:
-                code: vol_dec
-          - entity: input_boolean.freebox
-            icon: mdi:volume-high
-            tap_action:
-              action: call-service
-              service: freebox_player.remote
-              service_data:
-                code: vol_inc
-
-          - entity: input_boolean.freebox
-            icon: mdi:netflix
-            tap_action:
-              action: call-service
-              service: freebox_player.remote
-              service_data:
-                code: netflix
-
-          - entity: input_boolean.freebox
-            icon: mdi:television
-            tap_action:
-              action: call-service
-              service: freebox_player.remote
-              service_data:
-                code: tv
+  #      - type: "custom:button-card"
+  #        color_type: label-card
+  #        color: rgb(44, 109, 214)
+  #        name: Actions
+  #      - type: glance
+  #        title: Telecommande
+  #        show_state: false
+  #        show_name: false
+  #        entities:
+  #          - icon: mdi:fan
+  #            entity: input_boolean.vmc
+  #            name: vmc
+  #            tap_action:
+  #              action: call-service
+  #              service: input_boolean.toggle
+  #              service_data:
+  #                entity_id: input_boolean.vmc
+  #
+  #          - entity: input_boolean.freebox
+  #            name: "on"
+  #            icon: mdi:power
+  #            tap_action:
+  #              action: call-service
+  #              service: freebox_player.remote
+  #              service_data:
+  #                code: power
+  #
+  #          - entity: input_boolean.freebox
+  #            icon: mdi:volume-minus
+  #            tap_action:
+  #              action: call-service
+  #              service: freebox_player.remote
+  #              service_data:
+  #                code: vol_dec
+  #          - entity: input_boolean.freebox
+  #            icon: mdi:volume-high
+  #            tap_action:
+  #              action: call-service
+  #              service: freebox_player.remote
+  #              service_data:
+  #                code: vol_inc
+  #
+  #          - entity: input_boolean.freebox
+  #            icon: mdi:netflix
+  #            tap_action:
+  #              action: call-service
+  #              service: freebox_player.remote
+  #              service_data:
+  #                code: netflix
+  #
+  #          - entity: input_boolean.freebox
+  #            icon: mdi:television
+  #            tap_action:
+  #              action: call-service
+  #              service: freebox_player.remote
+  #              service_data:
+  #                code: tv
 
   - type: vertical-stack
+    title: Security
     cards:
-      - type: "custom:button-card"
-        color_type: label-card
-        color: rgb(44, 109, 214)
-        name: Cameras
       - type: horizontal-stack
         cards:
           - type: picture-glance
+            card_mod:
+              style: |
+                :host {
+                  margin-left:10px !important;
+                }
             title: Garage
             entities: []
-            camera_image: camera.garage
+            camera_image: camera.garage_frigate
           - type: picture-glance
-            title: Etage
+            card_mod:
+              style: |
+                :host {
+                  margin-right:10px !important;
+                }
+            title: Allée
             entities: []
-            camera_image: camera.etage
+            camera_image: camera.front_door
+      - type: horizontal-stack
+        cards:
           - type: picture-glance
+            card_mod:
+              style: |
+                :host {
+                  margin-left:10px !important;
+                }
+            title: Lapin
+            entities: []
+            camera_image: camera.lapin_frigate
+          - type: picture-glance
+            card_mod:
+              style: |
+                :host {
+                  margin-right:10px !important;
+                }
             title: Salon
             entities: []
-            camera_image: camera.salon
-          - type: picture-glance
-            title: Allee
-            entities: []
-            camera_image: camera.allee
-
+            camera_image: camera.jardin_frigate
+      - type: alarm-panel
+        card_mod:
+          style: |
+            :host {
+              margin:10px !important;
+            }
+        entity: alarm_control_panel.home_alarm
       - type: entities
-        title: Security
+        card_mod:
+          style: |
+            :host {
+              margin:10px !important;
+            }
+        title: Motion
         show_header_toggle: false
         entities:
           - entity: binary_sensor.motion_salon
@@ -134,22 +152,17 @@ cards:
             secondary_info: last-changed
           - entity: binary_sensor.window_door_sensor_3
             secondary_info: last-changed
-      - type: "custom:button-card"
-        color_type: label-card
-        color: rgb(44, 109, 214)
-        name: Alarme
-      - type: alarm-panel
-        entity: alarm_control_panel.home_alarm
-
   - type: vertical-stack
     cards:
-      - type: "custom:button-card"
-        color_type: label-card
-        color: rgb(44, 109, 214)
-        name: Temperatures
       - type: horizontal-stack
+        title: Température
         cards:
           - type: custom:mini-graph-card
+            card_mod:
+              style: |
+                :host {
+                  margin-left:10px !important;
+                }
             name: Salon [Netatmo]
             entities:
               - sensor.netatmo_pouzor_station_temperature
@@ -173,84 +186,6 @@ cards:
                 color: "#FF8000"
               - value: 26
                 color: "#ff0000"
-          - type: custom:mini-graph-card
-            name: Couloir
-            entities:
-              - sensor.temperature_14
-            show:
-              icon: false
-            height: 75
-            color_thresholds:
-              - value: 0
-                color: "#CCE5FF"
-              - value: 10
-                color: "#66B2FF"
-              - value: 15
-                color: "#0080FF"
-              - value: 18
-                color: "#87c087"
-              - value: 21
-                color: "#389638"
-              - value: 24
-                color: "#FF9932"
-              - value: 25
-                color: "#FF8000"
-              - value: 26
-                color: "#ff0000"
-      - type: horizontal-stack
-        cards:
-          - type: custom:mini-graph-card
-            name: Ext [X motion]
-            entities:
-              - sensor.temperature_ext
-            line_color: blue
-            show:
-              icon: false
-            height: 75
-            color_thresholds:
-              - value: 0
-                color: "#CCE5FF"
-              - value: 10
-                color: "#66B2FF"
-              - value: 15
-                color: "#0080FF"
-              - value: 18
-                color: "#87c087"
-              - value: 21
-                color: "#389638"
-              - value: 24
-                color: "#FF9932"
-              - value: 25
-                color: "#FF8000"
-              - value: 26
-                color: "#ff0000"
-          - type: custom:mini-graph-card
-            name: Garage [X motion]
-            entities:
-              - sensor.temperature_garage
-            unit: "°C"
-            show:
-              icon: false
-            height: 75
-            color_thresholds:
-              - value: 0
-                color: "#CCE5FF"
-              - value: 10
-                color: "#66B2FF"
-              - value: 15
-                color: "#0080FF"
-              - value: 18
-                color: "#87c087"
-              - value: 21
-                color: "#389638"
-              - value: 24
-                color: "#FF9932"
-              - value: 25
-                color: "#FF8000"
-              - value: 26
-                color: "#ff0000"
-      - type: horizontal-stack
-        cards:
           - type: custom:mini-graph-card
             name: Salon
             entities:
@@ -277,6 +212,42 @@ cards:
               - value: 26
                 color: "#ff0000"
           - type: custom:mini-graph-card
+            card_mod:
+              style: |
+                :host {
+                  margin-right:10px !important;
+                }
+            name: Couloir
+            entities:
+              - sensor.temperature_14
+            show:
+              icon: false
+            height: 75
+            color_thresholds:
+              - value: 0
+                color: "#CCE5FF"
+              - value: 10
+                color: "#66B2FF"
+              - value: 15
+                color: "#0080FF"
+              - value: 18
+                color: "#87c087"
+              - value: 21
+                color: "#389638"
+              - value: 24
+                color: "#FF9932"
+              - value: 25
+                color: "#FF8000"
+              - value: 26
+                color: "#ff0000"
+      - type: horizontal-stack
+        cards:
+          - type: custom:mini-graph-card
+            card_mod:
+              style: |
+                :host {
+                  margin-left:10px !important;
+                }
             name: Chambre [X multi]
             entities:
               - sensor.multi_sensor
@@ -302,6 +273,11 @@ cards:
               - value: 26
                 color: "#ff0000"
           - type: custom:mini-graph-card
+            card_mod:
+              style: |
+                :host {
+                  margin-right:10px !important;
+                }
             name: Etage
             entities:
               - sensor.temperature_27
@@ -326,35 +302,98 @@ cards:
                 color: "#FF8000"
               - value: 26
                 color: "#ff0000"
-      - type: "custom:button-card"
-        color_type: label-card
-        color: rgb(44, 109, 214)
-        name: Switch
-      - type: entities
-        show_header_toggle: false
-        entities:
-          - entity: switch.vmc_mss710_main_channel
-          - entity: switch.smart_switch_mss710_main_channel
-          - entity: switch.shenzhen_neo_electronics_co_ltd_power_plug_12a_switch
-          - entity: switch.shenzhen_neo_electronics_co_ltd_power_plug_12a_switch_2
-          - entity: switch.zipato_unknown_type_0003_id_1083_switch
-          - entity: automation.send_notif_to_slack_when_motion_ext
-          - entity: automation.send_notif_to_slack_when_motion_salon
-          - entity: automation.send_notification_when_alarm_triggered
-          - entity: switch.hurleuse_switch
-          - entity: sensor.alarm_time
-          - entity: switch.lumiere_ext_switch
-          - entity: light.light_ext_sensor
-          - entity: device_tracker.esp_af1459
-          - entity: switch.on_off_plug_in_unit_11
-
+      - type: horizontal-stack
+        cards:
+          - type: custom:mini-graph-card
+            card_mod:
+              style: |
+                :host {
+                  margin-left:10px !important;
+                }
+            name: Ext [X motion]
+            entities:
+              - sensor.temperature_ext
+            line_color: blue
+            show:
+              icon: false
+            height: 75
+            color_thresholds:
+              - value: 0
+                color: "#CCE5FF"
+              - value: 10
+                color: "#66B2FF"
+              - value: 15
+                color: "#0080FF"
+              - value: 18
+                color: "#87c087"
+              - value: 21
+                color: "#389638"
+              - value: 24
+                color: "#FF9932"
+              - value: 25
+                color: "#FF8000"
+              - value: 26
+                color: "#ff0000"
+          - type: custom:mini-graph-card
+            card_mod:
+              style: |
+                :host {
+                  margin-right:10px !important;
+                }
+            name: Garage [X motion]
+            entities:
+              - sensor.temperature_garage
+            unit: "°C"
+            show:
+              icon: false
+            height: 75
+            color_thresholds:
+              - value: 0
+                color: "#CCE5FF"
+              - value: 10
+                color: "#66B2FF"
+              - value: 15
+                color: "#0080FF"
+              - value: 18
+                color: "#87c087"
+              - value: 21
+                color: "#389638"
+              - value: 24
+                color: "#FF9932"
+              - value: 25
+                color: "#FF8000"
+              - value: 26
+                color: "#ff0000"
+      - type: custom:meteo-france-weather-card
+        card_mod:
+          style: |
+            :host {
+              margin:10px !important;
+            }
+        name: Moret
+        entity: weather.moret_sur_loing
+        rainForecastEntity: sensor.moret_sur_loing_next_rain
+        rainChanceEntity: sensor.moret_sur_loing_rain_chance
+        thunderChanceEntity: sensor.moret_sur_loing_thunder_chance
+        alertEntity: sensor.moret_sur_loing_weather_alert
   - type: vertical-stack
+    title: Consommation
     cards:
-      - type: "custom:button-card"
-        color_type: label-card
-        color: rgb(44, 109, 214)
-        name: Zigbee
+      - type: "custom:content-card-linky"
+        card_mod:
+          style: |
+            :host {
+              margin:10px !important;
+            }
+        entity: sensor.myenedis_22138784256450_2
+        showInTableUnit: false
+
       - type: entities
+        card_mod:
+          style: |
+            :host {
+              margin:10px !important;
+            }
         show_header_toggle: false
         entities:
           - entity: light.hue_bureau
@@ -373,9 +412,30 @@ cards:
             name: Couloir
           - entity: light.lightstripe_lidl
             name: LightStrip LIDL Celia
+          - entity: light.extended_color_light_14
+            name: LightStrip Simon
           - entity: light.lumiere_celia
             name: Plafonier Célia
           - entity: light.extended_color_light_12
             name: Plafonier Simon
           - entity: light.extended_color_light_12_2
             name: LightStrip PC
+  - type: vertical-stack
+    title: Switchs
+    cards:
+      - type: entities
+        card_mod:
+          style: |
+            :host {
+              margin:10px !important;
+            }
+        show_header_toggle: false
+        entities:
+          - entity: switch.vmc_mss710_main_channel
+          - entity: switch.shenzhen_neo_electronics_co_ltd_power_plug_12a_switch
+          - entity: switch.shenzhen_neo_electronics_co_ltd_power_plug_12a_switch_2
+          - entity: switch.zipato_unknown_type_0003_id_1083_switch
+          - entity: automation.send_notification_when_alarm_triggered
+          - entity: switch.hurleuse_switch
+          - entity: light.light_ext_sensor
+          - entity: switch.on_off_plug_in_unit_11
