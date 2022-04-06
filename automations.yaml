@@ -151,7 +151,7 @@
     platform: event
     event_type: deconz_event
     event_data:
-      id: tradfri_on_off_switch_simon
+      id: tradfri_on_off_switch
       event: 1002
   condition:
     condition: state
@@ -171,7 +171,7 @@
     platform: event
     event_type: deconz_event
     event_data:
-      id: tradfri_on_off_switch_simon
+      id: tradfri_on_off_switch
       event: 1002
   condition:
     condition: state
@@ -193,7 +193,7 @@
     platform: event
     event_type: deconz_event
     event_data:
-      id: tradfri_on_off_switch_simon
+      id: tradfri_on_off_switch
       event: 2002
   action:
     - service: light.turn_off
@@ -254,6 +254,41 @@
     - service: light.turn_off
       data:
         entity_id: light.lightstripe_lidl
+
+- alias: Start Gaming Session
+  id: start_gaming_session
+  trigger:
+    platform: event
+    event_type: deconz_event
+    event_data:
+      id: mi_magic_cube
+      gesture: 7
+  action:
+    - service: light.turn_off
+      data:
+        entity_id: light.hue_bureau
+    - service: light.turn_on
+      data:
+        entity_id: light.extended_color_light_12_2
+        hs_color:
+          - 200
+          - 100
+        brightness: 80
+- alias: Stop Gaming Session
+  id: stop_gaming_session
+  trigger:
+    platform: event
+    event_type: deconz_event
+    event_data:
+      id: mi_magic_cube
+      gesture: 8
+  action:
+    - service: light.turn_on
+      data:
+        entity_id: light.hue_bureau
+    - service: light.turn_off
+      data:
+        entity_id: light.extended_color_light_12_2
 
 - alias: System - Update Template Sensors
   initial_state: true
@@ -418,6 +453,36 @@
       trigger_sensor: binary_sensor.presence_13
 
 ############################ LOG ###############################
+
+- alias: "Notify New Login IP"
+  trigger:
+    - platform: state
+      entity_id: sensor.last_successful_authentication
+  action:
+    - service: notify.mobile_app_iphone_12_de_pouzor
+      data_template:
+        message: "Login success IP: {{ states[trigger.entity_id].state }}"
+
+- id: "Hass Startup Notification"
+  alias: "Hass Startup Notification"
+  trigger:
+    - platform: homeassistant
+      event: start
+  action:
+    - service: notify.mobile_app_iphone_12_de_pouzor
+      data_template:
+        message: "Hass Startup Notification"
+
+- id: "Hass Shutdown Notification"
+  alias: "Hass Shutdown Notification"
+  trigger:
+    - platform: homeassistant
+      event: shutdown
+  action:
+    - service: notify.mobile_app_iphone_12_de_pouzor
+      data_template:
+        message: "Hass Shutdown Notification"
+
 - id: "1608592199554"
   alias: "[Log] Garage Door"
   description: ""
@@ -561,7 +626,7 @@
     - platform: time
       at: 07:30:00
     - platform: time
-      at: "18:00:00"
+      at: "17:30:00"
   action:
     - service: switch.turn_on
       data:

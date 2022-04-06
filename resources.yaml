@@ -20,6 +20,8 @@
   type: module
 - url: /hacsfiles/lovelace-card-tools/card-tools.js
   type: module
+- url: /hacsfiles/lovelace-home-feed-card/lovelace-home-feed-card.js
+  type: module
 - url: /hacsfiles/banner-card/banner-card.js
   type: module
 - url: /hacsfiles/stack-in-card/stack-in-card.js

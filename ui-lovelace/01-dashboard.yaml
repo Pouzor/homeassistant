@@ -439,3 +439,19 @@ cards:
           - entity: switch.hurleuse_switch
           - entity: light.light_ext_sensor
           - entity: switch.on_off_plug_in_unit_11
+      - type: statistics-graph
+        card_mod:
+          style: |
+            :host {
+              margin:10px !important;
+            }
+        entities:
+          - sensor.temperature_14
+          - sensor.temperature_27
+          - sensor.multi_sensor
+          - sensor.temperature_24
+          - sensor.netatmo_pouzor_station_temperature
+        stat_types:
+          - mean
+        chart_type: line
+        days_to_show: 2

@@ -1,6 +1,6 @@
 path: iphone
 title: Iphone
-icon: "mdi:cellphone-iphone"
+icon: "mdi:cellphone"
 badges: []
 cards:
   - type: entities

@@ -60,6 +60,15 @@ cards:
             tap_action:
               action: navigate
               navigation_path: /hassio/dashboard # goes to Hassio update section when tapped
+      - type: "custom:home-feed-card"
+        id_filter: ^nothing.*
+        max_item_count: 10
+        entities:
+          - entity: sensor.last_successful_authentication
+            include_history: true
+            exclude_duplicates: false
+            exclude_states:
+              - "off"
 
   - type: entities
     title: System Information
@@ -83,3 +92,11 @@ cards:
         tap_action:
           action: call-service
           service: homeassistant.restart
+  - type: statistics-graph
+    entities:
+      - sensor.processor_use
+      - sensor.memory_use_percent
+    stat_types:
+      - max
+    chart_type: line
+    days_to_show: 1

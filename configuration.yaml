@@ -101,6 +101,9 @@ hacs:
 
 sensor:
   - platform: websocket_api
+  - platform: authenticated
+    exclude:
+      - 172.30.32.2
   - platform: template
     sensors:
       temperature_garage:
