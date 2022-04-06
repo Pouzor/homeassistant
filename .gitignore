@@ -34,3 +34,7 @@ www/*.jpg
 www/records/
 www/*.mp4
 tts/
+custom_components/
+.ip_authenticated.yaml
+frigate.yml
+zwave_device_config.yaml
