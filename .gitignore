@@ -1,5 +1,6 @@
 # Generic ignores
 *.log
+home-assistant.log.*
 *.db
 *.pyc
 ._*
@@ -32,9 +33,12 @@ secrets.yaml
 known_devices.yaml
 www/*.jpg
 www/records/
+www/community/
 www/*.mp4
 tts/
 custom_components/
+themes/
+notebooks/
 .ip_authenticated.yaml
 frigate.yml
 zwave_device_config.yaml
