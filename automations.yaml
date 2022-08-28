@@ -312,7 +312,7 @@
       entity_id: binary_sensor.presence_13
       to: "on"
     - platform: state
-      entity_id: binary_sensor.neo_coolcam_door_window_detector_sensor_2
+      entity_id: binary_sensor.door_sensor_porte_garage_access_control_window_door_is_open
       to: "on"
   action:
     - service: light.turn_on
@@ -392,6 +392,13 @@
           attachment:
             url: !secret frigate_url
             content-type: jpg
+    - service: notify.mobile_app_iphone
+      data_template:
+        message: Alert Camera
+        data:
+          attachment:
+            url: !secret frigate_url
+            content-type: jpg
     - delay: 30
 
 ################################# ALARM ####################################
@@ -401,7 +408,7 @@
   use_blueprint:
     path: pouzor/alarm_sensor.yaml
     input:
-      trigger_sensor: binary_sensor.neo_coolcam_door_window_detector_sensor_2
+      trigger_sensor: binary_sensor.door_sensor_porte_garage_access_control_window_door_is_open
 
 - alias: "[Alarm] Garage Car Door"
   description: ""
@@ -415,7 +422,7 @@
   use_blueprint:
     path: pouzor/alarm_sensor.yaml
     input:
-      trigger_sensor: binary_sensor.neo_coolcam_door_window_detector_sensor
+      trigger_sensor: binary_sensor.door_sensor_porte_entree_access_control_window_door_is_open_3
 
 - alias: "[Alarm] Windows Bureau"
   description: ""
@@ -489,7 +496,7 @@
   use_blueprint:
     path: pouzor/log_sensor.yaml
     input:
-      trigger_sensor: binary_sensor.neo_coolcam_door_window_detector_sensor_2
+      trigger_sensor: binary_sensor.door_sensor_porte_garage_access_control_window_door_is_open
       picto: "🚪"
       title: "HA - Porte couloire ouverte"
 - id: "1608592605111"
@@ -516,7 +523,7 @@
   use_blueprint:
     path: pouzor/log_sensor.yaml
     input:
-      trigger_sensor: binary_sensor.neo_coolcam_door_window_detector_sensor
+      trigger_sensor: binary_sensor.door_sensor_porte_entree_access_control_window_door_is_open_3
       picto: "🚪"
       title: "HA - Porte entrée ouverte"
 - id: "1608592803773"

@@ -128,11 +128,11 @@ cards:
             icon: hass:security
             name: Motion Garage
             secondary_info: last-changed
-          - entity: binary_sensor.neo_coolcam_door_window_detector_sensor
+          - entity: binary_sensor.door_sensor_porte_entree_access_control_window_door_is_open_3
             icon: mdi:door
             name: Porte entrée
             secondary_info: last-changed
-          - entity: binary_sensor.neo_coolcam_door_window_detector_sensor_2
+          - entity: binary_sensor.door_sensor_porte_garage_access_control_window_door_is_open
             icon: mdi:door
             secondary_info: last-changed
             name: Porte garage
@@ -152,6 +152,7 @@ cards:
             secondary_info: last-changed
           - entity: binary_sensor.window_door_sensor_3
             secondary_info: last-changed
+
   - type: vertical-stack
     cards:
       - type: horizontal-stack
@@ -387,7 +388,12 @@ cards:
             }
         entity: sensor.myenedis_22138784256450_2
         showInTableUnit: false
-
+      - type: history-graph
+        entities:
+          - device_tracker.unknown_device
+          - camera.jardin_frigate
+          - camera.garage_frigate
+          - camera.front_door
       - type: entities
         card_mod:
           style: |
@@ -420,6 +426,7 @@ cards:
             name: Plafonier Simon
           - entity: light.extended_color_light_12_2
             name: LightStrip PC
+
   - type: vertical-stack
     title: Switchs
     cards:

@@ -6,27 +6,6 @@ cards:
   - type: vertical-stack
     cards:
       - type: entities
-        title: Medias
-        show_header_toggle: false
-        entities:
-          - entity: sensor.records
-          - entity: sensor.frigate
-          - entity: sensor.frigate_size
-          - entity: switch.front_door_detect
-          - entity: switch.front_door_recordings
-          - entity: switch.front_door_snapshots
-          - entity: switch.garage_frigate_detect
-          - entity: switch.garage_frigate_recordings
-          - entity: switch.garage_frigate_snapshots
-          - entity: switch.jardin_frigate_detect
-          - entity: switch.jardin_frigate_recordings
-          - entity: switch.jardin_frigate_snapshots
-            card_mod:
-              style: |
-                :host {
-                color: red;
-                }
-      - type: entities
         title: Frigate Information
         show_header_toggle: false
         entities:
@@ -60,10 +39,10 @@ cards:
           style: thumbnails
     view:
       default: snapshot
-  - type: picture-glance
-    title: Salon
-    entities: []
-    camera_image: camera.salon_frigate
+  #  - type: picture-glance
+  #    title: Salon
+  #    entities: []
+  #    camera_image: camera.salon_frigate
   - type: picture-glance
     title: Garage
     entities: []
@@ -72,10 +51,10 @@ cards:
     title: Jardin
     entities: []
     camera_image: camera.jardin_frigate
-  - type: picture-glance
-    title: Lapin
-    entities: []
-    camera_image: camera.lapin_frigate
+  #  - type: picture-glance
+  #    title: Lapin
+  #    entities: []
+  #    camera_image: camera.lapin_frigate
   - type: picture-glance
     title: Etage
     entities: []

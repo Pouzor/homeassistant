@@ -1,6 +1,8 @@
 path: system
 title: System
 icon: "mdi:home-assistant"
+visible:
+  - user: 9ad87be689e743d3945944f45bb922da
 badges: []
 cards:
   - type: vertical-stack
@@ -60,6 +62,22 @@ cards:
             tap_action:
               action: navigate
               navigation_path: /hassio/dashboard # goes to Hassio update section when tapped
+      - type: entities
+        title: Medias
+        show_header_toggle: false
+        entities:
+          - entity: sensor.records
+          - entity: sensor.frigate
+          - entity: sensor.frigate_size
+          - entity: switch.front_door_detect
+          - entity: switch.front_door_recordings
+          - entity: switch.front_door_snapshots
+          - entity: switch.garage_frigate_detect
+          - entity: switch.garage_frigate_recordings
+          - entity: switch.garage_frigate_snapshots
+          - entity: switch.jardin_frigate_detect
+          - entity: switch.jardin_frigate_recordings
+          - entity: switch.jardin_frigate_snapshots
       - type: "custom:home-feed-card"
         id_filter: ^nothing.*
         max_item_count: 10

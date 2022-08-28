@@ -62,23 +62,11 @@ default_config:
 ios:
 mobile_app:
 ffmpeg:
-updater:
 discovery:
 conversation:
 logbook:
 map:
 wake_on_lan:
-
-panel_custom:
-  - name: zwave-graph-panel
-    url_path: zwave-graph
-    sidebar_title: Z-Wave Graph
-    sidebar_icon: mdi:z-wave
-    module_url: /local/zwavegraph3.js
-    config:
-      ranker: network-simplex
-      edge_visibility: relevant
-      grouping: z-wave
 
 input_boolean:
   vmc:
@@ -87,9 +75,9 @@ input_boolean:
     icon: mdi:fan
   freebox:
 
-zwave:
-  usb_path: /dev/ttyACM0
-  device_config: !include zwave_device_config.yaml
+#zwave:
+#  usb_path: /dev/ttyACM0
+#  device_config: !include zwave_device_config.yaml
 
 input_text:
   search_spotify:
@@ -120,26 +108,26 @@ sensor:
       - binary_sensor.capteur_couloire_motion
       - zwave.zipato_unknown_type_0003_id_1083_2
 
-  - platform: mqtt
-    name: "Temperature ESP"
-    state_topic: "office/sensor1"
-    unit_of_measurement: "°C"
-    value_template: "{{ value_json.temperature }}"
-  - platform: mqtt
-    name: "Humidite ESP"
-    state_topic: "office/sensor1"
-    unit_of_measurement: "%"
-    value_template: "{{ value_json.humidity }}"
-  - platform: mqtt
-    name: "Temperature Simon"
-    state_topic: "chambre/simon"
-    unit_of_measurement: "°C"
-    value_template: "{{ value_json.temperature }}"
-  - platform: mqtt
-    name: "Humidite Simon"
-    state_topic: "chambre/simon"
-    unit_of_measurement: "%"
-    value_template: "{{ value_json.humidity }}"
+  #  - platform: mqtt
+  #    name: "Temperature ESP"
+  #    state_topic: "office/sensor1"
+  #    unit_of_measurement: "°C"
+  #    value_template: "{{ value_json.temperature }}"
+  #  - platform: mqtt
+  #    name: "Humidite ESP"
+  #    state_topic: "office/sensor1"
+  #    unit_of_measurement: "%"
+  #    value_template: "{{ value_json.humidity }}"
+  #  - platform: mqtt
+  #    name: "Temperature Simon"
+  #    state_topic: "chambre/simon"
+  #    unit_of_measurement: "°C"
+  #    value_template: "{{ value_json.temperature }}"
+  #  - platform: mqtt
+  #    name: "Humidite Simon"
+  #    state_topic: "chambre/simon"
+  #    unit_of_measurement: "%"
+  #    value_template: "{{ value_json.humidity }}"
 
   - platform: folder
     folder: /config/www/records
@@ -281,10 +269,6 @@ sensor:
         friendly_name: "Number of Zigbee Devices"
         value_template: "32" #todo find real value
 
-  ###### DISPLAY CURRENT HOME ASSISTANT VERSION
-  - platform: version
-    name: Installed Version
-
   ###### UPTIME
   - platform: uptime
     name: Time Online
@@ -292,10 +276,6 @@ sensor:
 media_source:
   media_dirs:
     camera: /www/records
-
-spotify:
-  client_id: !secret spotify_id
-  client_secret: !secret spotify_secret
 
 # Enables support for tracking state changes over time
 history:
@@ -392,11 +372,11 @@ aws:
       credential_name: aws_account
       name: notify_sns
 
-notify:
-  - name: slack_ha
-    platform: slack
-    api_key: !secret slack_api_key
-    default_channel: "#général"
+#notify:
+#  - name: slack_ha
+#    platform: slack
+#    api_key: !secret slack_api_key
+#    default_channel: "#général"
 
 switch:
   - platform: template
