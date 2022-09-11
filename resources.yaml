@@ -28,3 +28,5 @@
   type: module
 - url: https://fonts.googleapis.com/css2?family=Oxygen&family=Ubuntu:wght@300&display=swap
   type: css
+- url: /hacsfiles/lovelace-mushroom/mushroom.js
+  type: module

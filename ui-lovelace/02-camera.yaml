@@ -25,37 +25,28 @@ cards:
           - entity: device_tracker.unknown_device_14
           - entity: device_tracker.unknown_device
           - entity: device_tracker.c310_7526b3
+  - type: vertical-stack
+    cards:
+      - type: picture-glance
+        title: Outside
+        entities: []
+        camera_image: camera.front_door
 
-  - type: picture-glance
-    title: Outside
-    entities: []
-    camera_image: camera.front_door
-
-  - type: custom:frigate-card
-    camera_entity: camera.front_door
-    event_viewer:
-      controls:
-        next_previous:
-          style: thumbnails
-    view:
-      default: snapshot
-  #  - type: picture-glance
-  #    title: Salon
-  #    entities: []
-  #    camera_image: camera.salon_frigate
-  - type: picture-glance
-    title: Garage
-    entities: []
-    camera_image: camera.garage_frigate
-  - type: picture-glance
-    title: Jardin
-    entities: []
-    camera_image: camera.jardin_frigate
-  #  - type: picture-glance
-  #    title: Lapin
-  #    entities: []
-  #    camera_image: camera.lapin_frigate
-  - type: picture-glance
-    title: Etage
-    entities: []
-    camera_image: camera.etage_frigate
+      - type: picture-glance
+        title: Garage
+        entities: []
+        camera_image: camera.garage_frigate
+  - type: vertical-stack
+    cards:
+      - type: picture-glance
+        title: Jardin
+        entities: []
+        camera_image: camera.jardin_frigate
+  - type: vertical-stack
+    cards:
+      - type: picture-entity
+        entity: camera.front_door_person
+  - type: vertical-stack
+    cards:
+      - type: picture-entity
+        entity: camera.garage_frigate_person

@@ -78,6 +78,9 @@ cards:
           - entity: switch.jardin_frigate_detect
           - entity: switch.jardin_frigate_recordings
           - entity: switch.jardin_frigate_snapshots
+          - entity: switch.salon_frigate_detect
+          - entity: switch.salon_frigate_recordings
+          - entity: switch.salon_frigate_snapshots
       - type: "custom:home-feed-card"
         id_filter: ^nothing.*
         max_item_count: 10
