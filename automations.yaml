@@ -1,3 +1,57 @@
+- alias: "React to temperature"
+  trigger:
+    platform: event
+    event_type: matrix_command
+    event_data:
+      command: ha_cmd
+    variables:
+      command_full: "{{ trigger.event.data.args['command'] }}"
+      command_tab: "{{ trigger.event.data.args['command'].split(' ') }}"
+      sensors:
+        {
+          "salon": "sensor.netatmo_pouzor_station_temperature",
+          "chambre": "sensor.multi_sensor",
+          "etage": "sensor.temperature_27",
+          "couloir": "sensor.temperature_14",
+        }
+  condition:
+    or:
+      - condition: template
+        value_template: "{{ command_tab[0] == 'temperature' }}"
+      - condition: template
+        value_template: "{{ command_tab[0] == 'temp' }}"
+  action:
+    service: notify.matrix_notify
+    data:
+      message: "{{command_tab[0]}} : {{ states(sensors[command_tab[1]]) }}"
+
+- alias: "React to capture"
+  trigger:
+    platform: event
+    event_type: matrix_command
+    event_data:
+      command: ha_cmd
+    variables:
+      command_full: "{{ trigger.event.data.args['command'] }}"
+      command_tab: "{{ trigger.event.data.args['command'].split(' ') }}"
+      sensors:
+        {
+          "jardin": "jardin_frigate",
+          "cour": "front_door",
+          "garage": "garage_frigate",
+        }
+      url: !secret external_url_clean
+  condition:
+    or:
+      - condition: template
+        value_template: "{{ command_tab[0] == 'capture' }}"
+      - condition: template
+        value_template: "{{ command_tab[0] == 'camera' }}"
+  action:
+    service: notify.matrix_notify
+    data:
+      message: "Lien vers la camera : {{ url }}/api/camera_proxy_stream/camera.{{sensors[command_tab[1]]}}?token={{states.camera[sensors[command_tab[1]]].attributes.access_token}}"
+
 - id: search_spotify
   alias: Search on spotify
   trigger:
@@ -151,7 +205,7 @@
     platform: event
     event_type: deconz_event
     event_data:
-      id: tradfri_on_off_switch
+      id: simon_on_off_switch
       event: 1002
   condition:
     condition: state
@@ -171,7 +225,7 @@
     platform: event
     event_type: deconz_event
     event_data:
-      id: tradfri_on_off_switch
+      id: simon_on_off_switch
       event: 1002
   condition:
     condition: state
@@ -193,7 +247,7 @@
     platform: event
     event_type: deconz_event
     event_data:
-      id: tradfri_on_off_switch
+      id: simon_on_off_switch
       event: 2002
   action:
     - service: light.turn_off
@@ -215,6 +269,42 @@
         hs_color:
           - "{{ (30 + (state_attr('light.lightstripe_lidl', 'hs_color')[0] or 0)) % 360 }}"
           - 100
+
+- alias: Light on grande chambre
+  id: light_on_grandre_chambre
+  trigger:
+    platform: event
+    event_type: deconz_event
+    event_data:
+      id: switch_34
+      event: 1002
+  condition:
+    condition: state
+    entity_id:
+      - light.dimmable_light_18
+    state: "off"
+  action:
+    - service: light.turn_on
+      data:
+        entity_id: light.dimmable_light_18
+
+- alias: Light off grande chambre
+  id: light_off_grandre_chambre
+  trigger:
+    platform: event
+    event_type: deconz_event
+    event_data:
+      id: switch_34
+      event: 1002
+  condition:
+    condition: state
+    entity_id:
+      - light.dimmable_light_18
+    state: "on"
+  action:
+    - service: light.turn_off
+      data:
+        entity_id: light.dimmable_light_18
 
 - alias: Light off Celia stripe after 1 hour
   trigger:

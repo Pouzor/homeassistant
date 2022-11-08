@@ -75,10 +75,6 @@ input_boolean:
     icon: mdi:fan
   freebox:
 
-#zwave:
-#  usb_path: /dev/ttyACM0
-#  device_config: !include zwave_device_config.yaml
-
 input_text:
   search_spotify:
     name: search_spotify
@@ -86,6 +82,16 @@ input_text:
 
 hacs:
   token: !secret hacs_token
+
+matrix:
+  homeserver: !secret matrix_url
+  username: !secret matrix_user_bot
+  password: !secret matrix_password
+  rooms:
+    - !secret matrix_room
+  commands:
+    - expression: ha (?P<command>.*)
+      name: ha_cmd
 
 sensor:
   - platform: websocket_api
@@ -98,8 +104,7 @@ sensor:
         value_template: "{{ state_attr('binary_sensor.motion_sensor', 'temperature') }}"
       temperature_ext:
         value_template: "{{ state_attr('binary_sensor.motion_salon', 'temperature') }}"
-      digicode:
-        value_template: "{% if is_state('sensor.schlage_link_mini_keypad_rfid_access_control', '6') %} Home {% else %} Away {% endif %}"
+
   - platform: attributes
     friendly_name: "Batteries"
     attribute: battery_level
@@ -371,6 +376,11 @@ aws:
       region_name: "eu-west-3"
       credential_name: aws_account
       name: notify_sns
+
+notify:
+  - name: matrix_notify
+    platform: matrix
+    default_room: !secret matrix_room
 
 #notify:
 #  - name: slack_ha

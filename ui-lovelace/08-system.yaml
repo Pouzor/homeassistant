@@ -81,6 +81,7 @@ cards:
           - entity: switch.salon_frigate_detect
           - entity: switch.salon_frigate_recordings
           - entity: switch.salon_frigate_snapshots
+          - entity: binary_sensor.presence_32
       - type: "custom:home-feed-card"
         id_filter: ^nothing.*
         max_item_count: 10

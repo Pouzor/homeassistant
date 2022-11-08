@@ -49,53 +49,33 @@ cards:
     show_volume_level: true
     use_media_info: true
     entity: media_player.2eme_firetvstick_remy
-#  - type: button
-#    name: HDMI Next - Firestick
-#    show_state: false
-#    tap_action:
-#      action: call-service
-#      service: remote.send_command
-#      service_data:
-#        entity_id: remote.harmony_hub
-#        device: "LG 37LE5300-ZA"
-#        command: "InputHdmi1/Dvi"
-#  - type: button
-#    name: HDMI 2
-#    show_state: false
-#    tap_action:
-#      action: call-service
-#      service: remote.send_command
-#      service_data:
-#        entity_id: remote.harmony_hub
-#        device: "LG 37LE5300-ZA"
-#        command: "InputHdmi2"
-#  - type: button
-#    name: Freebox
-#    show_state: false
-#    tap_action:
-#      action: call-service
-#      service: remote.send_command
-#      service_data:
-#        entity_id: remote.harmony_hub
-#        device: "LG 37LE5300-ZA"
-#        command: "InputHdmi3"
-#  - type: button
-#    name: Switch
-#    show_state: false
-#    tap_action:
-#      action: call-service
-#      service: remote.send_command
-#      service_data:
-#        entity_id: remote.harmony_hub
-#        device: "LG 37LE5300-ZA"
-#        command: "InputHdmi4"
-#  - type: button
-#    name: Next
-#    show_state: false
-#    tap_action:
-#      action: call-service
-#      service: remote.send_command
-#      service_data:
-#        entity_id: remote.harmony_hub
-#        device: "LG 37LE5300-ZA"
-#        command: "InputNext"
+  - cards:
+      - entity: sensor.strava_0_0
+        type: entity
+      - entities:
+          - entity: sensor.strava_0_1
+          - entity: sensor.strava_0_2
+          - entity: sensor.strava_0_3
+          - entity: sensor.strava_0_4
+          - entity: sensor.strava_0_5
+        type: glance
+    type: vertical-stack
+  - cards:
+      - entity: sensor.strava_1_0
+        type: entity
+      - entities:
+          - entity: sensor.strava_1_1
+          - entity: sensor.strava_1_2
+          - entity: sensor.strava_1_3
+          - entity: sensor.strava_1_4
+          - entity: sensor.strava_1_5
+        type: glance
+    type: vertical-stack
+
+  - entities:
+      - entity: sensor.strava_stats_summary_ytd_ride_distance
+      - entity: sensor.strava_stats_summary_ytd_ride_moving_time
+      - entity: sensor.strava_stats_summary_all_run_distance
+      - entity: sensor.strava_stats_summary_all_run_moving_time
+    title: Strava - Year to Date
+    type: entities

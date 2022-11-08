@@ -338,9 +338,11 @@ cards:
       - type: history-graph
         entities:
           - device_tracker.unknown_device
-          - camera.jardin_frigate
-          - camera.garage_frigate
-          - camera.front_door
+          - entity: device_tracker.c310_7526b3
+            name: Camera Jardin
+          - device_tracker.camera_garage_2
+          - entity: device_tracker.esp_c2f291
+            name: ESP Garage
       - type: entities
         card_mod:
           style: |
@@ -361,6 +363,8 @@ cards:
             name: LightStrip PC
           - entity: light.hue_bureau
             name: Plafonnier Bureau
+          - entity: light.dimmable_light_18
+            name: Grande Chambre
           - entity: light.lightstripe
             name: LightStripe
           - entity: light.extended_color_light_7
@@ -393,6 +397,9 @@ cards:
           - entity: switch.hurleuse_switch
           - entity: light.light_ext_sensor
           - entity: switch.on_off_plug_in_unit_11
+          - entity: switch.on_off_plug_in_unit_17
+          - entity: switch.on_off_plug_in_unit_16
+          - entity: switch.on_off_plug_in_unit_12
       - type: statistics-graph
         card_mod:
           style: |
