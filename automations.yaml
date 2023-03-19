@@ -48,9 +48,18 @@
       - condition: template
         value_template: "{{ command_tab[0] == 'camera' }}"
   action:
-    service: notify.matrix_notify
-    data:
-      message: "Lien vers la camera : {{ url }}/api/camera_proxy_stream/camera.{{sensors[command_tab[1]]}}?token={{states.camera[sensors[command_tab[1]]].attributes.access_token}}"
+    - service: camera.snapshot
+      data:
+        filename: "www/records/{{sensors[command_tab[1]]}}_snapshot.jpg"
+      target:
+        entity_id: "camera.{{sensors[command_tab[1]]}}"
+    - delay: 1
+    - service: notify.matrix_notify
+      data:
+        message: "Snapshot"
+        data:
+          images:
+            - "www/records/{{sensors[command_tab[1]]}}_snapshot.jpg"
 
 - id: search_spotify
   alias: Search on spotify
@@ -482,13 +491,26 @@
           attachment:
             url: !secret frigate_url
             content-type: jpg
-    - service: notify.mobile_app_iphone
-      data_template:
-        message: Alert Camera
+    #    - service: notify.mobile_app_iphone
+    #      data_template:
+    #        message: Alert Camera
+    #        data:
+    #          attachment:
+    #            url: !secret frigate_url
+    #            content-type: jpg
+    - service: camera.snapshot
+      data:
+        filename: www/records/front_door_snapshot.jpg
+      target:
+        entity_id: camera.front_door
+    - delay: 1
+    - service: notify.matrix_notify
+      data:
+        message: "Frigate Detection"
         data:
-          attachment:
-            url: !secret frigate_url
-            content-type: jpg
+          images:
+            - www/records/front_door_snapshot.jpg
+
     - delay: 30
 
 ################################# ALARM ####################################
@@ -717,26 +739,62 @@
     - service: light.turn_off
       entity_id: light.hue_bureau
 
-- id: noel_on
-  alias: "Noel ON"
+#- id: noel_on
+#  alias: "Noel ON"
+#  trigger:
+#    - platform: time
+#      at: 07:30:00
+#    - platform: time
+#      at: "17:30:00"
+#  action:
+#    - service: switch.turn_on
+#      data:
+#        entity_id: switch.on_off_plug_in_unit_11
+#
+#- id: noel_off
+#  alias: "Noel OFF"
+#  trigger:
+#    - platform: time
+#      at: 08:30:00
+#    - platform: time
+#      at: "22:00:00"
+#  action:
+#    - service: switch.turn_off
+#      data:
+#        entity_id: switch.on_off_plug_in_unit_11
+#
+- description: ""
+  mode: single
   trigger:
-    - platform: time
-      at: 07:30:00
-    - platform: time
-      at: "17:30:00"
+    - platform: event
+      event_type: toggle_light_nfc
+  condition: []
   action:
-    - service: switch.turn_on
-      data:
-        entity_id: switch.on_off_plug_in_unit_11
+    - service: light.toggle
+      data: {}
+      target:
+        entity_id: light.hue_bureau
+  alias: La balise Machine est analysée
 
-- id: noel_off
-  alias: "Noel OFF"
+- id: trigger_camera_cour_off
+  alias: "Trigger Camera Cour Off"
   trigger:
-    - platform: time
-      at: 08:30:00
-    - platform: time
-      at: "22:00:00"
+    platform: state
+    entity_id: device_tracker.unknown_device
+    to: "not_home"
   action:
-    - service: switch.turn_off
-      data:
-        entity_id: switch.on_off_plug_in_unit_11
+    - service: notify.mobile_app_iphone_12_de_pouzor
+      data_template:
+        message: "Camera Cour goes OFF"
+        title: "Camera OFF"
+- id: trigger_camera_garage_off
+  alias: "Trigger Camera garage Off"
+  trigger:
+    platform: state
+    entity_id: device_tracker.camera_garage_2
+    to: "not_home"
+  action:
+    - service: notify.mobile_app_iphone_12_de_pouzor
+      data_template:
+        message: "Camera Garage goes OFF"
+        title: "Camera OFF"

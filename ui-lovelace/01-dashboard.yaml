@@ -12,15 +12,6 @@ cards:
             card_mod:
               style: |
                 :host {
-                  margin-left:10px !important;
-                }
-            title: Garage
-            entities: []
-            camera_image: camera.garage_frigate
-          - type: picture-glance
-            card_mod:
-              style: |
-                :host {
                   margin-right:10px !important;
                 }
             title: Allée
@@ -34,16 +25,16 @@ cards:
                 :host {
                   margin-left:10px !important;
                 }
-            title: Lapin
+            title: Garage
             entities: []
-            camera_image: camera.lapin_frigate
+            camera_image: camera.garage_frigate
           - type: picture-glance
             card_mod:
               style: |
                 :host {
                   margin-right:10px !important;
                 }
-            title: Salon
+            title: Jardin
             entities: []
             camera_image: camera.jardin_frigate
 

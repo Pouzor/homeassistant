@@ -5,6 +5,7 @@ homeassistant:
   elevation: 0
   unit_system: metric
   time_zone: Europe/Paris
+  country: FR
   customize: !include customize.yaml
   allowlist_external_dirs:
     - /config/www/records
@@ -252,21 +253,6 @@ sensor:
             {%- endfor -%}
           {%- endfor -%}
 
-  ###### TOTAL NUMBER OF ZWAVE DEVICES
-  - platform: template
-    sensors:
-      total_zwave_devices:
-        friendly_name: "Number of Zwave Devices"
-        value_template: >
-          {%- set domains = ['zwave'] -%}
-          {%- for domain in domains -%}
-            {%- for item in states[domain] -%}
-              {% if loop.first %}
-                {{loop.length}}
-              {% endif %}
-            {%- endfor -%}
-          {%- endfor -%}
-
   ###### TOTAL NUMBER OF ZIGBE DEVICES
   - platform: template
     sensors:
@@ -295,7 +281,6 @@ history:
       - sensor.total_scripts
       - sensor.total_sensors
       - sensor.total_switches
-      - sensor.total_zwave_devices
       - sun.sun
       - sensor.last_hallway_detection
       - sensor.netatmo_module_battery

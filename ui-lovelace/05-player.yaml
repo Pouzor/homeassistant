@@ -49,33 +49,3 @@ cards:
     show_volume_level: true
     use_media_info: true
     entity: media_player.2eme_firetvstick_remy
-  - cards:
-      - entity: sensor.strava_0_0
-        type: entity
-      - entities:
-          - entity: sensor.strava_0_1
-          - entity: sensor.strava_0_2
-          - entity: sensor.strava_0_3
-          - entity: sensor.strava_0_4
-          - entity: sensor.strava_0_5
-        type: glance
-    type: vertical-stack
-  - cards:
-      - entity: sensor.strava_1_0
-        type: entity
-      - entities:
-          - entity: sensor.strava_1_1
-          - entity: sensor.strava_1_2
-          - entity: sensor.strava_1_3
-          - entity: sensor.strava_1_4
-          - entity: sensor.strava_1_5
-        type: glance
-    type: vertical-stack
-
-  - entities:
-      - entity: sensor.strava_stats_summary_ytd_ride_distance
-      - entity: sensor.strava_stats_summary_ytd_ride_moving_time
-      - entity: sensor.strava_stats_summary_all_run_distance
-      - entity: sensor.strava_stats_summary_all_run_moving_time
-    title: Strava - Year to Date
-    type: entities
