@@ -17,7 +17,6 @@ homeassistant:
     - !secret img_garage
     - !secret img_salon
     - !secret img_etage
-    - !secret doods_cam
   media_dirs:
     media: /config/www/records
 
@@ -68,6 +67,7 @@ conversation:
 logbook:
 map:
 wake_on_lan:
+notify:
 
 input_boolean:
   vmc:
@@ -84,56 +84,18 @@ input_text:
 hacs:
   token: !secret hacs_token
 
-matrix:
-  homeserver: !secret matrix_url
-  username: !secret matrix_user_bot
-  password: !secret matrix_password
-  rooms:
-    - !secret matrix_room
-  commands:
-    - expression: ha (?P<command>.*)
-      name: ha_cmd
-
 sensor:
   - platform: websocket_api
   - platform: authenticated
     exclude:
       - 172.30.32.2
-  - platform: template
-    sensors:
-      temperature_garage:
-        value_template: "{{ state_attr('binary_sensor.motion_sensor', 'temperature') }}"
-      temperature_ext:
-        value_template: "{{ state_attr('binary_sensor.motion_salon', 'temperature') }}"
 
   - platform: attributes
     friendly_name: "Batteries"
     attribute: battery_level
     unit_of_measurement: "%"
     entities:
-      - binary_sensor.capteur_couloire_motion
       - zwave.zipato_unknown_type_0003_id_1083_2
-
-  #  - platform: mqtt
-  #    name: "Temperature ESP"
-  #    state_topic: "office/sensor1"
-  #    unit_of_measurement: "°C"
-  #    value_template: "{{ value_json.temperature }}"
-  #  - platform: mqtt
-  #    name: "Humidite ESP"
-  #    state_topic: "office/sensor1"
-  #    unit_of_measurement: "%"
-  #    value_template: "{{ value_json.humidity }}"
-  #  - platform: mqtt
-  #    name: "Temperature Simon"
-  #    state_topic: "chambre/simon"
-  #    unit_of_measurement: "°C"
-  #    value_template: "{{ value_json.temperature }}"
-  #  - platform: mqtt
-  #    name: "Humidite Simon"
-  #    state_topic: "chambre/simon"
-  #    unit_of_measurement: "%"
-  #    value_template: "{{ value_json.humidity }}"
 
   - platform: folder
     folder: /config/www/records
@@ -268,70 +230,6 @@ media_source:
   media_dirs:
     camera: /www/records
 
-# Enables support for tracking state changes over time
-history:
-  exclude:
-    entities:
-      - sensor.yr_symbol
-      - remote.harmony_hub
-      - binary_sensor.remote_ui
-      - sensor.total_automations
-      - sensor.total_devicetrackers
-      - sensor.total_lights
-      - sensor.total_scripts
-      - sensor.total_sensors
-      - sensor.total_switches
-      - sun.sun
-      - sensor.last_hallway_detection
-      - sensor.netatmo_module_battery
-      - sensor.netatmo_module_battery_percent
-      - sensor.netatmo_station_wifi
-      - zwave.z_wave_me_zme_uzb1_usb_stick
-      - zwave.unknown_node_2
-      - camera.onvif_flux_etage
-      - camera.onvif_flux_garage
-      - camera.onvif_flux_salon
-      - camera.etage
-      - camera.garage
-      - camera.salon
-      - variable.last_hallway_detection
-      - variable.last_garage_detection
-      - sensor.netatmo_module_radio
-      - sensor.netatmo_module_battery_percent
-      - sensor.netatmo_module_battery
-      - sensor.netatmo_station_wifi
-      - sensor.solar_angle
-      - sensor.sunrise
-      - sensor.time_online
-      - sensor.neo_coolcam_door_window_detector_access_control
-      - sensor.neo_coolcam_door_window_detector_access_control_2
-      - sensor.neo_coolcam_door_window_detector_access_control_3
-      - sensor.shenzhen_neo_electronics_co_ltd_door_window_detector_access_control
-      - sensor.shenzhen_neo_electronics_co_ltd_door_window_detector_access_control_2
-      - sensor.neo_coolcam_door_window_detector_alarm_level
-      - sensor.neo_coolcam_door_window_detector_alarm_level_2
-      - sensor.neo_coolcam_door_window_detector_alarm_level_3
-      - sensor.shenzhen_neo_electronics_co_ltd_door_window_detector_alarm_level
-      - sensor.shenzhen_neo_electronics_co_ltd_door_window_detector_alarm_level_2
-      - sensor.neo_coolcam_door_window_detector_alarm_type
-      - sensor.neo_coolcam_door_window_detector_alarm_type_2
-      - sensor.neo_coolcam_door_window_detector_alarm_type_3
-      - sensor.shenzhen_neo_electronics_co_ltd_door_window_detector_alarm_type
-      - sensor.shenzhen_neo_electronics_co_ltd_door_window_detector_alarm_type_2
-      - sensor.my_computer_cpu_usage
-      - sensor.my_computer_hdd_format_c
-      - sensor.my_computer_hdd_free_space_c
-      - sensor.my_computer_hdd_label_c
-      - sensor.my_computer_hdd_total_free_space_c
-      - sensor.my_computer_hdd_total_size_c
-      - sensor.my_computer_hdd_usage_c
-      - sensor.my_computer_hdd_used_space_c
-      - sensor.my_computer_ram_usage
-    domains:
-      - device_tracker
-      - automation
-      - script
-
 tts:
   - platform: google_translate
     service_name: google_say
@@ -361,17 +259,6 @@ aws:
       region_name: "eu-west-3"
       credential_name: aws_account
       name: notify_sns
-
-notify:
-  - name: matrix_notify
-    platform: matrix
-    default_room: !secret matrix_room
-
-#notify:
-#  - name: slack_ha
-#    platform: slack
-#    api_key: !secret slack_api_key
-#    default_channel: "#général"
 
 switch:
   - platform: template

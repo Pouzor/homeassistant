@@ -59,13 +59,13 @@ cards:
         title: Motion
         show_header_toggle: false
         entities:
-          - entity: binary_sensor.fire_30
+          - entity: binary_sensor.detecteur_incendie_smoke
             secondary_info: last-changed
-          - entity: binary_sensor.motion_salon
+          - entity: binary_sensor.motion_sensor_bureau_occupancy
             icon: hass:security
-            name: Motion Entrée
+            name: Motion Bureau
             secondary_info: last-changed
-          - entity: binary_sensor.motion_sensor
+          - entity: binary_sensor.motion_sensor_garage_occupancy
             icon: hass:security
             name: Motion Garage
             secondary_info: last-changed
@@ -77,11 +77,11 @@ cards:
             icon: mdi:door
             secondary_info: last-changed
             name: Porte garage
-          - entity: binary_sensor.openclose_17
+          - entity: binary_sensor.contact_sensor_garage_contact
             name: Garage
             icon: mdi:garage
             secondary_info: last-changed
-          - entity: binary_sensor.presence_13
+          - entity: binary_sensor.motion_couloir_occupancy
             name: Couloir
             icon: mdi:home-circle
             secondary_info: last-changed
@@ -89,9 +89,9 @@ cards:
             secondary_info: last-changed
           - entity: binary_sensor.door_window_sensor_access_control_window_door_is_open_2
             secondary_info: last-changed
-          - entity: binary_sensor.window_door_sensor_2
+          - entity: binary_sensor.contact_sensor_porte_fenetre_cour_contact
             secondary_info: last-changed
-          - entity: binary_sensor.window_door_sensor_3
+          - entity: binary_sensor.contact_sensor_porte_fenetre_jardin_contact
             secondary_info: last-changed
 
   - type: vertical-stack
@@ -131,7 +131,7 @@ cards:
           - type: custom:mini-graph-card
             name: Salon
             entities:
-              - sensor.temperature_24
+              - sensor.aquara_sensor_salon_temperature
             line_color: blue
             show:
               icon: false
@@ -161,7 +161,7 @@ cards:
                 }
             name: Couloir
             entities:
-              - sensor.temperature_14
+              - sensor.motion_couloir_temperature
             show:
               icon: false
             height: 75
@@ -190,9 +190,9 @@ cards:
                 :host {
                   margin-left:10px !important;
                 }
-            name: Chambre [X multi]
+            name: Bureau [X multi]
             entities:
-              - sensor.multi_sensor
+              - sensor.aquara_sensor_bureau_temperature
             unit: "°C"
             show:
               icon: false
@@ -222,7 +222,7 @@ cards:
                 }
             name: Etage
             entities:
-              - sensor.temperature_27
+              - sensor.aquara_sensor_etage_temperature
             unit: "°C"
             show:
               icon: false
@@ -250,41 +250,11 @@ cards:
             card_mod:
               style: |
                 :host {
-                  margin-left:10px !important;
-                }
-            name: Ext [X motion]
-            entities:
-              - sensor.temperature_ext
-            line_color: blue
-            show:
-              icon: false
-            height: 75
-            color_thresholds:
-              - value: 0
-                color: "#CCE5FF"
-              - value: 10
-                color: "#66B2FF"
-              - value: 15
-                color: "#0080FF"
-              - value: 18
-                color: "#87c087"
-              - value: 21
-                color: "#389638"
-              - value: 24
-                color: "#FF9932"
-              - value: 25
-                color: "#FF8000"
-              - value: 26
-                color: "#ff0000"
-          - type: custom:mini-graph-card
-            card_mod:
-              style: |
-                :host {
                   margin-right:10px !important;
                 }
             name: Garage [X motion]
             entities:
-              - sensor.temperature_garage
+              - sensor.motion_sensor_garage_device_temperature
             unit: "°C"
             show:
               icon: false
@@ -324,7 +294,7 @@ cards:
             :host {
               margin:10px !important;
             }
-        entity: sensor.myenedis_22138784256450_2
+        entity: sensor.myelectricaldata_consumption_22138784256450_2
         showInTableUnit: false
       - type: history-graph
         entities:
@@ -342,31 +312,29 @@ cards:
             }
         show_header_toggle: false
         entities:
-          - entity: light.lightstripe_lidl
+          - entity: light.strip_celia
             name: LightStrip LIDL Celia
-          - entity: light.extended_color_light_14
+          - entity: light.strip_simon
             name: LightStrip Simon
-          - entity: light.lumiere_celia
+          - entity: light.plafond_celia
             name: Plafonier Célia
-          - entity: light.extended_color_light_12
+          - entity: light.plafond_simon
             name: Plafonier Simon
-          - entity: light.extended_color_light_12_2
+          - entity: light.lidl_pc
             name: LightStrip PC
-          - entity: light.hue_bureau
+          - entity: light.plafond_bureau
             name: Plafonnier Bureau
-          - entity: light.dimmable_light_18
+          - entity: light.plafond_grande_chambre
             name: Grande Chambre
-          - entity: light.lightstripe
+          - entity: light.strip_bureau_angle
             name: LightStripe
-          - entity: light.extended_color_light_7
+          - entity: light.plafond_chambre
             name: Chambre
-          - entity: light.couloire
+          - entity: light.plafond_couloir
             name: Couloir
-          - entity: light.dimmable_light_3
-            name: Ikea Armoire
-          - entity: light.extended_color_light_5
+          - entity: light.plafond_salon_table
             name: Salon D
-          - entity: light.extended_color_light_6
+          - entity: light.plafond_salon_canape
             name: Salon G
 
   - type: vertical-stack
@@ -381,16 +349,14 @@ cards:
         show_header_toggle: false
         entities:
           - entity: switch.vmc_mss710_main_channel
-          - entity: switch.wall_plug_switch_2
           - entity: switch.wall_plug_switch
           - entity: switch.zipato_unknown_type_0003_id_1083_switch
           - entity: automation.send_notification_when_alarm_triggered
           - entity: switch.hurleuse_switch
           - entity: light.light_ext_sensor
-          - entity: switch.on_off_plug_in_unit_11
-          - entity: switch.on_off_plug_in_unit_17
-          - entity: switch.on_off_plug_in_unit_16
-          - entity: switch.on_off_plug_in_unit_12
+          - entity: switch.multi_chambre_l1
+          - entity: switch.multi_chambre_l2
+          - entity: switch.multi_chambre_l3
       - type: statistics-graph
         card_mod:
           style: |
@@ -398,11 +364,11 @@ cards:
               margin:10px !important;
             }
         entities:
-          - sensor.temperature_14
-          - sensor.temperature_27
-          - sensor.multi_sensor
-          - sensor.temperature_24
           - sensor.netatmo_pouzor_station_temperature
+          - sensor.aquara_sensor_salon_temperature
+          - sensor.aquara_sensor_bureau_temperature
+          - sensor.aquara_sensor_etage_temperature
+          - sensor.motion_couloir_temperature
         stat_types:
           - mean
         chart_type: line
