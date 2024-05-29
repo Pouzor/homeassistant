@@ -1,7 +1,7 @@
 title: Dashboard
 path: dashboard
 badges: []
-icon: mdi:desktop-mac-dashboard
+icon: mdi:home-analytics
 cards:
   - type: vertical-stack
     title: Security
@@ -17,26 +17,6 @@ cards:
             title: Allée
             entities: []
             camera_image: camera.front_door
-      - type: horizontal-stack
-        cards:
-          - type: picture-glance
-            card_mod:
-              style: |
-                :host {
-                  margin-left:10px !important;
-                }
-            title: Garage
-            entities: []
-            camera_image: camera.garage_frigate
-          - type: picture-glance
-            card_mod:
-              style: |
-                :host {
-                  margin-right:10px !important;
-                }
-            title: Jardin
-            entities: []
-            camera_image: camera.jardin_frigate
 
       - type: custom:mushroom-alarm-control-panel-card
         card_mod:
@@ -65,35 +45,14 @@ cards:
             icon: hass:security
             name: Motion Bureau
             secondary_info: last-changed
-          - entity: binary_sensor.motion_sensor_garage_occupancy
-            icon: hass:security
-            name: Motion Garage
-            secondary_info: last-changed
-          - entity: binary_sensor.door_sensor_porte_entree_access_control_window_door_is_open_3
-            icon: mdi:door
-            name: Porte entrée
-            secondary_info: last-changed
-          - entity: binary_sensor.door_sensor_porte_garage_access_control_window_door_is_open
-            icon: mdi:door
-            secondary_info: last-changed
-            name: Porte garage
-          - entity: binary_sensor.contact_sensor_garage_contact
-            name: Garage
-            icon: mdi:garage
-            secondary_info: last-changed
           - entity: binary_sensor.motion_couloir_occupancy
             name: Couloir
             icon: mdi:home-circle
             secondary_info: last-changed
-          - entity: binary_sensor.door_window_sensor_access_control_window_door_is_open_3
-            secondary_info: last-changed
-          - entity: binary_sensor.door_window_sensor_access_control_window_door_is_open_2
-            secondary_info: last-changed
           - entity: binary_sensor.contact_sensor_porte_fenetre_cour_contact
             secondary_info: last-changed
-          - entity: binary_sensor.contact_sensor_porte_fenetre_jardin_contact
+          - entity: binary_sensor.contact_sensor_porte_entree_contact
             secondary_info: last-changed
-
   - type: vertical-stack
     cards:
       - type: horizontal-stack
@@ -105,34 +64,9 @@ cards:
                 :host {
                   margin-left:10px !important;
                 }
-            name: Salon [Netatmo]
-            entities:
-              - sensor.netatmo_pouzor_station_temperature
-            show:
-              icon: false
-            height: 75
-            color_thresholds:
-              - value: 0
-                color: "#CCE5FF"
-              - value: 10
-                color: "#66B2FF"
-              - value: 15
-                color: "#0080FF"
-              - value: 18
-                color: "#87c087"
-              - value: 21
-                color: "#389638"
-              - value: 24
-                color: "#FF9932"
-              - value: 25
-                color: "#FF8000"
-              - value: 26
-                color: "#ff0000"
-          - type: custom:mini-graph-card
             name: Salon
             entities:
               - sensor.aquara_sensor_salon_temperature
-            line_color: blue
             show:
               icon: false
             height: 75
@@ -153,6 +87,7 @@ cards:
                 color: "#FF8000"
               - value: 26
                 color: "#ff0000"
+
           - type: custom:mini-graph-card
             card_mod:
               style: |
@@ -185,15 +120,10 @@ cards:
       - type: horizontal-stack
         cards:
           - type: custom:mini-graph-card
-            card_mod:
-              style: |
-                :host {
-                  margin-left:10px !important;
-                }
-            name: Bureau [X multi]
+            name: Chambre
             entities:
-              - sensor.aquara_sensor_bureau_temperature
-            unit: "°C"
+              - sensor.aquara_sensor_chambre_temperature
+            line_color: blue
             show:
               icon: false
             height: 75
@@ -220,9 +150,9 @@ cards:
                 :host {
                   margin-right:10px !important;
                 }
-            name: Etage
+            name: Chambre Enfants
             entities:
-              - sensor.aquara_sensor_etage_temperature
+              - sensor.aquara_sensor_chambre_enfants_temperature
             unit: "°C"
             show:
               icon: false
@@ -244,39 +174,6 @@ cards:
                 color: "#FF8000"
               - value: 26
                 color: "#ff0000"
-      - type: horizontal-stack
-        cards:
-          - type: custom:mini-graph-card
-            card_mod:
-              style: |
-                :host {
-                  margin-right:10px !important;
-                }
-            name: Garage [X motion]
-            entities:
-              - sensor.motion_sensor_garage_device_temperature
-            unit: "°C"
-            show:
-              icon: false
-            height: 75
-            color_thresholds:
-              - value: 0
-                color: "#CCE5FF"
-              - value: 10
-                color: "#66B2FF"
-              - value: 15
-                color: "#0080FF"
-              - value: 18
-                color: "#87c087"
-              - value: 21
-                color: "#389638"
-              - value: 24
-                color: "#FF9932"
-              - value: 25
-                color: "#FF8000"
-              - value: 26
-                color: "#ff0000"
-
       - type: weather-forecast
         card_mod:
           style: |
@@ -288,22 +185,10 @@ cards:
   - type: vertical-stack
     title: Consommation
     cards:
-      - type: "custom:content-card-linky"
-        card_mod:
-          style: |
-            :host {
-              margin:10px !important;
-            }
-        entity: sensor.myelectricaldata_consumption_22138784256450_2
-        showInTableUnit: false
-      - type: history-graph
+      - type: entities
         entities:
-          - device_tracker.unknown_device
-          - entity: device_tracker.c310_7526b3
-            name: Camera Jardin
-          - device_tracker.camera_garage_2
-          - entity: device_tracker.esp_c2f291
-            name: ESP Garage
+          - vacuum.alfred
+          - select.alfred_mode
       - type: entities
         card_mod:
           style: |
@@ -316,26 +201,20 @@ cards:
             name: LightStrip LIDL Celia
           - entity: light.strip_simon
             name: LightStrip Simon
-          - entity: light.plafond_celia
-            name: Plafonier Célia
-          - entity: light.plafond_simon
-            name: Plafonier Simon
           - entity: light.lidl_pc
             name: LightStrip PC
           - entity: light.plafond_bureau
             name: Plafonnier Bureau
           - entity: light.plafond_grande_chambre
             name: Grande Chambre
+          - entity: light.plafond_salon
+            name: Salon
+          - entity: switch.plafond_couloir
+            name: Plafonnier Couloir
           - entity: light.strip_bureau_angle
             name: LightStripe
           - entity: light.plafond_chambre
             name: Chambre
-          - entity: light.plafond_couloir
-            name: Couloir
-          - entity: light.plafond_salon_table
-            name: Salon D
-          - entity: light.plafond_salon_canape
-            name: Salon G
 
   - type: vertical-stack
     title: Switchs
@@ -348,12 +227,7 @@ cards:
             }
         show_header_toggle: false
         entities:
-          - entity: switch.vmc_mss710_main_channel
-          - entity: switch.wall_plug_switch
-          - entity: switch.zipato_unknown_type_0003_id_1083_switch
           - entity: automation.send_notification_when_alarm_triggered
-          - entity: switch.hurleuse_switch
-          - entity: light.light_ext_sensor
           - entity: switch.multi_chambre_l1
           - entity: switch.multi_chambre_l2
           - entity: switch.multi_chambre_l3
@@ -364,12 +238,30 @@ cards:
               margin:10px !important;
             }
         entities:
-          - sensor.netatmo_pouzor_station_temperature
           - sensor.aquara_sensor_salon_temperature
-          - sensor.aquara_sensor_bureau_temperature
-          - sensor.aquara_sensor_etage_temperature
+          - sensor.aquara_sensor_chambre_temperature
           - sensor.motion_couloir_temperature
+          - sensor.aquara_sensor_chambre_enfants_temperature
         stat_types:
           - mean
         chart_type: line
         days_to_show: 2
+      - type: custom:android-tv-card
+        remote_id: remote.freebox_player_pop
+        slider_id: media_player.freebox_player_pop_2
+        title: TV
+        rows:
+          - - power
+            - channel_up
+            - channel_down
+          - - netflix
+            - youtube
+          - - vol_buttons
+          - - dpad
+          - - back
+            - home
+            - tv
+          - - rewind
+            - play
+            - pause
+            - fast_forward

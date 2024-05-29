@@ -6,12 +6,18 @@ cards:
   - type: vertical-stack
     cards:
       - type: entities
+        entities:
+          - entity: update.frigate_server
+            name: Server
+          - entity: sensor.coral_inference_speed
+            name: Coral inference speed
+          - entity: sensor.detection_fps
+            name: Detection fps
+        title: Frigate Server
+      - type: entities
         title: Frigate Information
         show_header_toggle: false
         entities:
-          - sensor.garage_frigate_camera_fps
-          - sensor.garage_frigate_detection_fps
-          - sensor.garage_frigate_process_fps
           - sensor.front_door_camera_fps
           - sensor.front_door_detection_fps
           - sensor.front_door_process_fps
@@ -31,22 +37,3 @@ cards:
         title: Outside
         entities: []
         camera_image: camera.front_door
-
-      - type: picture-glance
-        title: Garage
-        entities: []
-        camera_image: camera.garage_frigate
-  - type: vertical-stack
-    cards:
-      - type: picture-glance
-        title: Jardin
-        entities: []
-        camera_image: camera.jardin_frigate
-  - type: vertical-stack
-    cards:
-      - type: picture-entity
-        entity: camera.front_door_person
-  - type: vertical-stack
-    cards:
-      - type: picture-entity
-        entity: camera.garage_frigate_person

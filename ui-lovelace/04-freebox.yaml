@@ -4,34 +4,14 @@ badges: []
 icon: mdi:server-network
 cards:
   - type: entities
-    title: System Information
-    show_header_toggle: false
     entities:
-
-      - sensor.freebox_disque_dur_1
-      - switch.freebox_wifi
-      - sensor.freebox_temperature_cpu_ap
-      - sensor.freebox_temperature_2
-      - sensor.freebox_temperature_1
-      - sensor.freebox_temperature_3
-      - sensor.freebox_temperature_cpu_cp_slave
-      - sensor.freebox_temperature_cpu_cp_master
-      - sensor.freebox_download_speed
-      - sensor.freebox_upload_speed
-      - sensor.freebox_missed_calls
-  - type: custom:mini-graph-card
-    name: Download
-    entities:
-      - sensor.freebox_download_speed
-    show:
-      icon: false
-    icon: mdi:download
-    show_state: true
-  - type: custom:mini-graph-card
-    name: Upload
-    icon: mdi:upload
-    show_state: true
-    entities:
-      - sensor.freebox_upload_speed
-    show:
-      icon: false
+      - sensor.freebox_download_speed_2
+      - sensor.freebox_missed_calls_2
+      - sensor.freebox_temperature_1_2
+      - sensor.freebox_temperature_2_2
+      - sensor.freebox_temperature_3_2
+      - sensor.freebox_temperature_cpu_ap_2
+      - sensor.freebox_temperature_cpu_cp_master_2
+      - sensor.freebox_temperature_cpu_cp_slave_2
+      - sensor.freebox_upload_speed_2
+    title: Freebox v7 (r1)

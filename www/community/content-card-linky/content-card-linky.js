@@ -4,11 +4,12 @@ const LitElement = Object.getPrototypeOf(
 const html = LitElement.prototype.html;
 const css = LitElement.prototype.css;
 
+
 window.customCards = window.customCards || [];
 window.customCards.push({
   type: "content-card-linky",
-  name: "Carte Enedis par saniho",
-  description: "Carte pour l'intégration myEnedis.",
+  name: "Carte Enedis1",
+  description: "Carte pour l'intégration myElectricalData.",
   preview: true,
   documentationURL: "https://github.com/saniho/content-card-linky",
 });
@@ -30,6 +31,14 @@ const ecoWattForecastValues = new Map([
   [1, "green"],
   [2, "yellow"],
   [3, "red"],
+]);
+
+const tempoValues = new Map([
+  ["unknown", "grey"],
+  ["Inconnu", "grey"],
+  ["BLUE", "blue"],
+  ["WHITE", "white"],
+  ["RED", "red"],
 ]);
 
 
@@ -100,12 +109,12 @@ class ContentCardLinky extends LitElement {
                     ? html `
                     <span class="variations-linky">
                       <span class="ha-icon">
-                        <ha-icon icon="mdi:arrow-right" style="display: inline-block; transform: rotate(${(attributes.year_evolution < 0) ? '45' : ((attributes.year_evolution == 0) ? "0" : "-45")}deg)">
+                        <ha-icon icon="mdi:arrow-right" style="display: inline-block; transform: rotate(${(attributes.yearly_evolution < 0) ? '45' : ((attributes.yearly_evolution == 0) ? "0" : "-45")}deg)">
                        </ha-icon>
                       </span>
                       <div class="tooltip">
-                      ${Math.round(attributes.year_evolution)}<span class="unit"> %</span><span class="year">par rapport à ${this.previousYear()}</span>
-                          <span class="tooltiptext">A-1 : ${attributes.last_year}<br>A : ${attributes.current_year}</span>
+                      ${Math.round(attributes.yearly_evolution)}<span class="unit"> %</span><span class="year">par rapport à ${this.previousYear()}</span>
+                          <span class="tooltiptext">A-1 : ${attributes.current_year_last_year}<br>A : ${attributes.current_year}</span>
                       </div>
                     </span>`
                     : html ``
@@ -146,8 +155,8 @@ class ContentCardLinky extends LitElement {
                           </ha-icon>
                         </span>
                         <div class="tooltip">
-                        ${Math.round(attributes.current_week_evolution)}<span class="unit"> %</span><span class="previous-month">par rapport à ${this.weekPreviousYear()}</span>
-                        <span class="tooltiptext">Semaine A-1 : ${attributes.current_week_last_year}<br>Semaine courante : ${attributes.current_week}</span>
+                        ${Math.round(attributes.current_week_evolution)}<span class="unit"> %</span><span class="previous-month">par rapport à ${this.weekBefore()}</span>
+                        <span class="tooltiptext">Semaine dernière : ${attributes.last_week}<br>Semaine courante : ${attributes.current_week}</span>
                     </div>
                       </span>`
                     : html ``
@@ -160,8 +169,8 @@ class ContentCardLinky extends LitElement {
                          </ha-icon>
                         </span>
                         <div class="tooltip">
-                        ${Math.round(attributes.yesterday_evolution)}<span class="unit"> %</span><span class="previous-month">par rapport à ${this.yesterdayPreviousYear()}</span>
-                        <span class="tooltiptext">Hier A-1 : ${attributes.yesterdayLastYear}<br>Hier : ${attributes.yesterday}</span>
+                        ${Math.round(attributes.yesterday_evolution)}<span class="unit"> %</span><span class="previous-month">par rapport à ${this.dayBeforeYesterday()}</span>
+                        <span class="tooltiptext">Avant-hier : ${attributes.day_2}<br>Hier : ${attributes.yesterday}</span>
                     </div>
                       </span>`
                     : html ``
@@ -178,8 +187,9 @@ class ContentCardLinky extends LitElement {
                    }
                   
                 </div>
-                ${this.renderHistory(attributes.daily, attributes.unit_of_measurement, attributes.dailyweek, attributes.dailyweek_cost, attributes.dailyweek_costHC, attributes.dailyweek_costHP, attributes.dailyweek_HC, attributes.dailyweek_HP, this.config)}
+                ${this.renderHistory(attributes.daily, attributes.unit_of_measurement, attributes.dailyweek, attributes.dailyweek_cost, attributes.dailyweek_costHC, attributes.dailyweek_costHP, attributes.dailyweek_HC, attributes.dailyweek_HP, attributes.dailyweek_MP, attributes.dailyweek_MP_over, attributes.dailyweek_MP_time, this.config)}
                 ${this.renderEcoWatt(attributes, this.config)}
+				${this.renderTempo(attributes, this.config)}
                 ${this.renderError(attributes.errorLastCall, this.config)}
                 ${this.renderVersion(attributes.versionUpdateAvailable, attributes.versionGit)}
                 ${this.renderInformation(attributes, this.config)}
@@ -324,7 +334,7 @@ class ContentCardLinky extends LitElement {
     }
   }
 
-  renderHistory(daily, unit_of_measurement, dailyweek, dailyweek_cost, dailyweek_costHC, dailyweek_costHP, dailyweek_HC, dailyweek_HP, config) {
+  renderHistory(daily, unit_of_measurement, dailyweek, dailyweek_cost, dailyweek_costHC, dailyweek_costHP, dailyweek_HC, dailyweek_HP, dailyweek_MP, dailyweek_MP_over, dailyweek_MP_time, config) {
     if (this.config.showHistory === true) {
       if ( dailyweek != undefined){
         var nbJours = dailyweek.toString().split(",").length ; 
@@ -334,14 +344,14 @@ class ContentCardLinky extends LitElement {
             <div class="week-history">
             ${this.renderTitreLigne(config)}
             ${daily.slice(0, nbJours).reverse().map((day, index) => this.renderDay(day, nbJours-index, unit_of_measurement, dailyweek, dailyweek_cost, dailyweek_costHC, dailyweek_costHP, 
-               dailyweek_HC, dailyweek_HP, config))}
+               dailyweek_HC, dailyweek_HP, dailyweek_MP, dailyweek_MP_over, dailyweek_MP_time, config))}
             </div>
           `
         }
     }
   }
 
-  renderDay(day, dayNumber, unit_of_measurement, dailyweek, dailyweek_cost, dailyweek_costHC, dailyweek_costHP, dailyweek_HC, dailyweek_HP, config) {
+  renderDay(day, dayNumber, unit_of_measurement, dailyweek, dailyweek_cost, dailyweek_costHC, dailyweek_costHP, dailyweek_HC, dailyweek_HP, dailyweek_MP, dailyweek_MP_over, dailyweek_MP_time, config) {
     return html
       `
         <div class="day">
@@ -352,6 +362,7 @@ class ContentCardLinky extends LitElement {
           ${this.renderDayPriceHCHP(dailyweek_costHP, dayNumber, config)}
           ${this.renderDayHCHP(dailyweek_HC, dayNumber, unit_of_measurement, config)}
           ${this.renderDayHCHP(dailyweek_HP, dayNumber, unit_of_measurement, config)}
+		  ${this.renderDayMaxPower(dailyweek_MP, dayNumber, dailyweek_MP_over, dailyweek_MP_time, config)}
         </div>
       `
   }
@@ -379,6 +390,8 @@ class ContentCardLinky extends LitElement {
           ${this.renderDailyWeekTitre(this.config.showDayPriceHCHP, "Prix HP")}
           ${this.renderDailyWeekTitre(this.config.showDayHCHP, "HC")}
           ${this.renderDailyWeekTitre(this.config.showDayHCHP, "HP")}
+		  ${this.renderDailyWeekTitre(this.config.showDayMaxPower, "MP")}
+		  ${this.renderDailyWeekTitre(this.config.showDayMaxPowerTime, "MPtime")}
         </div>
         `
     }
@@ -412,6 +425,16 @@ class ContentCardLinky extends LitElement {
         ${this.config.showDayHCHP 
         ? html `
         <br><span class="cons-val">HP</span>`
+        : html ``
+        }
+	${this.config.showDayMaxPower 
+        ? html `
+	<br><span class="cons-val">MP</span>`
+        : html ``
+        }
+	${this.config.showDayMaxPower 
+        ? html `
+	<br><span class="cons-val">MPtime</span>`
         : html ``
         }
             </div>
@@ -499,24 +522,73 @@ class ContentCardLinky extends LitElement {
         }
     }
   }
+  renderDayMaxPower(value, dayNumber, overMP, MPtime, config) {
+    if (config.showDayMaxPower) {
+       const valeur = value.toString().split(",")[dayNumber-1] ;
+       const over = overMP.toString().split(",")[dayNumber-1];
+       if ( valeur === "-1" ){
+          return this.renderNoData();
+       }
+       else{
+		   if ( over === "true") {
+		    return html
+			`
+				<br><span class="cons-val" style="color:red">${this.toFloat(valeur, 2)}</span>
+				<br><span class="cons-val" style="color:red">${new Date(MPtime.toString().split(",")[dayNumber-1]).toLocaleTimeString('fr-FR', { hour: "2-digit", minute: "2-digit" }) }</span>
+			`;
+		   }
+		   else {
+			return html
+			`
+				<br><span class="cons-val">${this.toFloat(valeur, 2)}</span>
+				<br><span class="cons-val">${new Date(MPtime.toString().split(",")[dayNumber-1]).toLocaleTimeString('fr-FR', { hour: "2-digit", minute: "2-digit" }) }</span>
+			`;
+		   }
+	   }
+    }
+  }  
+  
+    renderDayMaxPowerTime(value, dayNumber, overMP, config) {
+    if (config.showDayMaxPower) {
+       const valeur = value.toString.split(",")[dayNumber-1] ;
+       const over = overMP.toString().split(",")[dayNumber-1];
+       if ( valeur === "-1" ){
+          return this.renderNoData();
+       }
+       else{
+		   if ( over === "true") {
+		    return html
+			`
+				<br><span class="cons-val" style="color:red">${this.toFloat(valeur, 2)}</span>
+			`;
+		   }
+		   else {
+			return html
+			`
+				<br><span class="cons-val">${this.toFloat(valeur, 2)}</span>
+			`;
+		   }
+	   }
+    }
+  } 
   
   getOneDayForecastTime(ecoWattForecast) {
-    let ecoWattForecastTimeRefBegin = new Date(ecoWattForecast.attributes["begin"]);
-    let ecoWattForecastTimeRefEnd = new Date(ecoWattForecast.attributes["end"]);
-    let ecoWattForecastStartTime = ecoWattForecastTimeRefBegin.toLocaleTimeString([], { hour: '2-digit'});
-    let ecoWattForecastEndTime = ecoWattForecastTimeRefEnd.toLocaleTimeString([], { hour: '2-digit' });
-
-    return [ecoWattForecastStartTime, ecoWattForecastEndTime];
+	let ecoWattForecastDate = new Date(ecoWattForecast.attributes["date"]);
+    return [ecoWattForecastDate];
   }
   
   getOneDayNextEcoWattText(ecoWattForecastEntity) {
+	let forecastDate = new Date(ecoWattForecastEntity.attributes["date"]);
     for (let [time, value] of Object.entries(
       ecoWattForecastEntity.attributes["forecast"]
     )) {
-      if (time != undefined && ecoWattForecastValues.get(value) > 0.1) {
-	let timeStr = time.replace(/([345])5/g, "$10");
-        return value + ((time == "0 min") ? " actuellement." : " dans " + timeStr + ".");
-      }
+      if ( time != undefined && ecoWattForecastValues.get(value) !== "green" ) {
+		let timeStr = time.replace(/([345])5/g, "$10");
+		return html `Actuellement: ${ecoWattForecastValues.get(value)}`;
+      } else
+	  {
+		  return html `Ecowatt ${ forecastDate.toLocaleDateString('fr-FR', {weekday: 'long', day: 'numeric'}) }`;
+	  }
     }
     return ""
   }
@@ -543,42 +615,116 @@ class ContentCardLinky extends LitElement {
 	if ( attributes.serviceEnedis !== "myElectricalData" ){
 	  return html `EcoWatt : uniquement disponible avec myElectricData`;
 	}
-	if (this.config.showEcoWatt === false ){
+	
+	let sensorName = this.config.ewEntity;
+    const ecoWattForecast = this.hass.states[sensorName];	
+	let sensorNameJ1 = this.config.ewEntityJ1;
+    const ecoWattForecastJ1 = this.hass.states[sensorNameJ1];
+	let sensorNameJ2 = this.config.ewEntityJ2;
+    const ecoWattForecastJ2 = this.hass.states[sensorNameJ2];
+
+    return html` 
+	<table style="width:100%">
+		${this.config.showEcoWatt 
+		? html`
+		<tr style="line-height:80%">
+		<td style="width:5%">J+0</td>
+		<td style="width:95%">
+			<ul class="flow-row oneHour">
+			${html`
+			${this.getOneDayNextEcoWatt(ecoWattForecast).map(
+			(forecast) => html`
+			<li class="ecowatt-${forecast[0]}" style="background: ${forecast[1]}" title="${forecast[1]} - ${forecast[0]}" ></li>`
+			)}
+			`}
+			</ul>	
+		</td>
+		</tr>`
+		: html ``}
+		${this.config.showEcoWattJ12
+		? html`
+		<tr style="line-height:80%">
+		<td style="width:5%">J+1</td>
+		<td style="width:95%">
+			<ul class="flow-row oneHour">
+			${html`
+			${this.getOneDayNextEcoWatt(ecoWattForecastJ1).map(
+			(forecast) => html`
+			<li class="ecowatt-${forecast[0]}" style="background: ${forecast[1]}" title="${forecast[1]} - ${forecast[0]}" ></li>`
+			)}
+			`}
+			</ul>	
+		</td>
+		</tr>
+		<tr style="line-height:80%">
+		<td style="width:5%">J+2</td>
+		<td style="width:95%">
+			<ul class="flow-row oneHour">
+			${html`
+			${this.getOneDayNextEcoWatt(ecoWattForecastJ2).map(
+			(forecast) => html`
+			<li class="ecowatt-${forecast[0]}" style="background: ${forecast[1]}" title="${forecast[1]} - ${forecast[0]}" ></li>`
+			)}
+			`}
+			</ul>	
+		</td>
+		</tr>
+		<tr style="line-height:80%">
+		<td style="width:5%"> </td>
+		<td style="width:95%">
+			<ul class="flow-row oneHourLabel">
+			${html`
+			${this.getOneDayNextEcoWatt(ecoWattForecastJ2).map(
+			(forecast) => html`
+			<li title="${forecast[0]}">${(forecast[0]%2==1) ? forecast[0] : ''}</li>`
+			)}
+			`}
+			</ul>
+		</td>
+		</tr>
+		`
+		: html``}
+		`;   
+  }
+  
+  getTempoDateValue(tempoEntity) {
+	let tempoDate = new Date(tempoEntity.attributes["date"]);
+	let tempoValue = tempoEntity.state;
+    return [tempoDate, tempoValues.get(tempoValue), tempoValue];
+  } 
+  
+  renderTempo(attributes, config) {
+	if (attributes.serviceEnedis === undefined ){
 	  return html ``;
 	}
-	let sensorName = config.entity + "_ecowatt" ;
-    const ecoWattForecast = this.hass.states[sensorName];
+	if ( attributes.serviceEnedis !== "myElectricalData" ){
+	  return html `EcoWatt : uniquement disponible avec myElectricData`;
+	}
+	if (this.config.showTempo === false ){
+	  return html ``;
+	}
+	let sensorNameJ0 = this.config.tempoEntityJ0;
+    const tempoJ0 = this.hass.states[sensorNameJ0];
+	let sensorNameJ1 = this.config.tempoEntityJ1;
+    const tempoJ1 = this.hass.states[sensorNameJ1];
 
-    if (!ecoWattForecast || ecoWattForecast.length === 0) {
-      return html``;
+    if (!tempoJ0 || tempoJ0.length === 0 || !tempoJ1 || tempoJ1.length === 0) {
+      return html `Tempo: sensor(s) indisponible ou incorrecte`;
     }
 
-    this.numberElements++;
-
-    let [startTime, endTime] = this.getOneDayForecastTime(ecoWattForecast);
+    let [dateJ0, valueJ0, stateJ0] = this.getTempoDateValue(tempoJ0);
+	let [dateJ1, valueJ1, stateJ1] = this.getTempoDateValue(tempoJ1);
 
     return html`
-      <ul class="flow-row oneHourHeader ${this.numberElements > 1 ? " spacer" : ""}">
-        <li> ${startTime} </li>
-        <li>${this.getOneDayNextEcoWattText(ecoWattForecast)}</li>
-        <li> ${endTime} </li>
-      </ul>
-      <ul class="flow-row oneHour">
-        ${html`
-        ${this.getOneDayNextEcoWatt(ecoWattForecast).map(
-      (forecast) => html`
-        <li class="ecowatt-${forecast[0]}" style="background: ${forecast[1]}" title="${forecast[1]} - ${forecast[0]}" ></li>`
-    )}
-        `}
-      </ul>
-      <ul class="flow-row oneHourLabel">
-        ${html`
-        ${this.getOneDayNextEcoWatt(ecoWattForecast).map(
-      (forecast) => html`
-        <li title="${forecast[0]}">${(forecast[0]%2==1) ? forecast[0] : ''}</li>`
-    )}
-        `}
-      </ul>`;
+	  <table style="width:100%">
+	  <tr>
+		<td class="tempo-${valueJ0}" style="width:50%">${ (new Date(dateJ0)).toLocaleDateString('fr-FR', {weekday: 'long', day: 'numeric'})}</td>
+		<td class="tempo-${valueJ1}" style="width:50%">${ (new Date(dateJ1)).toLocaleDateString('fr-FR', {weekday: 'long', day: 'numeric'})}</td>
+	  </tr>
+	  </table>
+		
+    `
+ 
   }
 
   setConfig(config) {
@@ -598,6 +744,7 @@ class ContentCardLinky extends LitElement {
       showInTableUnit: false,
       showDayPrice: false,
       showDayPriceHCHP: false,
+	  showDayMaxPower: false,
       showDayHCHP: false,
       showDayName: "long",
       showError: true,
@@ -610,6 +757,8 @@ class ContentCardLinky extends LitElement {
       showYesterdayRatio: false,
       showTitreLigne: false,
       showEcoWatt: false,
+	  showEcoWattJ12: false,
+	  showTempo: false,
       titleName: "",
       nbJoursAffichage: 7,
       kWhPrice: undefined,
@@ -654,11 +803,11 @@ class ContentCardLinky extends LitElement {
     
     return d.toLocaleDateString('fr-FR', {month: "long", year: "numeric"});
   } 
-  weekPreviousYear() {
+  weekBefore() {
     return "semaine";
   } 
-  yesterdayPreviousYear() {
-    return "hier";
+  dayBeforeYesterday() {
+    return "avant-hier";
   } 
 
 
@@ -875,8 +1024,27 @@ class ContentCardLinky extends LitElement {
       .oneHourHeader li:last-child {
         text-align: right;
       }
+	  .tempo-blue {
+        color: white;
+		text-align: center;
+        background: #009dfa;
+      }
+	  .tempo-white {
+        color: #002654;
+		text-align: center;
+        background: silver;
+      }
+	  .tempo-red {
+        color: white;
+		text-align: center;
+        background: #ff2700;
+      }
+	  .tempo-grey {
+        color: white;
+		text-align: center;
+        background: grey;
+      }	  
       `;
   }
 }
-
 customElements.define('content-card-linky', ContentCardLinky);

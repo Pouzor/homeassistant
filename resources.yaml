@@ -30,3 +30,15 @@
   type: css
 - url: /hacsfiles/lovelace-mushroom/mushroom.js
   type: module
+- url: /hacsfiles/my-cards/my-cards.js
+  type: module
+- url: /hacsfiles/stack-in-card/stack-in-card.js
+  type: module
+- url: /hacsfiles/apexcharts-card/apexcharts-card.js
+  type: module
+- url: /hacsfiles/custom_icon.js
+  type: module
+- url: /hacsfiles/vacuum-card.js
+  type: module
+- url: /hacsfiles/android-tv-card/android-tv-card.min.js
+  type: module

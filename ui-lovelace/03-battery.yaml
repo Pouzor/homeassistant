@@ -3,20 +3,20 @@ path: battery
 badges: []
 icon: mdi:battery-10
 cards:
-  - type: 'custom:auto-entities'
+  - type: "custom:auto-entities"
     card:
-      type: 'custom:bar-card'
-      animation: 'auto'
+      type: "custom:bar-card"
+      animation: "auto"
       title_position: inside
       rounding: 5px
       severity:
-      - value: 30
-        color: '#bf4040'
-      - value: 60
-        color: '#bf9540'
-      - value: 100
-        color: '#40bf40'
-      unit_of_measurement: '%'
+        - value: 30
+          color: "#bf4040"
+        - value: 60
+          color: "#bf9540"
+        - value: 100
+          color: "#40bf40"
+      unit_of_measurement: "%"
       width: 100%
       title_style:
         font-size: 12px
@@ -24,5 +24,4 @@ cards:
         font-size: 10px
     filter:
       include:
-        - entity_id: sensor.*.battery_level*
-
+        - entity_id: sensor.*.battery*

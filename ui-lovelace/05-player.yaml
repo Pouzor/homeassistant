@@ -3,27 +3,20 @@ path: player
 badges: []
 icon: mdi:animation-play
 cards:
+  - type: media-control
+    entity: media_player.spotify_remy_jardinet
   - type: entities
     title: Player
     entities:
-      - entity: media_player.chromecast1265
-        name: ChromeCast
-      - entity: media_player.remy_s_freebox_delta
-        name: Freebox
       - entity: media_player.pouzor_echo_spot
         name: Echo spot
-      - entity: media_player.maison_2
-        name: Groupe Maison
-      - entity: media_player.googlehome_de_pouzor
-        name: Google Home
-      - entity: media_player.mini_chambre
-        name: Google Home Mini
-      - entity: media_player.firetvstick_remy
-      - entity: media_player.2eme_firetvstick_remy
       - entity: input_text.search_spotify
-
   - type: media-control
-    entity: media_player.spotify_remy_jardinet
+    entity: media_player.pouzor_echo_spot
+    name: Echo Cuisine
+  - type: media-control
+    entity: media_player.remy_echo_show_5_2eme_gen
+    name: Echo Bureau
   - type: custom:mushroom-media-player-card
     fill_container: false
     media_controls:
@@ -32,20 +25,7 @@ cards:
     volume_controls:
       - volume_buttons
       - volume_set
-    collapsible_controls: false
+    collapsible_controls: true
     show_volume_level: true
     use_media_info: true
-    entity: media_player.firetvstick_remy
-
-  - type: custom:mushroom-media-player-card
-    fill_container: false
-    media_controls:
-      - on_off
-      - play_pause_stop
-    volume_controls:
-      - volume_buttons
-      - volume_set
-    collapsible_controls: false
-    show_volume_level: true
-    use_media_info: true
-    entity: media_player.2eme_firetvstick_remy
+    entity: media_player.freebox_player_pop_2

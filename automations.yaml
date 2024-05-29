@@ -22,78 +22,6 @@
       data:
         topic: "garage/open"
 
-- id: call_vmc_on
-  alias: "[Call] Vmc On"
-  trigger:
-    platform: state
-    entity_id: input_boolean.vmc
-    to: "on"
-  action:
-    - service: switch.turn_on
-      entity_id: switch.vmc_mss710_main_channel
-    - service: notify.slack_ha
-      data:
-        message: ":zap: Vmc On"
-- id: call_vmc_off
-  alias: "[Call] Vmc Off"
-  trigger:
-    platform: state
-    entity_id: input_boolean.vmc
-    to: "off"
-  action:
-    - service: switch.turn_off
-      entity_id: switch.vmc_mss710_main_channel
-    - service: notify.slack_ha
-      data:
-        message: ":zap: Vmc Off"
-- id: vmc_on
-  alias: "[Cron] Vmc On"
-  trigger:
-    - platform: time
-      at: 07:30:00
-    - platform: time
-      at: "12:00:00"
-    - platform: time
-      at: "18:00:00"
-  action:
-    - service: input_boolean.turn_on
-      data:
-        entity_id: input_boolean.vmc
-- id: vmc_off
-  alias: "[Cron] Vmc Off"
-  trigger:
-    - platform: time
-      at: "10:00:00"
-    - platform: time
-      at: "14:00:00"
-    - platform: time
-      at: "22:00:00"
-  action:
-    - service: input_boolean.turn_off
-      data:
-        entity_id: input_boolean.vmc
-
-- alias: VMC ON BUTTON
-  id: vmc_on_button
-  trigger:
-    platform: state
-    entity_id: sensor.bouton_vmc_action
-    to: "on"
-  action:
-    - service: input_boolean.turn_on
-      data:
-        entity_id: input_boolean.vmc
-- alias: VMC OFF BUTTON
-  id: vmc_off_button
-  trigger:
-    platform: state
-    entity_id: sensor.bouton_vmc_action
-    to: "off"
-  action:
-    - service: input_boolean.turn_off
-      data:
-        entity_id: input_boolean.vmc
-
 - alias: Light on Celia
   id: light_on_celia
   trigger:
@@ -106,6 +34,7 @@
         entity_id: light.plafond_celia
         brightness: 100
         kelvin: 2700
+
 - alias: Light off Celia
   id: light_off_celia
   trigger:
@@ -132,8 +61,40 @@
     - service: light.turn_on
       data:
         entity_id: light.strip_simon
-        brightness: 80
-        kelvin: 2700
+        brightness: 100
+        kelvin: 6666
+
+- alias: Light on chambre enfants
+  id: light_on_enfants
+  trigger:
+    platform: state
+    entity_id: sensor.bouton_chambre_enfants_action
+    to: "on"
+  action:
+    - service: light.turn_on
+      data:
+        entity_id: light.strip_simon
+        brightness: 100
+        kelvin: 6666
+    - service: light.turn_on
+      data:
+        entity_id: light.strip_celia
+        brightness: 100
+        kelvin: 6666
+
+- alias: Light off chambre enfants
+  id: light_off_enfants
+  trigger:
+    platform: state
+    entity_id: sensor.bouton_chambre_enfants_action
+    to: "off"
+  action:
+    - service: light.turn_off
+      data:
+        entity_id: light.strip_simon
+    - service: light.turn_off
+      data:
+        entity_id: light.strip_celia
 
 - alias: Light on color Simon
   id: light_on_color_simon
@@ -180,6 +141,24 @@
           - "{{ (30 + (state_attr('light.strip_celia', 'hs_color')[0] or 0)) % 360 }}"
           - 100
 
+- alias: Light on Celia strip white
+  id: light_on_celia_stripe_white
+  trigger:
+    platform: state
+    entity_id: sensor.telecommande_celia_action
+    to: "up_press"
+  condition:
+    condition: state
+    entity_id:
+      - light.strip_celia
+    state: "off"
+  action:
+    - service: light.turn_on
+      data:
+        entity_id: light.strip_celia
+        brightness: 100
+        kelvin: 6666
+
 - alias: Light off Celia Stripe
   id: light_off_celia_stripe
   trigger:
@@ -191,37 +170,37 @@
       data:
         entity_id: light.strip_celia
 
-- alias: Light on grande chambre
-  id: light_on_grandre_chambre
+- alias: Light on salon
+  id: light_on_salon
   trigger:
     platform: state
-    entity_id: sensor.buton_grande_chambre_action
+    entity_id: sensor.bouton_salon_action
     to: "single"
   condition:
     condition: state
     entity_id:
-      - light.plafond_grande_chambre
+      - light.plafond_salon
     state: "off"
   action:
     - service: light.turn_on
       data:
-        entity_id: light.plafond_grande_chambre
+        entity_id: light.plafond_salon
 
-- alias: Light off grande chambre
-  id: light_off_grandre_chambre
+- alias: Light off salon
+  id: light_off_salon
   trigger:
     platform: state
-    entity_id: sensor.buton_grande_chambre_action
+    entity_id: sensor.bouton_salon_action
     to: "single"
   condition:
     condition: state
     entity_id:
-      - light.plafond_grande_chambre
+      - light.plafond_salon
     state: "on"
   action:
     - service: light.turn_off
       data:
-        entity_id: light.plafond_grande_chambre
+        entity_id: light.plafond_salon
 
 - alias: Light off Celia stripe after 1 hour
   trigger:
@@ -249,6 +228,24 @@
       data:
         entity_id: light.strip_simon
 
+- alias: shake Gaming Session
+  id: shake_gaming_session
+  trigger:
+    platform: state
+    entity_id: sensor.0x00158d0005292b83_action
+    to: "shake"
+  action:
+    - service: light.turn_off
+      data:
+        entity_id: light.plafond_salon
+    - service: light.turn_on
+      data:
+        entity_id: light.lidl_pc
+        hs_color:
+          - "{{ (30 + (state_attr('light.lidl_pc', 'hs_color')[0] or 0)) % 360 }}"
+          - 100
+        brightness: 80
+
 - alias: Start Gaming Session
   id: start_gaming_session
   trigger:
@@ -258,7 +255,7 @@
   action:
     - service: light.turn_off
       data:
-        entity_id: light.plafond_bureau
+        entity_id: light.plafond_salon
     - service: light.turn_on
       data:
         entity_id: light.lidl_pc
@@ -275,7 +272,7 @@
   action:
     - service: light.turn_on
       data:
-        entity_id: light.plafond_bureau
+        entity_id: light.plafond_salon
     - service: light.turn_off
       data:
         entity_id: light.lidl_pc
@@ -294,7 +291,6 @@
         - sensor.total_devicetrackers
         - sensor.total_switches
         - sensor.total_lights
-        - sensor.total_zwave_devices
   id: edb9cdb511204046a2c2172e61aba0df
 
 - alias: Turn on light in couloir when motion trigger
@@ -303,13 +299,12 @@
       entity_id: binary_sensor.motion_couloir_occupancy
       to: "on"
     - platform: state
-      entity_id: binary_sensor.door_sensor_porte_garage_access_control_window_door_is_open
+      entity_id: binary_sensor.contact_sensor_porte_entree_contact
       to: "on"
   action:
-    - service: light.turn_on
+    - service: switch.turn_on
       data:
-        entity_id: light.plafond_couloir
-        brightness: 255
+        entity_id: switch.plafond_couloir
   id: b6abb38f076d4911badb3e8d195f6840
 
 - alias: Turn off light in couloir when motion trigger
@@ -320,8 +315,8 @@
       for:
         seconds: 10
   action:
-    - service: light.turn_off
-      entity_id: light.plafond_couloir
+    - service: switch.turn_off
+      entity_id: switch.plafond_couloir
   id: 2e49ba05aa164d27a0c7442f2282005e
 
 - alias: Send notification when alarm triggered
@@ -399,26 +394,12 @@
 
 ################################# ALARM ####################################
 
-- alias: "[Alarm] Garage Door"
-  description: ""
-  use_blueprint:
-    path: pouzor/alarm_sensor.yaml
-    input:
-      trigger_sensor: binary_sensor.door_sensor_porte_garage_access_control_window_door_is_open
-
-- alias: "[Alarm] Garage Car Door"
-  description: ""
-  use_blueprint:
-    path: pouzor/alarm_sensor.yaml
-    input:
-      trigger_sensor: binary_sensor.contact_sensor_garage_contact
-
 - alias: "[Alarm] Front Door"
   description: ""
   use_blueprint:
     path: pouzor/alarm_sensor.yaml
     input:
-      trigger_sensor: binary_sensor.door_sensor_porte_entree_access_control_window_door_is_open_3
+      trigger_sensor: binary_sensor.contact_sensor_porte_entree_contact
 
 - alias: "[Alarm] Windows Bureau"
   description: ""
@@ -426,34 +407,6 @@
     path: pouzor/alarm_sensor.yaml
     input:
       trigger_sensor: binary_sensor.neo_coolcam_door_window_detector_sensor_3
-
-- alias: "[Alarm] Windows Kitchen"
-  description: ""
-  use_blueprint:
-    path: pouzor/alarm_sensor.yaml
-    input:
-      trigger_sensor: binary_sensor.shenzhen_neo_electronics_co_ltd_door_window_detector_sensor_2
-
-- alias: "[Alarm] BackYard Door"
-  description: ""
-  use_blueprint:
-    path: pouzor/alarm_sensor.yaml
-    input:
-      trigger_sensor: binary_sensor.contact_sensor_porte_fenetre_jardin_contact
-
-- alias: "[Alarm] FrontYard Door"
-  description: ""
-  use_blueprint:
-    path: pouzor/alarm_sensor.yaml
-    input:
-      trigger_sensor: binary_sensor.contact_sensor_porte_fenetre_cour_contact
-
-- alias: "[Alarm] hallway"
-  description: ""
-  use_blueprint:
-    path: pouzor/alarm_sensor.yaml
-    input:
-      trigger_sensor: binary_sensor.motion_couloir_occupancy
 
 ############################ LOG ###############################
 
@@ -486,42 +439,16 @@
       data_template:
         message: "Hass Shutdown Notification"
 
-- id: "1608592199554"
-  alias: "[Log] Garage Door"
-  description: ""
-  use_blueprint:
-    path: pouzor/log_sensor.yaml
-    input:
-      trigger_sensor: binary_sensor.door_sensor_porte_garage_access_control_window_door_is_open
-      picto: "🚪"
-      title: "HA - Porte couloire ouverte"
-- id: "1608592605111"
-  alias: "[Log] Motion Garage"
-  description: ""
-  use_blueprint:
-    path: pouzor/log_sensor.yaml
-    input:
-      trigger_sensor: binary_sensor.motion_sensor_garage_occupancy
-      picto: "📷"
-      title: "HA - Motion dans le garage"
-- id: "1608592686045"
-  alias: "[Log] Garage Car Door"
-  description: ""
-  use_blueprint:
-    path: pouzor/log_sensor.yaml
-    input:
-      trigger_sensor: binary_sensor.contact_sensor_garage_contact
-      picto: "🏍"
-      title: HA - Garage ouvert
 - id: "1608592760031"
   alias: "[Log] Front Door"
   description: ""
   use_blueprint:
     path: pouzor/log_sensor.yaml
     input:
-      trigger_sensor: binary_sensor.door_sensor_porte_entree_access_control_window_door_is_open_3
+      trigger_sensor: binary_sensor.contact_sensor_porte_entree_contact
       picto: "🚪"
       title: "HA - Porte entrée ouverte"
+
 - id: "1608592803773"
   alias: "[Log] Motion Bureau"
   description: ""
@@ -531,34 +458,6 @@
       trigger_sensor: binary_sensor.motion_sensor_bureau_occupancy
       picto: "📷"
       title: "HA - Motion dans le bureau"
-- alias: "[Log] Windows Bureau"
-  description: ""
-  use_blueprint:
-    path: pouzor/log_sensor.yaml
-    input:
-      trigger_sensor: binary_sensor.neo_coolcam_door_window_detector_sensor_3
-      title: HA - Fenetre ouverte
-- alias: "[Log] BackYard Door"
-  description: ""
-  use_blueprint:
-    path: pouzor/log_sensor.yaml
-    input:
-      trigger_sensor: binary_sensor.contact_sensor_porte_fenetre_jardin_contact
-      picto: "🪟"
-- alias: "[Log] FrontYard Door"
-  description: ""
-  use_blueprint:
-    path: pouzor/log_sensor.yaml
-    input:
-      trigger_sensor: binary_sensor.contact_sensor_porte_fenetre_cour_contact
-      picto: "🪟"
-
-- alias: "[Log] kitchen windows"
-  description: ""
-  use_blueprint:
-    path: pouzor/log_sensor.yaml
-    input:
-      trigger_sensor: binary_sensor.shenzhen_neo_electronics_co_ltd_door_window_detector_sensor_2
 
 - alias: "[Log] C02 Sensor"
   description: ""

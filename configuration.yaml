@@ -26,7 +26,7 @@ automation: !include automations.yaml
 recorder:
   db_url: !secret mariadb
   auto_purge: true
-  purge_keep_days: 10
+  purge_keep_days: 20
 
 http:
   ssl_certificate: /ssl/fullchain.pem
@@ -62,10 +62,8 @@ default_config:
 ios:
 mobile_app:
 ffmpeg:
-discovery:
 conversation:
 logbook:
-map:
 wake_on_lan:
 notify:
 
@@ -81,8 +79,17 @@ input_text:
     name: search_spotify
     initial: Search into spotify
 
-hacs:
-  token: !secret hacs_token
+command_line:
+  - sensor:
+      name: frigate size
+      command: "du -s /media/frigate"
+      unit_of_measurement: "MiB"
+      value_template: '{{ value.split("\t" )[0] | multiply(1/1024) | round(2) }}'
+  - sensor:
+      name: cpu_temp
+      command: "cat /sys/class/thermal/thermal_zone0/temp"
+      unit_of_measurement: "°C"
+      value_template: "{{ value | multiply(0.001) }}"
 
 sensor:
   - platform: websocket_api
@@ -90,40 +97,11 @@ sensor:
     exclude:
       - 172.30.32.2
 
-  - platform: attributes
-    friendly_name: "Batteries"
-    attribute: battery_level
-    unit_of_measurement: "%"
-    entities:
-      - zwave.zipato_unknown_type_0003_id_1083_2
-
   - platform: folder
     folder: /config/www/records
 
   - platform: folder
     folder: /media/frigate
-
-  - platform: command_line
-    name: frigate size
-    command: "du -s /media/frigate"
-    unit_of_measurement: "MiB"
-    value_template: '{{ value.split("\t" )[0] | multiply(1/1024) | round(2) }}'
-
-  ###### HARDWARE STATISTICS
-  - platform: command_line
-    name: cpu_temp
-    command: "cat /sys/class/thermal/thermal_zone0/temp"
-    unit_of_measurement: "°C"
-    value_template: "{{ value | multiply(0.001) }}"
-  - platform: systemmonitor
-    resources:
-      - type: disk_free
-        arg: /home
-      - type: disk_use_percent
-        arg: /home
-      - type: memory_use_percent
-      - type: memory_free
-      - type: processor_use
 
   ###### TOTAL NUMBER OF AUTOMATIONS
   - platform: template
@@ -221,10 +199,6 @@ sensor:
       total_zigbee_devices:
         friendly_name: "Number of Zigbee Devices"
         value_template: "32" #todo find real value
-
-  ###### UPTIME
-  - platform: uptime
-    name: Time Online
 
 media_source:
   media_dirs:

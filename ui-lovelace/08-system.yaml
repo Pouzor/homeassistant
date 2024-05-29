@@ -52,12 +52,6 @@ cards:
             name: Zigbee
             icon: mdi:zigbee
 
-          - entity: sensor.time_online
-            name: Uptime
-            hold_action:
-              action: call-service
-              service: homeassistant.restart # restarts HA when long-pressed
-
           - entity: sensor.installed_version
             tap_action:
               action: navigate
