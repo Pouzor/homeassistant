@@ -44,10 +44,6 @@ cards:
               action: navigate # goes to my Lights page when tapped
               navigation_path: /lovelace/lights/
 
-          - entity: sensor.total_zwave_devices
-            name: ZWave
-            icon: mdi:z-wave
-
           - entity: sensor.total_zigbee_devices
             name: Zigbee
             icon: mdi:zigbee
@@ -66,16 +62,7 @@ cards:
           - entity: switch.front_door_detect
           - entity: switch.front_door_recordings
           - entity: switch.front_door_snapshots
-          - entity: switch.garage_frigate_detect
-          - entity: switch.garage_frigate_recordings
-          - entity: switch.garage_frigate_snapshots
-          - entity: switch.jardin_frigate_detect
-          - entity: switch.jardin_frigate_recordings
-          - entity: switch.jardin_frigate_snapshots
-          - entity: switch.salon_frigate_detect
-          - entity: switch.salon_frigate_recordings
-          - entity: switch.salon_frigate_snapshots
-          - entity: binary_sensor.presence_32
+
       - type: "custom:home-feed-card"
         id_filter: ^nothing.*
         max_item_count: 10
@@ -90,15 +77,28 @@ cards:
     title: System Information
     show_header_toggle: false
     entities:
-      - sensor.connected_clients
-      - sensor.processor_use
-      - sensor.disk_use_percent_home
-      - sensor.disk_free_home
-      - sensor.memory_use_percent
-      - sensor.memory_free
-      - entity: sensor.cpu_temp
-        name: CPU Temperature
-      - sensor.installed_version
+      - entity: sensor.system_monitor_last_boot
+        name: Dernier démarrage
+      - entity: sensor.processor_use
+        name: Utilisation du processeur
+      - entity: sensor.system_monitor_processor_temperature
+        name: Température du processeur
+      - entity: sensor.system_monitor_network_throughput_in_enp0s25
+        name: Débit du réseau entrant via enp0s25
+      - entity: sensor.system_monitor_network_throughput_out_enp0s25
+        name: Débit du réseau sortant via enp0s25
+      - entity: sensor.system_monitor_ipv4_address_hassio
+        name: Adresse IPv4 hassio
+      - entity: sensor.system_monitor_memory_use
+        name: Mémoire utilisée
+      - entity: sensor.memory_free
+        name: Mémoire libre
+      - entity: sensor.memory_use_percent
+        name: Utilisation de la mémoire
+      - entity: sensor.disk_free_home
+        name: Espace libre /home
+      - entity: sensor.disk_use_percent_home
+        name: Utilisation du disque /home
       - sensor.hacs
       - entity: sensor.cert_expiry_timestamp
         name: cert expiration

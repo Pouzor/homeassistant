@@ -29,3 +29,22 @@ cards:
     show_volume_level: true
     use_media_info: true
     entity: media_player.freebox_player_pop_2
+  - type: custom:android-tv-card
+    remote_id: remote.freebox_player_pop
+    slider_id: media_player.freebox_player_pop_2
+    title: TV
+    rows:
+      - - power
+        - channel_up
+        - channel_down
+      - - netflix
+        - youtube
+      - - vol_buttons
+      - - dpad
+      - - back
+        - home
+        - tv
+      - - rewind
+        - play
+        - pause
+        - fast_forward

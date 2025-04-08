@@ -36,9 +36,17 @@ www/records/
 www/community/
 www/*.mp4
 tts/
+myelectricaldata/
 custom_components/
+esphome/
 themes/
+zigbee2mqtt/
+.timeline
+.vacuum
 notebooks/
 .ip_authenticated.yaml
+ios.js
+.exports
+.jwt_secret
 frigate.yml
 zwave_device_config.yaml

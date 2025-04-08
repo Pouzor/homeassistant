@@ -38,7 +38,13 @@
   type: module
 - url: /hacsfiles/custom_icon.js
   type: module
-- url: /hacsfiles/vacuum-card.js
+- url: /hacsfiles/android-tv-card/universal-remote-card.min.js
   type: module
-- url: /hacsfiles/android-tv-card/android-tv-card.min.js
+- url: /hacsfiles/power-flow-card-plus/power-flow-card-plus.js
+  type: module
+- url: /hacsfiles/energy-flow-card-plus/energy-flow-card-plus.js
+  type: module
+- url: /hacsfiles/secondaryinfo-entity-row/secondaryinfo-entity-row.js
+  type: module
+- url: /hacsfiles/tabbed-card/tabbed-card.js
   type: module

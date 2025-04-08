@@ -28,6 +28,21 @@ recorder:
   auto_purge: true
   purge_keep_days: 20
 
+influxdb:
+  host: a0d7b954-influxdb
+  port: 8086
+  database: homeassistant
+  username: !secret influx_user
+  password: !secret influx_password
+  max_retries: 3
+  default_measurement: state
+  include:
+    entities:
+      - sensor.box_current_power
+      - sensor.sdb_current_power
+      - sensor.prise_connectee_frigo_current_power
+      - sensor.pc_current_power
+
 http:
   ssl_certificate: /ssl/fullchain.pem
   ssl_key: /ssl/privkey.pem
@@ -50,10 +65,6 @@ homekit:
 alexa:
   smart_home:
 
-freebox_player:
-  remote_code: !secret freebox_remote_code
-  host: !secret freebox_host
-
 #Global activation
 config:
 stream:
@@ -66,13 +77,6 @@ conversation:
 logbook:
 wake_on_lan:
 notify:
-
-input_boolean:
-  vmc:
-    name: VMC status
-    initial: off
-    icon: mdi:fan
-  freebox:
 
 input_text:
   search_spotify:
@@ -204,6 +208,9 @@ media_source:
   media_dirs:
     camera: /www/records
 
+tapo:
+  discovery: true
+
 tts:
   - platform: google_translate
     service_name: google_say
@@ -221,30 +228,6 @@ alarm_control_panel:
     armed_away:
       arming_time: 0
       delay_time: 0
-
-aws:
-  credentials:
-    - name: aws_account
-      aws_access_key_id: !secret aws_access_key_id
-      aws_secret_access_key: !secret aws_secret_access_key
-
-  notify:
-    - service: sns
-      region_name: "eu-west-3"
-      credential_name: aws_account
-      name: notify_sns
-
-switch:
-  - platform: template
-    switches:
-      my_computer:
-        friendly_name: "My Computer"
-        value_template: "{{ is_state('binary_sensor.my_computer_connected', 'on') }}"
-        turn_on:
-          service: script.my_computer_wake
-        turn_off:
-          service: script.my_computer_suspend
-        icon_template: mdi:laptop
 
 script:
   my_computer_wake:

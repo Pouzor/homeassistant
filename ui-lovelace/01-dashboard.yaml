@@ -53,137 +53,188 @@ cards:
             secondary_info: last-changed
           - entity: binary_sensor.contact_sensor_porte_entree_contact
             secondary_info: last-changed
-  - type: vertical-stack
-    cards:
-      - type: horizontal-stack
-        title: Température
-        cards:
-          - type: custom:mini-graph-card
-            card_mod:
-              style: |
-                :host {
-                  margin-left:10px !important;
-                }
-            name: Salon
-            entities:
-              - sensor.aquara_sensor_salon_temperature
-            show:
-              icon: false
-            height: 75
-            color_thresholds:
-              - value: 0
-                color: "#CCE5FF"
-              - value: 10
-                color: "#66B2FF"
-              - value: 15
-                color: "#0080FF"
-              - value: 18
-                color: "#87c087"
-              - value: 21
-                color: "#389638"
-              - value: 24
-                color: "#FF9932"
-              - value: 25
-                color: "#FF8000"
-              - value: 26
-                color: "#ff0000"
 
-          - type: custom:mini-graph-card
-            card_mod:
-              style: |
-                :host {
-                  margin-right:10px !important;
-                }
-            name: Couloir
-            entities:
-              - sensor.motion_couloir_temperature
-            show:
-              icon: false
-            height: 75
-            color_thresholds:
-              - value: 0
-                color: "#CCE5FF"
-              - value: 10
-                color: "#66B2FF"
-              - value: 15
-                color: "#0080FF"
-              - value: 18
-                color: "#87c087"
-              - value: 21
-                color: "#389638"
-              - value: 24
-                color: "#FF9932"
-              - value: 25
-                color: "#FF8000"
-              - value: 26
-                color: "#ff0000"
-      - type: horizontal-stack
-        cards:
-          - type: custom:mini-graph-card
-            name: Chambre
-            entities:
-              - sensor.aquara_sensor_chambre_temperature
-            line_color: blue
-            show:
-              icon: false
-            height: 75
-            color_thresholds:
-              - value: 0
-                color: "#CCE5FF"
-              - value: 10
-                color: "#66B2FF"
-              - value: 15
-                color: "#0080FF"
-              - value: 18
-                color: "#87c087"
-              - value: 21
-                color: "#389638"
-              - value: 24
-                color: "#FF9932"
-              - value: 25
-                color: "#FF8000"
-              - value: 26
-                color: "#ff0000"
-          - type: custom:mini-graph-card
-            card_mod:
-              style: |
-                :host {
-                  margin-right:10px !important;
-                }
-            name: Chambre Enfants
-            entities:
-              - sensor.aquara_sensor_chambre_enfants_temperature
-            unit: "°C"
-            show:
-              icon: false
-            height: 75
-            color_thresholds:
-              - value: 0
-                color: "#CCE5FF"
-              - value: 10
-                color: "#66B2FF"
-              - value: 15
-                color: "#0080FF"
-              - value: 18
-                color: "#87c087"
-              - value: 21
-                color: "#389638"
-              - value: 24
-                color: "#FF9932"
-              - value: 25
-                color: "#FF8000"
-              - value: 26
-                color: "#ff0000"
+  - type: vertical-stack
+    title: Température
+    cards:
+      - type: custom:mini-graph-card
+        name: Salon
+        entities:
+          - sensor.aquara_sensor_salon_temperature
+        line_color: blue
+        show:
+          average: false
+          extrema: true
+          labels: false
+          name_adaptive_color: false
+          icon_adaptive_color: true
+        height: 75
+        line_width: 2
+        font_size: 70
+        points_per_hour: 2
+        color_thresholds:
+          - value: 0
+            color: "#CCE5FF"
+          - value: 10
+            color: "#66B2FF"
+          - value: 15
+            color: "#00C7FF"
+          - value: 18
+            color: "#00FAFF"
+          - value: 20
+            color: "#00FFD0"
+          - value: 22
+            color: "#FFDC00"
+          - value: 24
+            color: "#FF6132"
+          - value: 26
+            color: "#FF4800"
+          - value: 27
+            color: "#FF2E00"
+          - value: 28
+            color: "#ff1500"
+      - type: custom:mini-graph-card
+        name: Couloir
+        entities:
+          - sensor.motion_couloir_temperature
+        show:
+          icon: false
+        height: 75
+        color_thresholds:
+          - value: 0
+            color: "#CCE5FF"
+          - value: 10
+            color: "#66B2FF"
+          - value: 15
+            color: "#0080FF"
+          - value: 18
+            color: "#87c087"
+          - value: 21
+            color: "#389638"
+          - value: 24
+            color: "#FF9932"
+          - value: 25
+            color: "#FF8000"
+          - value: 26
+            color: "#ff0000"
+      - type: custom:mini-graph-card
+        name: Chambre
+        entities:
+          - sensor.aquara_sensor_chambre_temperature
+        line_color: blue
+        show:
+          icon: false
+        height: 75
+        color_thresholds:
+          - value: 0
+            color: "#CCE5FF"
+          - value: 10
+            color: "#66B2FF"
+          - value: 15
+            color: "#0080FF"
+          - value: 18
+            color: "#87c087"
+          - value: 21
+            color: "#389638"
+          - value: 24
+            color: "#FF9932"
+          - value: 25
+            color: "#FF8000"
+          - value: 26
+            color: "#ff0000"
+      - type: custom:mini-graph-card
+        name: Chambre Enfants
+        entities:
+          - sensor.aquara_sensor_chambre_enfants_temperature
+        unit: "°C"
+        show:
+          icon: false
+        height: 75
+        color_thresholds:
+          - value: 0
+            color: "#CCE5FF"
+          - value: 10
+            color: "#66B2FF"
+          - value: 15
+            color: "#0080FF"
+          - value: 18
+            color: "#87c087"
+          - value: 21
+            color: "#389638"
+          - value: 24
+            color: "#FF9932"
+          - value: 25
+            color: "#FF8000"
+          - value: 26
+            color: "#ff0000"
       - type: weather-forecast
         card_mod:
           style: |
             :host {
               margin:10px !important;
             }
-        entity: weather.moret_sur_loing
+        entity: weather.avon
+      - type: statistics-graph
+        card_mod:
+          style: |
+            :host {
+              margin:10px !important;
+            }
+        entities:
+          - sensor.aquara_sensor_salon_temperature
+          - sensor.aquara_sensor_chambre_temperature
+          - sensor.motion_couloir_temperature
+          - sensor.aquara_sensor_chambre_enfants_temperature
+        stat_types:
+          - mean
+        chart_type: line
+        days_to_show: 2
 
   - type: vertical-stack
     title: Consommation
+    cards:
+      - type: "custom:content-card-linky"
+        entity: sensor.linky_22158465935033_consumption
+
+        showMonthRatio: true
+        titleName: Consommation d'hier
+      - type: custom:power-flow-card-plus
+        entities:
+          battery:
+            entity: ""
+            state_of_charge: sensor.iphone_12_de_pouzor_battery_level
+          grid:
+            entity: sensor.linky_22158465935033_consumption
+          individual:
+            - entity: sensor.pc_today_energy
+              icon: mdi:desktop-classic
+              name: PC
+            - entity: sensor.sdb_today_energy
+              name: SDB
+              icon: mdi:washing-machine
+            - entity: sensor.box_today_energy
+              name: BOX
+              icon: mdi:server
+            - entity: sensor.prise_connectee_frigo_today_energy
+              name: Frigo
+              icon: mdi:fridge
+          fossil_fuel_percentage: {}
+          home: {}
+        clickable_entities: true
+        display_zero_lines: true
+        use_new_flow_rate_model: true
+        w_decimals: 0
+        kw_decimals: 1
+        min_flow_rate: 0.75
+        max_flow_rate: 6
+        max_expected_power: 2000
+        min_expected_power: 0.01
+        watt_threshold: 1000
+        transparency_zero_lines: 0
+      - type: energy-devices-detail-graph
+
+  - type: vertical-stack
+    title: Switchs
     cards:
       - type: entities
         entities:
@@ -203,10 +254,8 @@ cards:
             name: LightStrip Simon
           - entity: light.lidl_pc
             name: LightStrip PC
-          - entity: light.plafond_bureau
-            name: Plafonnier Bureau
-          - entity: light.plafond_grande_chambre
-            name: Grande Chambre
+          - entity: light.chambre_enfant
+            name: Chambre enfant
           - entity: light.plafond_salon
             name: Salon
           - entity: switch.plafond_couloir
@@ -215,10 +264,6 @@ cards:
             name: LightStripe
           - entity: light.plafond_chambre
             name: Chambre
-
-  - type: vertical-stack
-    title: Switchs
-    cards:
       - type: entities
         card_mod:
           style: |
@@ -231,37 +276,3 @@ cards:
           - entity: switch.multi_chambre_l1
           - entity: switch.multi_chambre_l2
           - entity: switch.multi_chambre_l3
-      - type: statistics-graph
-        card_mod:
-          style: |
-            :host {
-              margin:10px !important;
-            }
-        entities:
-          - sensor.aquara_sensor_salon_temperature
-          - sensor.aquara_sensor_chambre_temperature
-          - sensor.motion_couloir_temperature
-          - sensor.aquara_sensor_chambre_enfants_temperature
-        stat_types:
-          - mean
-        chart_type: line
-        days_to_show: 2
-      - type: custom:android-tv-card
-        remote_id: remote.freebox_player_pop
-        slider_id: media_player.freebox_player_pop_2
-        title: TV
-        rows:
-          - - power
-            - channel_up
-            - channel_down
-          - - netflix
-            - youtube
-          - - vol_buttons
-          - - dpad
-          - - back
-            - home
-            - tv
-          - - rewind
-            - play
-            - pause
-            - fast_forward

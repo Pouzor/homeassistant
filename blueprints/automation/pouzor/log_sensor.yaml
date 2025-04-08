@@ -27,10 +27,6 @@ variables:
   picto: !input "picto"
   message: !input "message"
 action:
-  - service: notify.slack_ha
-    data_template:
-      message: "{{ picto }} {{ message }}"
-      target: "#général"
   - service: notify.mobile_app_iphone_12_de_pouzor
     data_template:
       message: "{{ picto }} {{ message }}"
