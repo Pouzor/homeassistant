@@ -48,3 +48,11 @@
   type: module
 - url: /hacsfiles/tabbed-card/tabbed-card.js
   type: module
+- url: /hacsfiles/lovelace-template-entity-row/template-entity-row.js
+  type: module
+- url: /hacsfiles/lovelace-gazpar-card/gazpar-card.js
+  type: module
+- url: /hacsfiles/status-card/status-card.js
+  type: module
+- url: /hacsfiles/flex-horseshoe-card/flex-horseshoe-card.js
+  type: module

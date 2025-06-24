@@ -10,114 +10,90 @@
         media_content_id: "{{ states('input_text.search_spotify') }}"
         media_content_type: SPOTIFY
 
-#- id: open_garage
-#  alias: "Open garage"
-#  trigger:
-#    platform: event
-#    event_type: ios.action_fired
-#    event_data:
-#      actionName: "Ouvrir Garage"
+################## Celia WIP ################
+- alias: Light on celia wall
+  id: light_on_celia_wall
+  triggers:
+    - domain: mqtt
+      device_id: 4253f7afad81804234a91e88ab5b301e #bouton ikea 1
+      type: action
+      subtype: "on"
+      trigger: device
+    - domain: mqtt
+      device_id: b8cfb4bbad5a0bcc832fc48f67b49041 #bouton lidle 2
+      type: action
+      subtype: "on"
+      trigger: device
+  actions:
+    - action: light.turn_on
+      target:
+        entity_id:
+          - light.chambre_celia_droite
+          - light.chambre_celia_gauche
+
+- alias: Light off celia wall
+  id: light_off_celia_wall
+  triggers:
+    - domain: mqtt
+      device_id: 4253f7afad81804234a91e88ab5b301e #bouton ikea 1
+      type: action
+      subtype: "off"
+      trigger: device
+    - domain: mqtt
+      device_id: b8cfb4bbad5a0bcc832fc48f67b49041 #bouton lidle 2
+      type: action
+      subtype: "off"
+      trigger: device
+  actions:
+    - action: light.turn_off
+      target:
+        entity_id:
+          - light.chambre_celia_droite
+          - light.chambre_celia_gauche
+
+#
+#- alias: Light on color Simon
+#  id: light_on_color_simon
+#  triggers:
+#    - domain: mqtt
+#      device_id: 4253f7afad81804234a91e88ab5b301e #bouton ikea 1
+#      type: action
+#      subtype: "on"
+#      trigger: device
+#  condition:
+#    condition: state
+#    entity_id:
+#      - light.strip_simon
+#    state: "on"
 #  action:
-#    - service: mqtt.publish
+#    - service: light.turn_on
 #      data:
-#        topic: "garage/open"
+#        entity_id: light.strip_simon
+#        hs_color:
+#          - "{{ (30 + (state_attr('light.strip_simon', 'hs_color')[0] or 0)) % 360 }}"
+#          - 100
+#        brightness: 80
 
-- alias: Light on Simon
-  id: light_on_simon
+#- alias: Light off Simon
+#  id: light_off_simon
+#  triggers:
+#    - domain: mqtt
+#      device_id: 4253f7afad81804234a91e88ab5b301e #bouton lidle 2
+#      type: action
+#      subtype: "off"
+#      trigger: device
+#  action:
+#    - service: light.turn_off
+#      data:
+#        entity_id: light.strip_simon
+
+######### SIMON ###########
+
+- alias: Light on Simon Stripe
+  id: light_on_simon_stripe
   triggers:
     - domain: mqtt
-      device_id: 4253f7afad81804234a91e88ab5b301e
-      type: action
-      subtype: "on"
-      trigger: device
-  condition:
-    condition: state
-    entity_id:
-      - light.strip_simon
-    state: "off"
-  action:
-    - service: light.turn_on
-      data:
-        entity_id: light.strip_simon
-        brightness: 100
-        kelvin: 6666
-
-- alias: Light on chambre enfants
-  id: light_on_enfants
-  triggers:
-    - domain: mqtt
-      device_id: b8cfb4bbad5a0bcc832fc48f67b49041
-      type: action
-      subtype: "on"
-      trigger: device
-  action:
-    - service: light.turn_on
-      data:
-        entity_id: light.strip_simon
-        brightness: 100
-        kelvin: 6666
-    - service: light.turn_on
-      data:
-        entity_id: light.strip_celia
-        brightness: 100
-        kelvin: 6666
-
-- alias: Light off chambre enfants
-  id: light_off_enfants
-  triggers:
-    - domain: mqtt
-      device_id: b8cfb4bbad5a0bcc832fc48f67b49041
-      type: action
-      subtype: "off"
-      trigger: device
-  action:
-    - service: light.turn_off
-      data:
-        entity_id: light.strip_simon
-    - service: light.turn_off
-      data:
-        entity_id: light.strip_celia
-
-- alias: Light on color Simon
-  id: light_on_color_simon
-  triggers:
-    - domain: mqtt
-      device_id: 4253f7afad81804234a91e88ab5b301e
-      type: action
-      subtype: "on"
-      trigger: device
-  condition:
-    condition: state
-    entity_id:
-      - light.strip_simon
-    state: "on"
-  action:
-    - service: light.turn_on
-      data:
-        entity_id: light.strip_simon
-        hs_color:
-          - "{{ (30 + (state_attr('light.strip_simon', 'hs_color')[0] or 0)) % 360 }}"
-          - 100
-        brightness: 80
-
-- alias: Light off Simon
-  id: light_off_simon
-  triggers:
-    - domain: mqtt
-      device_id: 4253f7afad81804234a91e88ab5b301e
-      type: action
-      subtype: "off"
-      trigger: device
-  action:
-    - service: light.turn_off
-      data:
-        entity_id: light.strip_simon
-
-- alias: Light on Celia stripe
-  id: light_on_celia_stripe
-  triggers:
-    - domain: mqtt
-      device_id: 7277d5eb9ad8b03b82a115ad1384174b
+      device_id: 7277d5eb9ad8b03b82a115ad1384174b #telecommande hue
       type: action
       subtype: "up_press"
       trigger: device
@@ -129,8 +105,8 @@
           - "{{ (30 + (state_attr('light.strip_celia', 'hs_color')[0] or 0)) % 360 }}"
           - 100
 
-- alias: Light on Celia strip white
-  id: light_on_celia_stripe_white
+- alias: Light on Simon strip white
+  id: light_on_simon_stripe_white
   triggers:
     - domain: mqtt
       device_id: 7277d5eb9ad8b03b82a115ad1384174b
@@ -149,80 +125,109 @@
         brightness: 100
         kelvin: 6666
 
-- alias: Light off Celia Stripe
-  id: light_off_celia_stripe
+- alias: Light off Simon Stripe
+  id: light_off_simon_stripe
   triggers:
     - domain: mqtt
       device_id: 7277d5eb9ad8b03b82a115ad1384174b
       type: action
       subtype: "down_press"
       trigger: device
+  actions:
+    - action: light.turn_off
+      target:
+        entity_id: light.strip_celia
+
+- alias: Light on simon plafond
+  id: light_on_simon_plafond
+  triggers:
+    - trigger: device
+      domain: mqtt
+      device_id: "7277d5eb9ad8b03b82a115ad1384174b"
+      type: action
+      subtype: "on_press"
+  actions:
+    - action: light.turn_on
+      target:
+        entity_id: light.plafond_simon_blr
+
+- alias: Light off simon plafond
+  id: light_off_simon_plafond
+  triggers:
+    - trigger: device
+      domain: mqtt
+      device_id: "7277d5eb9ad8b03b82a115ad1384174b"
+      type: action
+      subtype: "off_press"
+  actions:
+    - action: light.turn_off
+      target:
+        entity_id: light.plafond_simon_blr
+
+##### STOP LIGHT AUTO ######
+- alias: Light off Celia stripe after 1 hour
+  trigger:
+    - platform: time
+      at: "00:00:00"
   action:
     - service: light.turn_off
       data:
         entity_id: light.strip_celia
+    - service: light.turn_off
+      data:
+        entity_id: light.strip_simon
 
-- alias: Light on salon
-  id: light_on_salon
+######### END SIMON ###########
+
+###### Chambre ########
+
+- alias: Light on Chambre
+  id: light_on_chambre
   triggers:
     - trigger: device
       domain: mqtt
-      device_id: "41fe936469613a47910064796e03dee5"
+      device_id: "41fe936469613a47910064796e03dee5" #telecommande plate
+      type: action
+      subtype: single
+    - trigger: device
+      domain: mqtt
+      device_id: "b0bf8299addd2a0d8684eebba15a91bf" #telecommande plate 2
       type: action
       subtype: single
   conditions:
     condition: state
     entity_id:
-      - light.plafond_salon
+      - light.plafond_chambre
     state: "off"
   actions:
     - action: light.turn_on
       target:
-        entity_id: light.plafond_salon
+        entity_id: light.plafond_chambre
 
-- alias: Light off salon
-  id: light_off_salon
+- alias: Light off chambre
+  id: light_off_chambre
   triggers:
     - trigger: device
       domain: mqtt
       device_id: "41fe936469613a47910064796e03dee5"
       type: action
       subtype: single
+    - trigger: device
+      domain: mqtt
+      device_id: "b0bf8299addd2a0d8684eebba15a91bf"
+      type: action
+      subtype: single
   conditions:
     condition: state
     entity_id:
-      - light.plafond_salon
+      - light.plafond_chambre
     state: "on"
   actions:
     - action: light.turn_off
       target:
-        entity_id: light.plafond_salon
+        entity_id: light.plafond_chambre
 
-- alias: Light off Celia stripe after 1 hour
-  trigger:
-    - platform: time
-      at: "22:00:00"
-    - platform: time
-      at: "23:00:00"
-    - platform: time
-      at: "00:00:00"
-  action:
-    - service: light.turn_off
-      data:
-        entity_id: light.strip_celia
-
-- alias: Light off Simon stripe after 1 hour
-  trigger:
-    - platform: time
-      at: "22:00:00"
-    - platform: time
-      at: "23:00:00"
-    - platform: time
-      at: "00:00:00"
-  action:
-    - service: light.turn_off
-      data:
-        entity_id: light.strip_simon
+####### END Chambre #######
 
 - alias: shake Gaming Session
   id: shake_gaming_session
@@ -289,96 +294,48 @@
         - sensor.total_lights
   id: edb9cdb511204046a2c2172e61aba0df
 
-- alias: Turn on light in couloir when motion trigger
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.motion_couloir_occupancy
-      to: "on"
-    - platform: state
-      entity_id: binary_sensor.contact_sensor_porte_entree_contact
-      to: "on"
-  action:
-    - service: switch.turn_on
-      data:
-        entity_id: switch.plafond_couloir
-  id: b6abb38f076d4911badb3e8d195f6840
+#- alias: Send notification when alarm triggered
+#  trigger:
+#    - platform: state
+#      entity_id: alarm_control_panel.home_alarm
+#      to: triggered
+#  action:
+#    - service: notify.mobile_app_iphone_12_de_pouzor
+#      data:
+#        message: ALARM! The alarm has been triggered
+#        data:
+#          push:
+#            interruption-level: critical
+#            sound:
+#              name: "default"
+#              critical: 1
+#              volume: 1.0
+#    - service: switch.turn_on
+#      entity_id: switch.hurleuse_switch
+#    - service: switch.turn_on
+#      entity_id: switch.zipato_unknown_type_0003_id_1083_switch
+#  id: a15bee969c7140dfa68f4d6aa13f3404
 
-- alias: Turn off light in couloir when motion trigger
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.motion_couloir_occupancy
-      to: "off"
-      for:
-        seconds: 15
-  action:
-    - service: switch.turn_off
-      entity_id: switch.plafond_couloir
-  id: 2e49ba05aa164d27a0c7442f2282005e
-
-- alias: Turn on light in couloir when motion trigger 2
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.motion_couloir_2_occupancy
-      to: "on"
-
-  action:
-    - service: switch.turn_on
-      data:
-        entity_id: switch.plafond_couloir
-
-- alias: Turn off light in couloir when motion trigger 2
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.motion_couloir_2_occupancy
-      to: "off"
-      for:
-        seconds: 30
-  action:
-    - service: switch.turn_off
-      entity_id: switch.plafond_couloir
-
-- alias: Send notification when alarm triggered
-  trigger:
-    - platform: state
-      entity_id: alarm_control_panel.home_alarm
-      to: triggered
-  action:
-    - service: notify.mobile_app_iphone_12_de_pouzor
-      data:
-        message: ALARM! The alarm has been triggered
-        data:
-          push:
-            interruption-level: critical
-            sound:
-              name: "default"
-              critical: 1
-              volume: 1.0
-    - service: switch.turn_on
-      entity_id: switch.hurleuse_switch
-    - service: switch.turn_on
-      entity_id: switch.zipato_unknown_type_0003_id_1083_switch
-  id: a15bee969c7140dfa68f4d6aa13f3404
-
-- alias: Send notification when alarm is unarmed and disable alarm
-  trigger:
-    - platform: state
-      entity_id: alarm_control_panel.home_alarm
-      to: disarmed
-  action:
-    - service: notify.mobile_app_iphone_12_de_pouzor
-      data:
-        message: The alarm has been disabled
-        data:
-          push:
-            interruption-level: critical
-            sound:
-              name: "default"
-              critical: 1
-              volume: 1.0
-    - service: switch.turn_off
-      entity_id: switch.hurleuse_switch
-    - service: switch.turn_off
-      entity_id: switch.zipato_unknown_type_0003_id_1083_switch
+#- alias: Send notification when alarm is unarmed and disable alarm
+#  trigger:
+#    - platform: state
+#      entity_id: alarm_control_panel.home_alarm
+#      to: disarmed
+#  action:
+#    - service: notify.mobile_app_iphone_12_de_pouzor
+#      data:
+#        message: The alarm has been disabled
+#        data:
+#          push:
+#            interruption-level: critical
+#            sound:
+#              name: "default"
+#              critical: 1
+#              volume: 1.0
+#    - service: switch.turn_off
+#      entity_id: switch.hurleuse_switch
+#    - service: switch.turn_off
+#      entity_id: switch.zipato_unknown_type_0003_id_1083_switch
 
 ############### CAMERA ########################
 
@@ -388,55 +345,50 @@
   trigger:
     platform: mqtt
     topic: frigate/events
-  action:
-    - service: notify.mobile_app_iphone_12_de_pouzor
+  actions:
+    - action: notify.mobile_app_iphone_12_de_pouzor
       data_template:
         message: Alert camera Tensor Flow
         data:
           attachment:
             url: !secret frigate_url
             content-type: jpg
-    - service: camera.snapshot
-      data:
-        filename: www/records/front_door_snapshot.jpg
-      target:
-        entity_id: camera.front_door
     - delay: 30
 
 ################################# ALARM ####################################
 
-- alias: "[Alarm] Front Door"
-  description: ""
-  use_blueprint:
-    path: pouzor/alarm_sensor.yaml
-    input:
-      trigger_sensor: binary_sensor.contact_sensor_porte_entree_contact
-
-- alias: "[Alarm] Windows Bureau"
-  description: ""
-  use_blueprint:
-    path: pouzor/alarm_sensor.yaml
-    input:
-      trigger_sensor: binary_sensor.neo_coolcam_door_window_detector_sensor_3
+#- alias: "[Alarm] Front Door"
+#  description: ""
+#  use_blueprint:
+#    path: pouzor/alarm_sensor.yaml
+#    input:
+#      trigger_sensor: binary_sensor.contact_sensor_porte_entree_contact
+#
+#- alias: "[Alarm] Windows Bureau"
+#  description: ""
+#  use_blueprint:
+#    path: pouzor/alarm_sensor.yaml
+#    input:
+#      trigger_sensor: binary_sensor.neo_coolcam_door_window_detector_sensor_3
 
 ############################ LOG ###############################
 
-- alias: "Notify New Login IP"
-  trigger:
-    - platform: state
-      entity_id: sensor.last_successful_authentication
-  action:
-    - service: notify.mobile_app_iphone_12_de_pouzor
-      data_template:
-        message: "Login success IP: {{ states[trigger.entity_id].state }}"
+#- alias: "Notify New Login IP"
+#  trigger:
+#    - platform: state
+#      entity_id: sensor.last_successful_authentication
+#  action:
+#    - service: notify.mobile_app_iphone_12_de_pouzor
+#      data_template:
+#        message: "Login success IP: {{ states[trigger.entity_id].state }}"
 
 - id: "Hass Startup Notification"
   alias: "Hass Startup Notification"
   trigger:
     - platform: homeassistant
       event: start
-  action:
-    - service: notify.mobile_app_iphone_12_de_pouzor
+  actions:
+    - action: notify.mobile_app_iphone_12_de_pouzor
       data_template:
         message: "Hass Startup Notification"
 
@@ -445,20 +397,67 @@
   trigger:
     - platform: homeassistant
       event: shutdown
-  action:
-    - service: notify.mobile_app_iphone_12_de_pouzor
+  actions:
+    - action: notify.mobile_app_iphone_12_de_pouzor
       data_template:
         message: "Hass Shutdown Notification"
 
-- id: "1608592760031"
-  alias: "[Log] Front Door"
-  description: ""
-  use_blueprint:
-    path: pouzor/log_sensor.yaml
-    input:
-      trigger_sensor: binary_sensor.contact_sensor_porte_entree_contact
-      picto: "🚪"
-      title: "HA - Porte entrée ouverte"
+- id: "Notify for all opening door"
+  alias: "Notify for all opening door"
+  triggers:
+    - trigger: state
+      entity_id:
+        - binary_sensor.contact_sensor_porte_entree_contact
+        - binary_sensor.contact_sensor_porte_fenetre_cour_contact
+      to: "on"
+  actions:
+    - action: notify.mobile_app_iphone_12_de_pouzor
+      data_template:
+        message: "🚪 HA - Porte entrée ouverte"
+        title: "HA - Ouverture"
+
+- id: "Notify for garden windows"
+  alias: "Notify for garden windows"
+  triggers:
+    - trigger: state
+      entity_id:
+        - binary_sensor.vibration_sensor_1_vibration
+        - binary_sensor.vibration_sensor_2_vibration
+      to: "on"
+  actions:
+    - action: notify.mobile_app_iphone_12_de_pouzor
+      data_template:
+        message: "🚪 HA - Baie vitrée"
+        title: "HA - Vibration baie vitrée"
+
+- id: "Notify for all opening windows"
+  alias: "Notify for all opening windows"
+  triggers:
+    - trigger: state
+      entity_id:
+        - binary_sensor.sonoff_sensor_fenetre_1_contact
+        - binary_sensor.sonoff_sensor_fenetre_2_contact
+        - binary_sensor.sonoff_sensor_fenetre_3_contact
+      to: "on"
+  actions:
+    - action: notify.mobile_app_iphone_12_de_pouzor
+      data_template:
+        message: "🔥 HA - Fenètre ouverte"
+        title: "HA - Ouverture"
+
+- id: "Notify for all motion sensor"
+  alias: "Notify for all motion sensor"
+  triggers:
+    - trigger: state
+      entity_id:
+        - binary_sensor.motion_lidl_occupancy
+        - binary_sensor.motion_couloir_2_occupancy
+      to: "on"
+  actions:
+    - action: notify.mobile_app_iphone_12_de_pouzor
+      data_template:
+        message: "🔥 HA - Motion sensor"
+        title: "HA - Sensor"
 
 - alias: "[Log] C02 Sensor"
   description: ""
@@ -469,38 +468,54 @@
       picto: "🔥"
       title: HA - C02 Alarme
 
-- id: trigger_camera_cour_off
-  alias: "Trigger Camera Cour Off"
-  trigger:
-    platform: state
-    entity_id: device_tracker.unknown_device
-    to: "not_home"
-  action:
-    - service: notify.mobile_app_iphone_12_de_pouzor
-      data_template:
-        message: "Camera Cour goes OFF"
-        title: "Camera OFF"
-
 - id: trigger_pc_on
   alias: "Trigger PC On"
-  trigger:
-    platform: state
-    entity_id: device_tracker.desktop_4l2bq0i
-    to: "home"
-  action:
-    - service: notify.mobile_app_iphone_12_de_pouzor
+  triggers:
+    - trigger: state
+      entity_id: device_tracker.desktop_4l2bq0i
+      to: "home"
+  actions:
+    - action: notify.mobile_app_iphone_12_de_pouzor
       data_template:
         message: "PC goes ON"
         title: "PC ON"
 
-- id: trigger_camera_cour_on
-  alias: "Trigger Camera Cour On"
-  trigger:
-    platform: state
-    entity_id: device_tracker.unknown_device
-    to: "home"
-  action:
-    - service: notify.mobile_app_iphone_12_de_pouzor
+#alarm_control_panel
+- alias: "Trigger alarm while we are in"
+  triggers:
+    - trigger: state
+      entity_id:
+        - binary_sensor.sonoff_sensor_fenetre_1_contact
+        - binary_sensor.sonoff_sensor_fenetre_2_contact
+        - binary_sensor.sonoff_sensor_fenetre_3_contact
+      to: "on"
+    - trigger: state
+      entity_id:
+        - binary_sensor.vibration_sensor_1_vibration
+        - binary_sensor.vibration_sensor_2_vibration
+      to: "on"
+    - trigger: state
+      entity_id:
+        - binary_sensor.contact_sensor_porte_entree_contact
+        - binary_sensor.contact_sensor_porte_fenetre_cour_contact
+      to: "on"
+    - trigger: state
+      entity_id:
+        - binary_sensor.motion_lidl_occupancy
+      to: "on"
+  conditions:
+    - condition: state
+      entity_id: alarm_control_panel.home_alarm
+      state: armed_home
+  actions:
+    - action: notify.mobile_app_iphone_12_de_pouzor
       data_template:
-        message: "Camera Cour goes ON"
-        title: "Camera ON"
+        message: "‼️‼️ HA - Alarm triggered ‼️‼️"
+        title: "My House"
+        data:
+          push:
+            interruption-level: critical
+            sound:
+              name: "default"
+              critical: 1
+              volume: 1.0

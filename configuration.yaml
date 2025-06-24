@@ -7,45 +7,37 @@ homeassistant:
   time_zone: Europe/Paris
   country: FR
   customize: !include customize.yaml
-  allowlist_external_dirs:
-    - /config/www/records
-    - /media/frigate
   external_url: !secret external_url
   internal_url: !secret internal_url
-  allowlist_external_urls:
-    - !secret img_ext
-    - !secret img_garage
-    - !secret img_salon
-    - !secret img_etage
-  media_dirs:
-    media: /config/www/records
 
 group: !include groups.yaml
 automation: !include automations.yaml
 
 recorder:
-  db_url: !secret mariadb
+  db_url: !secret mariadb_proxmox
   auto_purge: true
   purge_keep_days: 20
 
-influxdb:
-  host: a0d7b954-influxdb
-  port: 8086
-  database: homeassistant
-  username: !secret influx_user
-  password: !secret influx_password
-  max_retries: 3
-  default_measurement: state
-  include:
-    entities:
-      - sensor.box_current_power
-      - sensor.sdb_current_power
-      - sensor.prise_connectee_frigo_current_power
-      - sensor.pc_current_power
+#influxdb:
+#  host: a0d7b954-influxdb
+#  port: 8086
+#  database: homeassistant
+#  username: !secret influx_user
+#  password: !secret influx_password
+#  max_retries: 3
+#  default_measurement: state
+#  include:
+#    entities:
+#      - sensor.box_current_power
+#      - sensor.sdb_current_power
+#      - sensor.prise_connectee_frigo_current_power
+#      - sensor.pc_current_power
 
 http:
   ssl_certificate: /ssl/fullchain.pem
   ssl_key: /ssl/privkey.pem
+  ip_ban_enabled: true
+  login_attempts_threshold: 3
 
 logger:
   default: info
@@ -83,30 +75,8 @@ input_text:
     name: search_spotify
     initial: Search into spotify
 
-command_line:
-  - sensor:
-      name: frigate size
-      command: "du -s /media/frigate"
-      unit_of_measurement: "MiB"
-      value_template: '{{ value.split("\t" )[0] | multiply(1/1024) | round(2) }}'
-  - sensor:
-      name: cpu_temp
-      command: "cat /sys/class/thermal/thermal_zone0/temp"
-      unit_of_measurement: "°C"
-      value_template: "{{ value | multiply(0.001) }}"
-
 sensor:
   - platform: websocket_api
-  - platform: authenticated
-    exclude:
-      - 172.30.32.2
-
-  - platform: folder
-    folder: /config/www/records
-
-  - platform: folder
-    folder: /media/frigate
-
   ###### TOTAL NUMBER OF AUTOMATIONS
   - platform: template
     sensors:
@@ -205,8 +175,6 @@ sensor:
         value_template: "32" #todo find real value
 
 media_source:
-  media_dirs:
-    camera: /www/records
 
 tapo:
   discovery: true

@@ -31,6 +31,3 @@ action:
     data_template:
       message: "{{ picto }} {{ message }}"
       title: !input "title"
-#  - service: notify.matrix_notify
-#    data:
-#      message: "{{ message }}"
